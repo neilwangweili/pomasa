@@ -5,9 +5,13 @@
 
 ## 问题
 
-如何为Agent提供领域知识？
+如何为Agent提供执行任务所需的外部知识？
 
-AI Agent需要领域知识来正确执行任务。如果将知识硬编码在Agent Blueprint中，会导致Blueprint冗长、知识分散、更新困难，且非程序员无法参与维护。领域知识持续演进，需要验证和审核，必须能够同时服务于AI、开发者和领域专家。
+AI Agent需要两类外部知识：
+1. **领域知识**：告诉Agent"是什么"——理论框架、概念定义、分类体系等
+2. **方法论指导**：告诉Agent"怎么做"——数据来源、分析方法、输出格式等
+
+如果将这些知识硬编码在Agent Blueprint中，会导致Blueprint冗长、知识分散、更新困难，且非程序员无法参与维护。
 
 ## 语境
 
@@ -27,24 +31,48 @@ AI Agent需要领域知识来正确执行任务。如果将知识硬编码在Age
 
 ## 解决方案
 
-**将领域知识外置为独立的数据文件，与Agent Blueprint分离。Blueprint引用这些文件，Agent在执行时读取并应用知识。**
+**将外部知识外置为独立的数据文件，与Agent Blueprint分离。Blueprint引用这些文件，Agent在执行时读取并应用知识。**
 
-### 知识分层架构
+### 两类参考数据
+
+参考数据分为两大类，建议用子目录区分：
 
 ```
-参考数据层次：
-├── 元数据层：处理对象的基本信息
-│   └── 例：organizations.json（跟踪哪些组织）
+references/
+├── domain/                    # 领域知识：是什么
+│   ├── theoretical_framework.md    # 理论框架
+│   ├── concepts.md                 # 概念定义
+│   ├── taxonomy.json               # 分类体系
+│   └── literature_review.md        # 文献综述
 │
-├── 本体层：概念分类体系
-│   └── 例：activity-types.json（活动类型分类）
-│
-├── 模式层：数据结构定义
-│   └── 例：activity-record-template.json（记录格式）
-│
-└── 规范层：质量标准和写作规范
-    └── 例：output-format-guide.md（报告格式指南）
+└── methodology/               # 方法论指导：怎么做
+    ├── research-overview.md        # 研究概述
+    ├── data-sources.md             # 数据来源指南
+    ├── analysis-methods.md         # 分析方法
+    └── output-template.md          # 输出模板
 ```
+
+#### 领域知识（domain/）
+
+告诉Agent"是什么"：
+
+| 类型 | 说明 | 示例 |
+|------|------|------|
+| 理论框架 | 分析所依据的理论体系 | ESSCC理论框架详解 |
+| 概念定义 | 关键概念的精确定义 | 术语表、概念说明 |
+| 分类体系 | 事物的分类方法 | 活动类型、组织类别 |
+| 背景知识 | 相关的背景信息 | 文献综述、历史沿革 |
+
+#### 方法论指导（methodology/）
+
+告诉Agent"怎么做"，详见 [STR-06 Methodological Guidance](./STR-06-methodological-guidance.md)：
+
+| 类型 | 说明 | 示例 |
+|------|------|------|
+| 研究概述 | 目标、范围、立场 | 要回答什么问题 |
+| 数据来源 | 哪里取数据、可信度 | 来源类型、评级标准 |
+| 分析方法 | 用什么方法分析 | 分析框架、核心问题 |
+| 输出模板 | 输出什么格式 | 文档结构、格式规范 |
 
 ### 标准目录结构
 
@@ -54,12 +82,10 @@ project/
 │   └── ...
 │
 ├── references/       # 参考数据（独立管理）
-│   ├── research-overview.md      # 研究概述
-│   ├── data-sources.md           # 数据来源指南
-│   ├── analysis-methods.md       # 分析方法
-│   ├── report-template.md        # 报告模板
-│   ├── style-guide.md            # 写作风格指南
-│   └── [domain-specific-files]   # 领域特定知识
+│   ├── domain/       # 领域知识
+│   │   └── ...
+│   └── methodology/  # 方法论指导
+│       └── ...
 │
 └── data/             # 运行时数据
     └── ...
@@ -113,6 +139,38 @@ project/
 3. **版本友好**：结构变更应考虑向后兼容
 4. **人机兼顾**：既便于AI处理，也便于人类阅读
 
+### 领域知识的完整性原则
+
+**用户提供的领域参考资料必须全文保留，不得摘要或总结。**
+
+这是一个关键原则。AI在处理领域知识时容易"自作聪明"——摘要、总结、重组原始资料。这样做会：
+
+- **丢失信息**：摘要必然丢失细节，而这些细节可能在后续分析中至关重要
+- **引入偏差**：AI的理解可能有偏差，摘要会把偏差固化下来
+- **破坏权威性**：原始资料是领域专家的成果，AI的摘要不具有同等权威性
+- **阻断溯源**：摘要后无法追溯到原始表述，违反数据血缘原则
+
+正确的做法：
+
+| 原始格式 | 处理方式 |
+|---------|---------|
+| Markdown文件 | 直接复制到 references/domain/ |
+| PDF文件 | 转换为Markdown后完整保留 |
+| Word文档 | 转换为Markdown后完整保留 |
+| 网页内容 | 保存为Markdown，注明来源URL |
+
+```
+# 错误示例
+用户提供了一份50页的理论框架文档，AI生成系统时"贴心地"
+总结为5页的精华版。
+
+# 正确示例
+用户提供了一份50页的理论框架文档，完整复制到
+references/domain/theoretical_framework.md
+```
+
+**例外情况**：如果原始资料确实过于冗长（如整本书），应该与用户讨论如何处理，而不是AI自行决定摘要。
+
 ### 元数据文件示例
 
 ```json
@@ -163,18 +221,21 @@ project/
 
 ### 来自 industry_assessment 系统
 
-**references目录结构**：
+**推荐的references目录结构**：
 ```
 references/
-├── research-overview.md              # 研究概述
-├── data-sources.md                   # 数据来源指南
-├── analysis-methods.md               # 分析方法指南
-├── report-template.md                # 报告模板
-├── theoretical_framework_explained.md     # ESSCC理论框架详解
-└── theoretical_framework_literature_review.md  # 文献综述
+├── domain/                                # 领域知识
+│   ├── theoretical_framework_explained.md      # ESSCC理论框架详解
+│   └── theoretical_framework_literature_review.md  # 文献综述
+│
+└── methodology/                           # 方法论指导
+    ├── research-overview.md                    # 研究概述
+    ├── data-sources.md                         # 数据来源指南
+    ├── analysis-methods.md                     # 分析方法指南
+    └── report-template.md                      # 报告模板
 ```
 
-**theoretical_framework_explained.md（节选）**：
+**领域知识示例（domain/theoretical_framework_explained.md节选）**：
 ```markdown
 # ESSCC理论框架详解
 
@@ -192,19 +253,38 @@ references/
 - **表现形式**：国有企业在能源、电信、铁路等领域
   的主导地位
 - **评估要点**：控制程度、覆盖范围、效率表现
+```
 
-#### 1.2 提供公共产品
+**方法论指导示例（methodology/analysis-methods.md节选）**：
+```markdown
+# 分析方法指南
+
+## 分析框架
+
+针对每个功能项，需要回答以下五个核心问题：
+
+### 问题1：功能体现
+**ESSCC的这项功能，在这个行业中是如何体现的？**
+
+分析要点：
+- 寻找具体的制度安排、政策措施、企业行为等实例
+- 用数据和案例说明功能的具体表现形式
+- 区分"直接体现"和"间接体现"
+
+### 问题2：正面效果
+**这种体现，对这个行业的发展带来了什么好处？**
 ...
 ```
 
 这种设计使得：
-- 理论框架可以独立于Agent逻辑演进
-- 领域专家可以直接修改理论说明
-- 多个Agent可以共享同一套理论框架
+- 领域知识和方法论可以独立演进
+- 领域专家维护领域知识，方法论专家维护方法论
+- 多个Agent可以共享同一套参考数据
 
 ## 相关模式
 
 - **[Prompt-Defined Agent](./COR-01-prompt-defined-agent.md)**：Blueprint引用Reference Data
+- **[Methodological Guidance](./STR-06-methodological-guidance.md)**：方法论指导的详细规范
 - **[Filesystem Data Bus](./STR-02-filesystem-data-bus.md)**：Reference Data通过文件系统提供给Agent
 - **[Embedded Quality Standards](./QUA-01-embedded-quality-standards.md)**：规范类Reference Data包含质量标准
 

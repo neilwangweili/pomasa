@@ -88,6 +88,7 @@
 | STR-03 | [Workspace Isolation](./STR-03-workspace-isolation.md) | 推荐 | 限制Agent只能在指定目录内工作 |
 | STR-04 | [Business-Driven Agent Design](./STR-04-business-driven-agent-design.md) | 推荐 | Agent划分跟随业务流程，按执行顺序编号 |
 | STR-05 | [Composable Document Assembly](./STR-05-composable-document-assembly.md) | 推荐 | 长文档分章节生成，格式规范，机械拼接 |
+| STR-06 | [Methodological Guidance](./STR-06-methodological-guidance.md) | 推荐 | 方法论指导：数据来源、分析方法、输出模板 |
 
 ### BHV - 行为模式
 
@@ -127,6 +128,12 @@
      │  Reference    │            │  Embedded     │
      │  Data Config  │            │  Quality      │
      └───────┬───────┘            └───────┬───────┘
+             │                            │
+     ┌───────▼───────┐                    │
+     │  STR-06       │                    │
+     │  Methodolog.  │                    │
+     │  Guidance     │                    │
+     └───────┬───────┘                    │
              │                            │
              ▼                            ▼
 ┌────────────────────┐          ┌─────────────────────┐
@@ -179,6 +186,7 @@
 
 ## 版本历史
 
+- **v0.3** (2025-12): 新增STR-06 Methodological Guidance，更新STR-01区分领域知识与方法论
 - **v0.2** (2025-12): 重构模式编号，按类别分组（COR/STR/BHV/QUA）
 - **v0.1** (2025-12): 初始版本，提炼自 industry_assessment 系统
 
