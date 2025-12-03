@@ -90,6 +90,7 @@
 | 模式 | 必要性 | 说明 |
 |------|--------|------|
 | [Orchestrated Agent Pipeline](./06-orchestrated-agent-pipeline.md) | 推荐 | 编排多Agent按阶段顺序执行 |
+| [Faithful Agent Instantiation](./12-faithful-agent-instantiation.md) | 必要 | 调用Agent时必须让其读取完整Blueprint，每个任务独立调用 |
 | [Parallel Instance Execution](./07-parallel-instance-execution.md) | 可选 | 并行启动多个Agent实例处理独立任务 |
 | [Progressive Data Refinement](./08-progressive-data-refinement.md) | 可选 | 数据经多阶段逐步精炼 |
 
@@ -99,6 +100,7 @@
 |------|--------|------|
 | [Embedded Quality Standards](./09-embedded-quality-standards.md) | 推荐 | 在Agent蓝图中嵌入质量标准 |
 | [Layered Quality Assurance](./10-layered-quality-assurance.md) | 可选 | 多层次的质量保障机制 |
+| [Verifiable Data Lineage](./13-verifiable-data-lineage.md) | 必要 | 全链路可验证的数据血缘，防范AI幻觉 |
 
 ## 模式关系图
 

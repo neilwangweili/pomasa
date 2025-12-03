@@ -16,6 +16,8 @@
 |------|------|------|
 | Prompt-Defined Agent | [01-prompt-defined-agent.md](./pattern-catalog/01-prompt-defined-agent.md) | 用自然语言Blueprint定义Agent行为 |
 | Intelligent Runtime | [02-intelligent-runtime.md](./pattern-catalog/02-intelligent-runtime.md) | 依赖智能运行时（Claude Code）执行 |
+| Faithful Agent Instantiation | [12-faithful-agent-instantiation.md](./pattern-catalog/12-faithful-agent-instantiation.md) | 调用Agent时让其读取完整Blueprint，每个任务独立调用 |
+| Verifiable Data Lineage | [13-verifiable-data-lineage.md](./pattern-catalog/13-verifiable-data-lineage.md) | 全链路可验证的数据血缘，防范AI幻觉 |
 
 ### 推荐采用的模式
 
@@ -99,8 +101,10 @@
 
 ```
 必须采用：
-├── Prompt-Defined Agent      # 声明式Agent定义
-└── Intelligent Runtime       # 智能运行时支撑
+├── Prompt-Defined Agent         # 声明式Agent定义
+├── Intelligent Runtime          # 智能运行时支撑
+├── Faithful Agent Instantiation # 调用时读取完整Blueprint，每个任务独立调用
+└── Verifiable Data Lineage      # 全链路可验证的数据血缘，防范AI幻觉
 
 推荐采用：
 ├── Reference Data Configuration  # 研究框架、方法论外置
