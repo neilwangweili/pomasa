@@ -83,6 +83,7 @@
 | [Reference Data Configuration](./03-reference-data-configuration.md) | 推荐 | 领域知识外置为独立配置 |
 | [Filesystem Data Bus](./04-filesystem-data-bus.md) | 推荐 | 用文件系统作为Agent间数据传递机制 |
 | [Workspace Isolation](./05-workspace-isolation.md) | 推荐 | 限制Agent只能在指定目录内工作 |
+| [Business-Driven Agent Design](./11-business-driven-agent-design.md) | 推荐 | Agent划分跟随业务流程，按执行顺序编号 |
 
 ### 行为模式
 

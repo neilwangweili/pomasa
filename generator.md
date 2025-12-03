@@ -28,6 +28,7 @@
 | Workspace Isolation | [05-workspace-isolation.md](./pattern-catalog/05-workspace-isolation.md) | 限制Agent在指定目录内工作 |
 | Orchestrated Agent Pipeline | [06-orchestrated-agent-pipeline.md](./pattern-catalog/06-orchestrated-agent-pipeline.md) | 编排多Agent按阶段执行 |
 | Embedded Quality Standards | [09-embedded-quality-standards.md](./pattern-catalog/09-embedded-quality-standards.md) | 在Blueprint中嵌入质量标准 |
+| Business-Driven Agent Design | [11-business-driven-agent-design.md](./pattern-catalog/11-business-driven-agent-design.md) | Agent划分跟随业务流程，按执行顺序编号 |
 
 ### 可选采用的模式
 
@@ -106,7 +107,8 @@
 ├── Filesystem Data Bus           # 数据传递和追溯
 ├── Workspace Isolation           # 项目隔离
 ├── Orchestrated Agent Pipeline   # 采集→分析→报告流水线
-└── Embedded Quality Standards    # 学术质量标准
+├── Embedded Quality Standards    # 学术质量标准
+└── Business-Driven Agent Design  # Agent划分跟随业务流程
 
 按需采用：
 ├── Parallel Instance Execution   # 多数据源/多维度并行
