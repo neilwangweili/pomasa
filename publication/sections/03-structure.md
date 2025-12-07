@@ -47,37 +47,7 @@ Combining these two dimensions yields the following matrix:
 
 Patterns do not exist in isolation; they form a network of dependencies and reinforcements:
 
-```
-                    COR-02
-                  Intelligent
-                    Runtime
-                        |
-                        | enables
-                        v
-                    COR-01
-               Prompt-Defined Agent
-                   /    |    \
-                  /     |     \
-                 v      v      v
-            STR-01   BHV-01   QUA-01
-           Reference Pipeline Quality
-              Data     |    Standards
-                |      |         |
-                v      v         v
-            STR-06   BHV-02   QUA-03
-           Method.  Faithful  Data
-           Guidance  Inst.   Lineage
-                       |
-                       v
-                    STR-02
-                  Filesystem
-                   Data Bus
-                       |
-                       v
-                    STR-03
-                   Workspace
-                   Isolation
-```
+![Pattern Relationships](images/pattern-relationships.png)
 
 The diagram reveals the architecture's foundation: COR-02 (Intelligent Runtime) enables COR-01 (Prompt-Defined Agent), which in turn makes all other patterns possible. The three branches—reference data management, execution coordination, and quality assurance—represent the primary architectural concerns that Structure, Behavior, and Quality patterns address.
 
