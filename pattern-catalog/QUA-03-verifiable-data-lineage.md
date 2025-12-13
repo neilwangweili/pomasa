@@ -1,307 +1,307 @@
 # Verifiable Data Lineage
 
-**分类**：质量模式
-**必要性**：必要
+**Category**: Quality
+**Necessity**: Required
 
-## 问题
+## Problem
 
-如何确保AI系统产出的数据和结论是真实可信的？
+How can we ensure that data and conclusions produced by AI systems are authentic and trustworthy?
 
-AI系统（尤其是LLM）存在严重的"幻觉"问题：可能编造不存在的数据、虚构URL、捏造引用。即使在Blueprint中明确要求数据核实，在同一个执行上下文中，AI往往无法有效识别自己早先产生的幻觉数据。
+AI systems (especially LLMs) suffer from a serious "hallucination" problem: they may fabricate non-existent data, invent URLs, or fake citations. Even when data verification is explicitly required in Blueprints, within the same execution context, AI often cannot effectively identify hallucinated data it produced earlier.
 
-这个问题在研究型MAS中尤为严重，因为：
-- 最终产出需要学术级别的可信度
-- 错误数据会导致错误结论
-- 幻觉数据一旦进入分析阶段，会被"洗白"成看似合理的论据
+This problem is particularly serious in research-oriented MAS because:
+- Final outputs require academic-level credibility
+- Incorrect data leads to incorrect conclusions
+- Once hallucinated data enters the analysis phase, it gets "whitewashed" into seemingly reasonable arguments
 
-## 语境
+## Context
 
-该模式适用于以下场景：
+This pattern applies to the following scenarios:
 
-- 系统产出需要可验证、可追溯
-- 对数据真实性有较高要求
-- 最终产出需要符合学术规范
-- 需要防范AI幻觉问题
+- System outputs need to be verifiable and traceable
+- High requirements for data authenticity
+- Final outputs need to comply with academic standards
+- Need to prevent AI hallucination issues
 
-## 作用力
+## Forces
 
-- **效率 vs 严谨**：严格核实增加时间成本
-- **信任 vs 验证**：不能盲目信任AI产出，需要独立验证
-- **完整性 vs 可信度**：宁可数据少但可信，不要数据多但存疑
-- **自动化 vs 人工介入**：某些核实可能需要人工参与
+- **Efficiency vs Rigor**: Strict verification increases time cost
+- **Trust vs Verification**: Cannot blindly trust AI outputs; need independent verification
+- **Completeness vs Credibility**: Better to have less data that is credible than more data that is questionable
+- **Automation vs Human Intervention**: Some verification may require human participation
 
-## 解决方案
+## Solution
 
-**建立全链路可验证的数据血缘：所有数据必须有可验证来源，全程编号追溯，通过独立上下文进行分层复核，不合格数据坚决剔除。**
+**Establish end-to-end verifiable data lineage: all data must have verifiable sources, numbered and traced throughout, verified through independent contexts in layers, and unqualified data must be resolutely eliminated.**
 
-### 核心原则
+### Core Principles
 
-1. **数据必须有可验证来源**
-   - 每条采集的数据必须有URL或学术引用
-   - 来源必须是外部可访问、可验证的
-   - 不接受"众所周知"、"据报道"等模糊来源
+1. **Data Must Have Verifiable Sources**
+   - Every piece of collected data must have a URL or academic citation
+   - Sources must be externally accessible and verifiable
+   - Do not accept vague sources like "widely known" or "reportedly"
 
-2. **全链路编号和追溯**
-   - 原始资料有唯一编号
-   - 分析材料引用原始资料编号
-   - 最终报告的references指向可验证来源
+2. **End-to-End Numbering and Tracing**
+   - Original materials have unique numbers
+   - Analysis materials cite original material numbers
+   - Final report references point to verifiable sources
 
-3. **独立上下文复核**
-   - 数据复核必须由单独的subagent执行
-   - 复核agent与采集agent不共享上下文
-   - 这样才能有效识别幻觉数据
+3. **Independent Context Verification**
+   - Data verification must be executed by a separate subagent
+   - Verification agent does not share context with collection agent
+   - This is the only way to effectively identify hallucinated data
 
-4. **分层复核机制**
-   - 采集后：事实核查（数据是否真实存在）
-   - 分析后：论证核查（引用是否准确支持结论）
+4. **Layered Verification Mechanism**
+   - After collection: Fact-checking (does the data actually exist)
+   - After analysis: Argument verification (do citations accurately support conclusions)
 
-5. **不合格数据处理**
-   - 不真实的数据：坚决剔除
-   - 来源不可信的数据：降级标注或剔除
-   - 可信度较低的数据：明确标注
+5. **Handling Unqualified Data**
+   - Untrue data: Resolutely eliminate
+   - Untrustworthy source data: Downgrade annotation or eliminate
+   - Low credibility data: Clearly annotate
 
-### 数据血缘链
+### Data Lineage Chain
 
 ```
-外部来源 (URL/学术引用)
+External Source (URL/Academic Citation)
     │
     ▼
-原始资料 [编号: SRC-001]
-    │ ← 采集后复核：验证URL有效、内容匹配
+Original Material [ID: SRC-001]
+    │ ← Post-collection verification: validate URL valid, content matches
     ▼
-分析材料 [编号: ANA-001, 引用: SRC-001, SRC-003]
-    │ ← 分析后复核：验证引用准确、论证成立
+Analysis Material [ID: ANA-001, References: SRC-001, SRC-003]
+    │ ← Post-analysis verification: validate citation accuracy, argument validity
     ▼
-最终报告 [References: URL列表]
+Final Report [References: URL list]
     │
     ▼
-外部可验证
+Externally Verifiable
 ```
 
-## 结果
+## Consequences
 
-### 收益
+### Benefits
 
-- **防范幻觉**：独立复核能有效识别虚构数据
-- **可追溯**：任何结论都能追溯到原始来源
-- **学术可信**：产出符合学术引用规范
-- **质量可控**：不合格数据被及时剔除
+- **Prevent Hallucination**: Independent verification can effectively identify fabricated data
+- **Traceable**: Any conclusion can be traced back to original sources
+- **Academic Credibility**: Outputs conform to academic citation standards
+- **Quality Control**: Unqualified data is eliminated in time
 
-### 代价
+### Liabilities
 
-- **效率降低**：复核过程增加时间
-- **数据量减少**：不合格数据被剔除后，可用数据变少
-- **复杂度增加**：需要设计编号系统和复核流程
-- **可能需要人工**：某些复核可能需要人工介入
+- **Reduced Efficiency**: Verification process adds time
+- **Reduced Data Volume**: After eliminating unqualified data, available data becomes less
+- **Increased Complexity**: Need to design numbering systems and verification processes
+- **May Require Manual Work**: Some verification may require human intervention
 
-## 实现指南
+## Implementation Guidelines
 
-### 原始资料编号规范
+### Original Material Numbering Standard
 
 ```markdown
-## [SRC-001] 数据标题
+## [SRC-001] Data Title
 
-**来源URL**：https://example.com/article/123
-**来源类型**：学术文章 / 政策文件 / 行业研报 / 新闻报道 / ...
-**采集时间**：2025-03-15
-**发布时间**：2025-02-20
+**Source URL**: https://example.com/article/123
+**Source Type**: Academic Article / Policy Document / Industry Report / News Article / ...
+**Collection Time**: 2025-03-15
+**Publication Time**: 2025-02-20
 
-**核心内容**：
-[内容摘要]
+**Core Content**:
+[Content summary]
 
-**原文关键引用**：
-> "直接引用的原文内容"
+**Key Quote from Original**:
+> "Directly quoted original content"
 
-**可信度评估**：高 / 中 / 低
-**可信度说明**：[评估理由]
+**Credibility Assessment**: High / Medium / Low
+**Credibility Explanation**: [Assessment rationale]
 ```
 
-### 分析材料引用规范
+### Analysis Material Citation Standard
 
 ```markdown
-## [ANA-001] 分析标题
+## [ANA-001] Analysis Title
 
-**引用的原始资料**：
-- SRC-001: [简要说明引用了什么]
-- SRC-003: [简要说明引用了什么]
+**Referenced Original Materials**:
+- SRC-001: [Brief description of what was cited]
+- SRC-003: [Brief description of what was cited]
 
-**分析内容**：
-根据[SRC-001]的数据显示...，结合[SRC-003]的报道...
+**Analysis Content**:
+According to data from [SRC-001]..., combined with reporting from [SRC-003]...
 
-**结论**：
-[分析结论]
+**Conclusion**:
+[Analysis conclusion]
 ```
 
-### 最终报告引用规范
+### Final Report Citation Standard
 
 ```markdown
 ## References
 
-1. [SRC-001] 文章标题, 作者, 发布日期, URL
-2. [SRC-003] 政策名称, 发布机构, 发布日期, URL
+1. [SRC-001] Article Title, Author, Publication Date, URL
+2. [SRC-003] Policy Name, Publishing Organization, Publication Date, URL
 ...
 ```
 
-### 采集后复核Agent设计
+### Post-Collection Verification Agent Design
 
 ```markdown
-# 数据复核Agent
+# Data Verification Agent
 
-## 你的角色
-你是独立的数据复核员。你的任务是验证采集数据的真实性和可信度。
+## Your Role
+You are an independent data verifier. Your task is to verify the authenticity and credibility of collected data.
 
-## 重要原则
-- 你必须独立验证每条数据，不能假设之前的采集是正确的
-- 对每个URL，你必须实际访问并确认内容匹配
-- 发现问题必须如实记录，不能"放水"
+## Important Principles
+- You must independently verify each piece of data; cannot assume previous collection was correct
+- For each URL, you must actually visit and confirm content matches
+- Must truthfully record any issues found; cannot "go easy"
 
-## 复核内容
+## Verification Content
 
-### 1. 来源可访问性
-- 访问每个URL，确认可以正常访问
-- 记录无法访问的URL
+### 1. Source Accessibility
+- Visit each URL and confirm it can be accessed normally
+- Record inaccessible URLs
 
-### 2. 内容匹配性
-- 确认URL中的内容与采集记录的摘要一致
-- 确认引用的原文确实存在于来源中
-- 标记内容不匹配的数据项
+### 2. Content Matching
+- Confirm that content in URL matches the recorded summary in collection
+- Confirm that cited original text actually exists in the source
+- Mark data items with mismatched content
 
-### 3. 来源可信度
-- 评估来源的权威性（官方机构 > 主流媒体 > 行业机构 > 个人）
-- 标记低可信度来源
+### 3. Source Credibility
+- Evaluate source authority (official institutions > mainstream media > industry organizations > individuals)
+- Mark low credibility sources
 
-## 输出
+## Output
 
-### 复核报告
+### Verification Report
 ```
-# 数据复核报告
+# Data Verification Report
 
-## 复核概况
-- 复核时间：[时间]
-- 数据总量：[数量]
-- 通过数量：[数量]
-- 问题数量：[数量]
+## Verification Overview
+- Verification Time: [Time]
+- Total Data Count: [Count]
+- Passed Count: [Count]
+- Issue Count: [Count]
 
-## 问题清单
+## Issue List
 
-### 无法访问的来源
-| 编号 | URL | 问题描述 |
+### Inaccessible Sources
+| ID | URL | Issue Description |
 |------|-----|---------|
 | SRC-005 | https://... | 404 Not Found |
 
-### 内容不匹配
-| 编号 | 问题描述 |
+### Content Mismatch
+| ID | Issue Description |
 |------|---------|
-| SRC-012 | 声称的引用在原文中未找到 |
+| SRC-012 | Claimed citation not found in original text |
 
-### 低可信度来源
-| 编号 | 来源类型 | 可信度 | 建议 |
+### Low Credibility Sources
+| ID | Source Type | Credibility | Recommendation |
 |------|---------|--------|------|
-| SRC-008 | 个人博客 | 低 | 建议剔除或降级 |
+| SRC-008 | Personal Blog | Low | Recommend elimination or downgrade |
 
-## 复核结论
-[总体评估和建议]
+## Verification Conclusion
+[Overall assessment and recommendations]
 ```
 
-### 处理建议
-- **剔除**：SRC-005, SRC-012（不真实）
-- **降级标注**：SRC-008（低可信度）
-- **保留**：其余数据项
+### Handling Recommendations
+- **Eliminate**: SRC-005, SRC-012 (untrue)
+- **Downgrade Annotation**: SRC-008 (low credibility)
+- **Retain**: Remaining data items
 ```
 
-### 分析后复核Agent设计
+### Post-Analysis Verification Agent Design
 
 ```markdown
-# 论证复核Agent
+# Argument Verification Agent
 
-## 你的角色
-你是独立的论证复核员。你的任务是验证分析材料中的引用是否准确、论证是否成立。
+## Your Role
+You are an independent argument verifier. Your task is to verify whether citations in analysis materials are accurate and whether arguments are valid.
 
-## 复核内容
+## Verification Content
 
-### 1. 引用准确性
-- 分析中引用的数据是否与原始资料一致
-- 是否存在断章取义
-- 数字、日期等关键信息是否准确
+### 1. Citation Accuracy
+- Whether data cited in analysis matches original materials
+- Whether there is cherry-picking
+- Whether key information like numbers and dates is accurate
 
-### 2. 论证有效性
-- 引用的证据是否真的支持所得出的结论
-- 是否存在过度推断
-- 因果关系是否成立
+### 2. Argument Validity
+- Whether cited evidence truly supports the conclusions drawn
+- Whether there is over-inference
+- Whether causal relationships are valid
 
-### 3. 遗漏检查
-- 是否有重要的反面证据被忽略
-- 结论是否足够审慎
+### 3. Omission Check
+- Whether important counter-evidence was ignored
+- Whether conclusions are sufficiently cautious
 
-## 输出
+## Output
 
-### 论证复核报告
-- 引用准确性问题清单
-- 论证有效性问题清单
-- 修改建议
+### Argument Verification Report
+- Citation accuracy issue list
+- Argument validity issue list
+- Modification recommendations
 ```
 
-### 在Pipeline中的位置
+### Position in Pipeline
 
 ```
 01.initial_scanner     → 02.deep_researcher
                               │
                               ▼
-                       03.data_verifier    ← 采集后复核（独立subagent）
+                       03.data_verifier    ← Post-collection verification (independent subagent)
                               │
-                              ▼ (剔除不合格数据)
+                              ▼ (eliminate unqualified data)
                        04.analyzer
                               │
                               ▼
-                       05.argument_verifier ← 分析后复核（独立subagent）
+                       05.argument_verifier ← Post-analysis verification (independent subagent)
                               │
-                              ▼ (修正问题)
+                              ▼ (correct issues)
                        06.reporter
 ```
 
-## 示例
+## Examples
 
-### 幻觉数据的典型特征
+### Typical Characteristics of Hallucinated Data
 
-**容易产生幻觉的情况**：
-- 具体的数字（如"市场规模达到1.2万亿"）
-- 具体的日期（如"2023年5月发布的政策"）
-- 具体的引用（如"根据某某研究院报告"）
-- 看起来很合理但无法验证的内容
+**Situations prone to hallucination**:
+- Specific numbers (e.g., "market size reached 1.2 trillion")
+- Specific dates (e.g., "policy released in May 2023")
+- Specific citations (e.g., "according to a certain research institute report")
+- Content that looks reasonable but cannot be verified
 
-**复核时的警惕信号**：
-- URL格式正确但页面不存在
-- URL存在但内容与描述不符
-- 来源机构名称略有出入（如"中国汽车协会" vs "中国汽车工业协会"）
-- 数据过于"完美"地支持结论
+**Warning signs during verification**:
+- URL format is correct but page does not exist
+- URL exists but content does not match description
+- Source organization name has slight discrepancies (e.g., "China Automobile Association" vs "China Association of Automobile Manufacturers")
+- Data "perfectly" supports conclusions too well
 
-### 复核发现问题的处理
+### Handling Issues Discovered During Verification
 
-**场景**：复核发现SRC-015的URL无法访问
+**Scenario**: Verification discovers that SRC-015's URL is inaccessible
 
-**处理流程**：
-1. 尝试在互联网档案（如Wayback Machine）查找
-2. 尝试搜索相同内容的其他来源
-3. 如果找到替代来源，更新URL
-4. 如果无法验证，从数据集中剔除
-5. 检查分析材料中是否引用了该数据，如有则需修改分析
+**Handling Process**:
+1. Try searching in internet archives (e.g., Wayback Machine)
+2. Try searching for other sources with the same content
+3. If alternative source found, update URL
+4. If cannot verify, eliminate from dataset
+5. Check whether analysis materials cited this data; if so, need to modify analysis
 
-## 相关模式
+## Related Patterns
 
-- **[Faithful Agent Instantiation](./BHV-02-faithful-agent-instantiation.md)**：复核必须在独立subagent中执行
-- **[Business-Driven Agent Design](./STR-04-business-driven-agent-design.md)**：复核Agent是独立的业务步骤
-- **[Embedded Quality Standards](./QUA-01-embedded-quality-standards.md)**：质量标准包括数据真实性要求
-- **[Layered Quality Assurance](./QUA-02-layered-quality-assurance.md)**：分层复核是质量保障的一部分
+- **[Faithful Agent Instantiation](./BHV-02-faithful-agent-instantiation.md)**: Verification must be executed in independent subagent
+- **[Business-Driven Agent Design](./STR-04-business-driven-agent-design.md)**: Verification Agent is an independent business step
+- **[Embedded Quality Standards](./QUA-01-embedded-quality-standards.md)**: Quality standards include data authenticity requirements
+- **[Layered Quality Assurance](./QUA-02-layered-quality-assurance.md)**: Layered verification is part of quality assurance
 
-## 检查清单
+## Checklist
 
-设计系统时，确认以下要点：
+When designing the system, confirm the following points:
 
-- [ ] 所有采集的数据都有URL或学术引用？
-- [ ] 原始资料有统一的编号规范？
-- [ ] 分析材料引用原始资料时使用编号？
-- [ ] 最终报告有完整的References？
-- [ ] 采集后有独立的数据复核Agent？
-- [ ] 复核Agent在独立的subagent上下文中执行？
-- [ ] 有明确的不合格数据处理流程？
-- [ ] 分析后有论证复核机制？
+- [ ] All collected data has URL or academic citation?
+- [ ] Original materials have unified numbering standard?
+- [ ] Analysis materials use numbering when citing original materials?
+- [ ] Final report has complete References?
+- [ ] Independent data verification Agent exists after collection?
+- [ ] Verification Agent executes in independent subagent context?
+- [ ] Clear process for handling unqualified data exists?
+- [ ] Argument verification mechanism exists after analysis?

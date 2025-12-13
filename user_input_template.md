@@ -1,87 +1,87 @@
 # User Input
 
-请填写以下信息，Generator将据此生成你的研究型多智能体系统。
+Please fill in the following information. The Generator will use this to create your research-oriented multi-agent system.
 
-对于不确定的项目，可以填写"由AI建议"，Generator会根据模式目录给出合理的默认方案。
-
----
-
-## 语言设置
-
-**Agent Blueprint语言**：
-
-[填写：中文 / English / 其他]
-
-**报告输出语言**：
-
-[填写：中文 / English / 其他]
+For items you are uncertain about, you can write "to be suggested by AI", and the Generator will provide reasonable default solutions based on the pattern catalog.
 
 ---
 
-## 研究项目基本信息
+## Language Settings
 
-**项目标识符**：
+**Agent Blueprint Language**:
 
-[填写：用于目录命名的简短标识，如 industry_assessment、literature_review 等]
+[Fill in: Chinese / English / Other]
 
-**研究主题与核心问题**：
+**Report Output Language**:
 
-[描述：你要研究什么问题？想回答什么核心问题？]
-
-**初步思路与洞察**：
-
-[描述：你对这个问题已有的理解、初步假设、研究方向等。如果有理论框架，在此说明]
+[Fill in: Chinese / English / Other]
 
 ---
 
-## 数据采集
+## Research Project Basic Information
 
-**数据来源**：
+**Project Identifier**:
 
-[描述：从哪里获取数据？如：公开网络信息、学术文献、政策文件、API接口等]
+[Fill in: A short identifier for directory naming, e.g., industry_assessment, literature_review, etc.]
 
-**现有参考资料**：
+**Research Topic and Core Questions**:
 
-[列出：如果你已有一些参考资料要纳入系统，在此列出文件路径或说明]
+[Describe: What problem do you want to research? What core questions do you want to answer?]
 
----
+**Initial Ideas and Insights**:
 
-## 分析方法
-
-**分析方法**：
-
-[描述：用什么方法分析数据？如有特定的分析框架或维度，在此说明。也可填写"由AI建议"]
+[Describe: Your existing understanding of this problem, preliminary hypotheses, research direction, etc. If you have a theoretical framework, explain it here]
 
 ---
 
-## 输出形式
+## Data Collection
 
-**报告格式**：
+**Data Sources**:
 
-[描述：最终产出什么形式的报告？如：学术论文、研究报告、分析摘要等]
+[Describe: Where will you obtain data? e.g., public web information, academic literature, policy documents, API interfaces, etc.]
 
-**报告结构**：
+**Existing Reference Materials**:
 
-[描述：报告的组织结构。也可填写"由AI建议"]
-
----
-
-## 模式选择
-
-完整模式列表见 [pattern-catalog/README.md](./pattern-catalog/README.md)
-
-**质量保障级别**：
-
-- [ ] 简单：仅采用必要模式，不做额外质检
-- [x] 标准（默认）：采用 QUA-01 嵌入质量标准
-- [ ] 严格：采用 QUA-01 + QUA-02 多层质量保障
-
-**其他想启用或禁用的模式**：
-
-[填写：如有特殊需求，可在此说明。没有则填"无"]
+[List: If you already have some reference materials to include in the system, list file paths or descriptions here]
 
 ---
 
-## 其他要求
+## Analysis Methods
 
-[填写：任何其他约束、期望或特殊要求。没有则填"无"]
+**Analysis Methods**:
+
+[Describe: What methods will you use to analyze the data? If you have a specific analytical framework or dimensions, explain here. You can also write "to be suggested by AI"]
+
+---
+
+## Output Format
+
+**Report Format**:
+
+[Describe: What form should the final report take? e.g., academic paper, research report, analysis summary, etc.]
+
+**Report Structure**:
+
+[Describe: The organizational structure of the report. You can also write "to be suggested by AI"]
+
+---
+
+## Pattern Selection
+
+For the complete pattern list, see [pattern-catalog/README.md](./pattern-catalog/README.md)
+
+**Quality Assurance Level**:
+
+- [ ] Simple: Only adopt required patterns, no additional quality checks
+- [x] Standard (default): Adopt QUA-01 Embedded Quality Standards
+- [ ] Strict: Adopt QUA-01 + QUA-02 Multi-Layer Quality Assurance
+
+**Other Patterns to Enable or Disable**:
+
+[Fill in: If you have special requirements, explain here. If none, write "None"]
+
+---
+
+## Other Requirements
+
+[Fill in: Any other constraints, expectations, or special requirements. If none, write "None"]

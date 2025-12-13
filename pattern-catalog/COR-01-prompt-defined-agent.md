@@ -1,219 +1,221 @@
 # Prompt-Defined Agent
 
-**分类**：核心模式
-**必要性**：必要
+**Category**: Core
+**Necessity**: Required
 
-## 问题
+## Problem
 
-如何定义AI Agent的行为？
+How to define the behavior of an AI Agent?
 
-传统方法使用代码详细指定每一步逻辑，但当任务复杂度超出固定逻辑的表达能力时——不同数据源结构各异、外部环境随时变化、"质量"本身是语义概念——硬编码的规则变得脆弱。质量标准（如"客观、专业、符合学术规范"）是语义层面的要求，难以用代码逻辑实现。
+The traditional approach uses code to specify every step of logic in detail, but when task complexity exceeds the expressive capacity of fixed logic—different data sources have varying structures, the external environment changes constantly, "quality" itself is a semantic concept—hard-coded rules become fragile. Quality standards (such as "objective, professional, conforming to academic norms") are semantic-level requirements that are difficult to implement with code logic.
 
-## 语境
+## Context
 
-该模式适用于以下场景：
+This pattern applies to the following scenarios:
 
-- 任务需要语义理解能力（如信息提取、内容生成、质量判断）
-- 任务细节可能频繁变化（如数据源格式变更）
-- 需要非程序员能够理解和维护系统行为
-- 有智能运行时环境（如Claude Code）支撑执行
+- Tasks require semantic understanding capabilities (such as information extraction, content generation, quality judgment)
+- Task details may change frequently (such as data source format changes)
+- Non-programmers need to be able to understand and maintain system behavior
+- There is an intelligent runtime environment (such as Claude Code) to support execution
 
-## 作用力
+## Forces
 
-- **灵活性 vs 可预测性**：声明式带来灵活性，但降低了执行的确定性
-- **表达力 vs 复杂度**：自然语言表达力强，但可能产生歧义
-- **开发效率 vs 运行成本**：开发效率极高，但每次执行消耗AI调用费用
-- **人类可读 vs 机器可执行**：需要找到两者兼顾的表达方式
+- **Flexibility vs Predictability**: Declarative style brings flexibility but reduces execution determinism
+- **Expressiveness vs Complexity**: Natural language has strong expressive power but may produce ambiguity
+- **Development Efficiency vs Runtime Cost**: Development efficiency is extremely high, but each execution consumes AI invocation costs
+- **Human Readable vs Machine Executable**: Need to find an expression that balances both
 
-## 解决方案
+## Solution
 
-**使用自然语言文档（Agent Blueprint）描述Agent"应该做什么"、"遵循什么规范"、"达到什么标准"，而不是规定"具体怎么做"。**
+**Use natural language documents (Agent Blueprint) to describe what the Agent "should do", "what norms to follow", and "what standards to achieve", rather than prescribing "how to do it specifically".**
 
-### Blueprint的核心要素
+### Core Elements of a Blueprint
 
 ```markdown
-# Agent名称
+# Agent Name
 
-## 你的角色
-[定义Agent的身份和总体职责]
+## Your Role
+[Define the Agent's identity and overall responsibilities]
 
-## 任务参数
-[列出Agent接收的参数，包括占位符如 {PARAM}]
+## Task Parameters
+[List the parameters the Agent receives, including placeholders like {PARAM}]
 
-## 参考资料
-[指明需要读取的Reference Data文件]
+## Reference Materials
+[Indicate Reference Data files that need to be read]
 
-## 工作流程
-[详细的任务描述、策略、过程——是"引导"而非"指令"]
+## Workflow
+[Detailed task description, strategies, process—"guidance" rather than "instructions"]
 
-## 输出要求
-[明确的交付物标准和文件路径]
+## Output Requirements
+[Clear deliverable standards and file paths]
 
-## 完成标准
-[质量检查清单]
+## Completion Standards
+[Quality checklist]
 ```
 
-### 关键设计原则
+### Key Design Principles
 
-1. **声明意图，不规定细节**
-   - 描述"要达到的效果"而非"具体步骤"
-   - 为运行时决策留出空间
+1. **Declare Intent, Not Details**
+   - Describe "the effect to be achieved" rather than "specific steps"
+   - Leave room for runtime decision-making
 
-2. **支持参数化**
-   - 使用占位符（如 `{ORGANIZATION_ID}`）
-   - 同一Blueprint可实例化为多个Agent Instance
+2. **Support Parameterization**
+   - Use placeholders (such as `{ORGANIZATION_ID}`)
+   - The same Blueprint can be instantiated into multiple Agent Instances
 
-3. **嵌入质量标准**
-   - 将质量要求写入Blueprint
-   - AI在执行过程中持续对照标准自检
+3. **Embed Quality Standards**
+   - Write quality requirements into the Blueprint
+   - AI continuously self-checks against standards during execution
 
-4. **保持可读性**
-   - 使用结构化的Markdown格式
-   - 非程序员也能理解和修改
+4. **Maintain Readability**
+   - Use structured Markdown format
+   - Non-programmers can also understand and modify
 
-## 结果
+## Consequences
 
-### 收益
+### Benefits
 
-- **极高的灵活性**：AI自动适应环境变化
-- **语义级质量保障**：AI理解抽象标准
-- **低维护成本**：修改prompt比修改代码容易
-- **自然可读性**：非程序员可参与维护
-- **快速迭代**：修改后立即生效，无需编译部署
+- **Extremely High Flexibility**: AI automatically adapts to environmental changes
+- **Semantic-Level Quality Assurance**: AI understands abstract standards
+- **Low Maintenance Cost**: Modifying prompts is easier than modifying code
+- **Natural Readability**: Non-programmers can participate in maintenance
+- **Rapid Iteration**: Changes take effect immediately, no compilation or deployment needed
 
-### 代价
+### Liabilities
 
-- **执行非确定性**：同一prompt可能产生不同执行路径
-- **运营成本较高**：依赖AI模型调用
-- **调试困难**：无法像代码那样设置断点
-- **平台依赖**：绑定特定的智能运行时
-- **可预测性降低**：难以精确预知执行细节
+- **Execution Non-Determinism**: The same prompt may produce different execution paths
+- **Higher Operating Cost**: Depends on AI model invocations
+- **Difficult Debugging**: Cannot set breakpoints like with code
+- **Platform Dependency**: Bound to a specific intelligent runtime
+- **Reduced Predictability**: Difficult to precisely predict execution details
 
-## 实现指南
+## Implementation Guidelines
 
-### Blueprint结构模板
+### Blueprint Structure Template
 
 ```markdown
-# [Agent名称]
+# [Agent Name]
 
-## 工作空间隔离要求
-[工作空间约束，见 Workspace Isolation 模式]
+## Workspace Isolation Requirements
+[Workspace constraints, see Workspace Isolation pattern]
 
-## 你的角色
-[一段话概述Agent的身份和核心职责]
+## Your Role
+[Brief summary of the Agent's identity and core responsibilities]
 
-## 前置准备
-[执行前必须阅读的参考资料列表]
+## Prerequisites
+[List of reference materials that must be read before execution]
 
-## 输入参数
-- `{PARAM_1}`：[参数说明]
-- `{PARAM_2}`：[参数说明]
+## Input Parameters
+- `{PARAM_1}`: [Parameter description]
+- `{PARAM_2}`: [Parameter description]
 
-## 工作流程
+## Workflow
 
-### 阶段一：[阶段名称]
-[该阶段的目标、策略、注意事项]
+### Stage 1: [Stage Name]
+[Goals, strategies, and considerations for this stage]
 
-### 阶段二：[阶段名称]
+### Stage 2: [Stage Name]
 ...
 
-## 输出要求
+## Output Requirements
 
-**输出位置**：`path/to/output/`
+**Output Location**: `path/to/output/`
 
-**输出格式**：
-[详细的输出文件结构和格式说明]
+**Output Format**:
+[Detailed description of output file structure and format]
 
-## 完成标准
-- [ ] [检查项1]
-- [ ] [检查项2]
+## Completion Standards
+- [ ] [Check item 1]
+- [ ] [Check item 2]
 - ...
 
-## 注意事项
-[特别提醒、边界情况、禁止事项等]
+## Important Notes
+[Special reminders, edge cases, prohibited actions, etc.]
 ```
 
-### 写作技巧
+### Writing Techniques
 
-1. **使用第二人称**：用"你"而非"Agent"，建立角色认同
-2. **给出示例**：对于复杂格式，提供具体示例
-3. **明确边界**：说清楚什么不该做
-4. **分层说明**：从概述到细节，逐层展开
+1. **Use Second Person**: Use "you" rather than "Agent" to establish role identification
+2. **Provide Examples**: For complex formats, provide specific examples
+3. **Clarify Boundaries**: Make it clear what should not be done
+4. **Layered Explanation**: Expand from overview to details, layer by layer
 
-### 常见陷阱
+### Common Pitfalls
 
-- **过于抽象**：只说"分析数据"，不说分析什么、怎么呈现
-- **过于具体**：把每个shell命令都写出来，失去灵活性
-- **遗漏输出规范**：没有明确输出路径和格式
-- **质量标准模糊**：只说"高质量"，不说具体标准
+- **Too Abstract**: Only saying "analyze data" without specifying what to analyze or how to present it
+- **Too Specific**: Writing out every shell command, losing flexibility
+- **Missing Output Specifications**: Not clearly defining output paths and formats
+- **Vague Quality Standards**: Only saying "high quality" without specific criteria
 
-## 示例
+## Examples
 
-### 来自 industry_assessment 系统
+### From the industry_assessment System
 
 ```markdown
-# 初步感知器 (Initial Scanner)
+# Initial Scanner
 
-## 你的角色
+## Your Role
 
-你是ESSCC产业分析研究项目的初步感知器。你的职责是对目标产业
-形成总体感知，并基于产业特征为ESSCC框架的每个功能项制定贴合
-实际的问题清单，为后续深度调研奠定基础。
+You are the Initial Scanner for the ESSCC industry analysis research project.
+Your responsibility is to form an overall perception of the target industry
+and develop a problem checklist tailored to the industry characteristics for
+each functional item in the ESSCC framework, laying the foundation for
+subsequent in-depth research.
 
-## 输入参数
+## Input Parameters
 
-- `{INDUSTRY_ID}`：产业标识符
-- `{INDUSTRY_NAME}`：目标产业名称
+- `{INDUSTRY_ID}`: Industry identifier
+- `{INDUSTRY_NAME}`: Target industry name
 
-## 工作流程
+## Workflow
 
-### 阶段一：产业概况采集
+### Stage 1: Industry Overview Collection
 
-**目标**：对目标产业形成初步总体感知。
+**Goal**: Form a preliminary overall perception of the target industry.
 
-**采集内容**：
-1. 产业基本概况（定义、规模、格局、产业链）
-2. 所有制结构概况（国企、民企、外资角色）
-3. 政策环境概况（国家政策、地方措施、监管框架）
-4. 发展历程概况（关键阶段、重大事件、技术演进）
+**Collection Content**:
+1. Basic industry overview (definition, scale, landscape, industry chain)
+2. Ownership structure overview (roles of state-owned, private, foreign enterprises)
+3. Policy environment overview (national policies, local measures, regulatory framework)
+4. Development history overview (key stages, major events, technology evolution)
 
-**输出位置**：`data/{INDUSTRY_ID}/01.materials/01.industry_overview/`
+**Output Location**: `data/{INDUSTRY_ID}/01.materials/01.industry_overview/`
 
-### 阶段二：问题清单细化
+### Stage 2: Problem Checklist Refinement
 
-**目标**：为ESSCC框架的每个功能项制定具体问题清单。
+**Goal**: Develop specific problem checklists for each functional item in the ESSCC framework.
 
-**工作方法**：
-1. 理解产业特征：仔细阅读阶段一的概况资料
-2. 逐一审视功能项：对照ESSCC框架的55个功能项
-3. 制定具体问题：为每个功能项制定3-5个问题
-4. 标注调研方向：为每个问题标注数据来源类型
+**Working Method**:
+1. Understand industry characteristics: Carefully read the overview materials from Stage 1
+2. Review functional items one by one: Cross-reference with the 55 functional items in the ESSCC framework
+3. Develop specific questions: Formulate 3-5 questions for each functional item
+4. Annotate research directions: Label data source types for each question
 
-## 数据采集原则
+## Data Collection Principles
 
-### 全面性
-- 产业概况要覆盖所有四个方面
-- 问题清单要覆盖所有55个功能项
+### Comprehensiveness
+- Industry overview should cover all four aspects
+- Problem checklist should cover all 55 functional items
 
-### 准确性
-- 优先选择高可信度来源
-- 关键数据要交叉验证
+### Accuracy
+- Prioritize highly credible sources
+- Cross-verify key data
 ```
 
-## 相关模式
+## Related Patterns
 
-- **[Intelligent Runtime](./COR-02-intelligent-runtime.md)**：本模式依赖智能运行时来理解和执行Blueprint
-- **[Reference Data Configuration](./STR-01-reference-data-configuration.md)**：Blueprint引用外置的参考数据
-- **[Embedded Quality Standards](./QUA-01-embedded-quality-standards.md)**：在Blueprint中嵌入质量标准
-- **[Workspace Isolation](./STR-03-workspace-isolation.md)**：Blueprint中应包含工作空间隔离要求
+- **[Intelligent Runtime](./COR-02-intelligent-runtime.md)**: This pattern relies on the intelligent runtime to understand and execute Blueprints
+- **[Reference Data Configuration](./STR-01-reference-data-configuration.md)**: Blueprints reference externalized reference data
+- **[Embedded Quality Standards](./QUA-01-embedded-quality-standards.md)**: Embed quality standards in Blueprints
+- **[Workspace Isolation](./STR-03-workspace-isolation.md)**: Blueprints should include workspace isolation requirements
 
-## 变体
+## Variants
 
-### 参数化Agent
-Blueprint包含大量占位符，执行时动态替换，适合批量处理场景。
+### Parameterized Agent
+Blueprint contains many placeholders that are dynamically replaced during execution, suitable for batch processing scenarios.
 
-### 对话式Agent
-Blueprint描述对话策略而非单次任务流程，适合交互式场景。
+### Conversational Agent
+Blueprint describes conversation strategies rather than single-task workflows, suitable for interactive scenarios.
 
-### 元Agent（Orchestrator）
-Blueprint描述如何协调其他Agent，而非直接执行任务。
+### Meta-Agent (Orchestrator)
+Blueprint describes how to coordinate other Agents rather than directly executing tasks.

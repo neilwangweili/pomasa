@@ -1,189 +1,189 @@
 # Filesystem Data Bus
 
-**分类**：结构模式
-**必要性**：推荐
+**Category**: Structure
+**Necessity**: Recommended
 
-## 问题
+## Problem
 
-Agent之间如何传递数据？
+How do Agents transfer data between each other?
 
-多Agent系统中，Agent之间需要交换数据。传统方案（API调用、消息队列、共享数据库）需要额外基础设施、复杂配置和网络编程。AI多Agent系统需要一种与运行时自然契合、完全可追溯、人类可读可编辑、部署简单的方案。
+In multi-agent systems, Agents need to exchange data. Traditional approaches (API calls, message queues, shared databases) require additional infrastructure, complex configuration, and network programming. AI multi-agent systems need a solution that naturally fits the runtime, is fully traceable, human-readable and editable, and simple to deploy.
 
-## 语境
+## Context
 
-该模式适用于以下场景：
+This pattern applies to the following scenarios:
 
-- 批量处理任务（非实时系统）
-- 需要完全可追溯和可审计
-- 希望人类能直接查看和编辑中间结果
-- 运行时环境提供良好的文件系统工具支持
-- 数据量中等，不需要复杂查询
+- Batch processing tasks (non-realtime systems)
+- Need for complete traceability and auditability
+- Desire for humans to directly view and edit intermediate results
+- Runtime environment provides good filesystem tool support
+- Medium data volumes, no need for complex queries
 
-## 作用力
+## Forces
 
-- **简单性 vs 功能性**：文件系统简单，但缺少事务、查询等高级功能
-- **透明性 vs 性能**：所有数据可见带来透明，但I/O开销较大
-- **松耦合 vs 实时性**：通过文件松耦合，但难以支持实时通信
-- **人类可读 vs 机器效率**：文本格式人类友好，但处理效率较低
+- **Simplicity vs Functionality**: Filesystems are simple but lack advanced features like transactions and queries
+- **Transparency vs Performance**: All data being visible brings transparency, but I/O overhead is greater
+- **Loose Coupling vs Realtime**: Loose coupling through files, but difficult to support realtime communication
+- **Human Readability vs Machine Efficiency**: Text formats are human-friendly, but processing efficiency is lower
 
-## 解决方案
+## Solution
 
-**使用文件系统作为数据传递媒介。Agent通过约定的文件路径读写JSON和Markdown文件，不直接通信。**
+**Use the filesystem as the data transfer medium. Agents read and write JSON and Markdown files through agreed-upon file paths, without communicating directly.**
 
-### 目录结构反映数据流
+### Directory Structure Reflects Data Flow
 
 ```
 data/
-├── {TIME_PERIOD}/           # 按时间周期分区
-│   ├── 01.materials/        # 阶段一输出：原始数据
-│   │   ├── {entity_1}/      # 按处理实体分区
+├── {TIME_PERIOD}/           # Partition by time period
+│   ├── 01.materials/        # Stage one output: raw data
+│   │   ├── {entity_1}/      # Partition by processing entity
 │   │   ├── {entity_2}/
 │   │   └── ...
 │   │
-│   ├── 02.analysis/         # 阶段二输出：分析结果
+│   ├── 02.analysis/         # Stage two output: analysis results
 │   │   └── ...
 │   │
-│   └── 03.reports/          # 阶段三输出：最终报告
+│   └── 03.reports/          # Stage three output: final reports
 │       └── ...
 ```
 
-### 核心设计原则
+### Core Design Principles
 
-1. **目录结构即数据流**
-   - 目录层级反映处理阶段
-   - 子目录反映数据分区
+1. **Directory Structure as Data Flow**
+   - Directory hierarchy reflects processing stages
+   - Subdirectories reflect data partitions
 
-2. **文件格式约定**
-   - 结构化数据使用JSON
-   - 文本内容使用Markdown
-   - 元信息使用YAML front matter
+2. **File Format Conventions**
+   - Structured data uses JSON
+   - Text content uses Markdown
+   - Metadata uses YAML front matter
 
-3. **路径约定**
-   - 使用一致的命名规范
-   - 路径可从参数推导，无需显式配置
+3. **Path Conventions**
+   - Use consistent naming standards
+   - Paths can be derived from parameters, no explicit configuration needed
 
-4. **数据不可变性**
-   - 每阶段产出新数据，不修改前序数据
-   - 保留完整数据演化历史
+4. **Data Immutability**
+   - Each stage produces new data, does not modify previous data
+   - Preserves complete data evolution history
 
-## 结果
+## Consequences
 
-### 收益
+### Benefits
 
-- **极致简单**：不需要中间件，零配置
-- **完全可审查**：所有数据可见、可追溯
-- **人类可读**：JSON和Markdown格式直接可读
-- **AI运行时友好**：自然契合Claude Code的文件工具
-- **版本控制友好**：可用Git管理数据版本
-- **零配置协作**：通过目录约定而非显式配置实现协作
+- **Ultimate Simplicity**: No middleware needed, zero configuration
+- **Fully Auditable**: All data visible and traceable
+- **Human Readable**: JSON and Markdown formats directly readable
+- **AI Runtime Friendly**: Naturally fits Claude Code's file tools
+- **Version Control Friendly**: Can use Git to manage data versions
+- **Zero-Config Collaboration**: Collaboration through directory conventions rather than explicit configuration
 
-### 代价
+### Liabilities
 
-- **并发控制弱**：无锁机制，需通过设计避免冲突
-- **查询能力有限**：无法像数据库那样复杂查询
-- **性能较低**：文件I/O比内存操作慢
-- **事务性差**：无法保证原子性操作
-- **实时性受限**：不适合需要即时通信的场景
+- **Weak Concurrency Control**: No locking mechanism, must avoid conflicts through design
+- **Limited Query Capability**: Cannot perform complex queries like databases
+- **Lower Performance**: File I/O slower than memory operations
+- **Poor Transactionality**: Cannot guarantee atomic operations
+- **Limited Realtime**: Not suitable for scenarios requiring immediate communication
 
-## 实现指南
+## Implementation Guidelines
 
-### 目录命名约定
-
-```
-# 阶段目录：数字前缀表示顺序
-01.materials/     # 阶段一
-02.analysis/      # 阶段二
-03.reports/       # 阶段三
-
-# 实体目录：使用ID或规范化名称
-org_1/            # 组织1的数据
-org_2/            # 组织2的数据
-
-# 特殊目录
-wip/              # 工作进度记录
-references/       # 参考数据（不属于数据流）
-```
-
-### 文件命名约定
+### Directory Naming Conventions
 
 ```
-# 主数据文件：描述性名称
-activities.json       # 活动数据
-basic_profile.md      # 基本概况
+# Stage directories: numeric prefix indicates order
+01.materials/     # Stage one
+02.analysis/      # Stage two
+03.reports/       # Stage three
 
-# 来源清单：统一命名
-source_list.md        # 该目录数据的来源清单
+# Entity directories: use ID or normalized name
+org_1/            # Organization 1 data
+org_2/            # Organization 2 data
 
-# 检查报告：统一命名
-quality_check_report.md   # 质量检查报告
-
-# 最终产出：统一命名
-final_report.md       # 最终报告
-executive_summary.md  # 执行摘要
+# Special directories
+wip/              # Work in progress tracking
+references/       # Reference data (not part of data flow)
 ```
 
-### Blueprint中的路径引用
+### File Naming Conventions
+
+```
+# Primary data files: descriptive names
+activities.json       # Activity data
+basic_profile.md      # Basic profile
+
+# Source lists: unified naming
+source_list.md        # Source list for this directory's data
+
+# Check reports: unified naming
+quality_check_report.md   # Quality check report
+
+# Final outputs: unified naming
+final_report.md       # Final report
+executive_summary.md  # Executive summary
+```
+
+### Path References in Blueprints
 
 ```markdown
-## 输出要求
+## Output Requirements
 
-**输出位置**：`data/{INDUSTRY_ID}/01.materials/01.industry_overview/`
+**Output Location**: `data/{INDUSTRY_ID}/01.materials/01.industry_overview/`
 
-**输出格式**：
+**Output Format**:
 ```
 data/{INDUSTRY_ID}/01.materials/01.industry_overview/
-├── basic_profile.md          # 产业基本概况
-├── ownership_structure.md    # 所有制结构概况
-├── policy_environment.md     # 政策环境概况
-├── development_history.md    # 发展历程概况
-└── source_list.md            # 来源清单
+├── basic_profile.md          # Industry basic profile
+├── ownership_structure.md    # Ownership structure profile
+├── policy_environment.md     # Policy environment profile
+├── development_history.md    # Development history profile
+└── source_list.md            # Source list
 ```
 
-[注：路径使用参数占位符，执行时替换为实际值]
+[Note: Paths use parameter placeholders, replaced with actual values during execution]
 ```
 
-### 避免写入冲突
+### Avoiding Write Conflicts
 
-通过数据分区避免多Agent同时写入同一文件：
+Avoid multiple Agents writing to the same file simultaneously through data partitioning:
 
 ```
-# 并行执行时，每个Agent写入不同目录
+# During parallel execution, each Agent writes to a different directory
 Agent_1 → data/2025-09/raw/org_1/
 Agent_2 → data/2025-09/raw/org_2/
 Agent_3 → data/2025-09/raw/org_3/
 ...
 ```
 
-### 双文件模式
+### Dual-File Pattern
 
-对于重要数据，可采用"双文件"模式：
+For important data, can adopt the "dual-file" pattern:
 
 ```
 {entity}/
-├── data.json       # 机器可读的结构化数据
-└── sources.md      # 人类可读的来源说明
+├── data.json       # Machine-readable structured data
+└── sources.md      # Human-readable source documentation
 ```
 
-## 示例
+## Examples
 
-### 来自 industry_assessment 系统
+### From the industry_assessment System
 
-**数据目录结构**：
+**Data Directory Structure**:
 ```
 data/
-└── evtol/                           # 产业ID
-    ├── 01.materials/                # 原始材料
-    │   ├── 01.industry_overview/    # 产业概况
+└── evtol/                           # Industry ID
+    ├── 01.materials/                # Raw materials
+    │   ├── 01.industry_overview/    # Industry overview
     │   │   ├── basic_profile.md
     │   │   ├── ownership_structure.md
     │   │   └── source_list.md
     │   │
-    │   ├── 02.question_list/        # 问题清单
+    │   ├── 02.question_list/        # Question list
     │   │   ├── overview.md
     │   │   ├── dimension_1_ownership.md
     │   │   └── ...
     │   │
-    │   └── 03.deep_research/        # 深度调研
+    │   └── 03.deep_research/        # Deep research
     │       ├── 1.1_control_strategic_sectors/
     │       │   ├── policies.md
     │       │   ├── statistics.md
@@ -191,18 +191,18 @@ data/
     │       │   └── source_list.md
     │       └── ...
     │
-    ├── 02.analysis/                 # 分析结果
-    │   ├── functions/               # 功能项分析
-    │   ├── features/                # 特征综合
-    │   ├── dimensions/              # 维度综合
+    ├── 02.analysis/                 # Analysis results
+    │   ├── functions/               # Function analysis
+    │   ├── features/                # Feature synthesis
+    │   ├── dimensions/              # Dimension synthesis
     │   └── overall_synthesis.md
     │
-    └── 03.reports/                  # 最终报告
+    └── 03.reports/                  # Final reports
         ├── final_report.md
         └── executive_summary.md
 ```
 
-**数据流转**：
+**Data Flow**:
 ```
 Initial Scanner → 01.materials/01.industry_overview/
                 → 01.materials/02.question_list/
@@ -218,120 +218,120 @@ Reporter        → 03.reports/final_report.md
                 → 03.reports/executive_summary.md
 ```
 
-## 相关模式
+## Related Patterns
 
-- **[Reference Data Configuration](./STR-01-reference-data-configuration.md)**：Reference Data也存储在文件系统中，但位于`references/`而非`data/`
-- **[Workspace Isolation](./STR-03-workspace-isolation.md)**：限制Agent只能访问特定目录
-- **[Progressive Data Refinement](./BHV-04-progressive-data-refinement.md)**：数据在目录间流转时逐步精炼
-- **[Parallel Instance Execution](./BHV-03-parallel-instance-execution.md)**：通过目录分区支持并行写入
+- **[Reference Data Configuration](./STR-01-reference-data-configuration.md)**: Reference Data is also stored in the filesystem, but located in `references/` rather than `data/`
+- **[Workspace Isolation](./STR-03-workspace-isolation.md)**: Restricts Agents to access only specific directories
+- **[Progressive Data Refinement](./BHV-04-progressive-data-refinement.md)**: Data undergoes gradual refinement as it flows between directories
+- **[Parallel Instance Execution](./BHV-03-parallel-instance-execution.md)**: Supports parallel writes through directory partitioning
 
-## 数据目录分区策略
+## Data Directory Partitioning Strategy
 
-### 分区维度的选择
+### Choosing Partition Dimensions
 
-**一级目录 = 运行实例的区分维度**
+**First-Level Directory = Dimension for Distinguishing Run Instances**
 
-根据任务特性选择合适的一级分区：
+Choose appropriate first-level partitioning based on task characteristics:
 
-| 任务类型 | 分区维度 | 示例 |
+| Task Type | Partition Dimension | Example |
 |----------|----------|------|
-| 周期性任务 | 时间/日期 | `data/2025-12-03/` |
-| 多实体任务 | 实体ID | `data/US/`、`data/CN/` |
-| 一次性任务 | 无需一级分区 | 直接 `data/01.xxx/` |
+| Periodic tasks | Time/Date | `data/2025-12-03/` |
+| Multi-entity tasks | Entity ID | `data/US/`, `data/CN/` |
+| One-time tasks | No first-level partition | Directly `data/01.xxx/` |
 
-**二级目录 = Agent产出的阶段划分**
+**Second-Level Directory = Agent Output Stage Division**
 
-无论采用何种一级分区，二级目录始终按Agent阶段编号：
+Regardless of first-level partitioning approach, second-level directories always follow Agent stage numbering:
 
 ```
-data/{一级分区}/
+data/{first_level_partition}/
 ├── 01.initial_scan/
 ├── 02.deep_research/
 ├── 03.analysis/
 └── 04.reports/
 ```
 
-### 时间分区
+### Time-Based Partitioning
 
-**适用场景**：周期性重复运行的任务
+**Applicable Scenarios**: Periodically repeated tasks
 
-- 每周新闻期刊
-- 每月市场报告
-- 每日数据采集
+- Weekly news digests
+- Monthly market reports
+- Daily data collection
 
-**目录结构**：
+**Directory Structure**:
 ```
 data/
-├── 2025-12-01/              # 周日期刊
+├── 2025-12-01/              # Sunday digest
 │   ├── 01.news_collection/
 │   ├── 02.analysis/
 │   └── 03.digest/
-├── 2025-12-08/              # 下周日期刊
+├── 2025-12-08/              # Next Sunday digest
 │   ├── 01.news_collection/
 │   └── ...
-└── latest -> 2025-12-08/    # 可选：符号链接指向最新
+└── latest -> 2025-12-08/    # Optional: symbolic link to latest
 ```
 
-**命名规范**：
-- 日期格式：`YYYY-MM-DD`（便于排序）
-- 月度任务：`YYYY-MM`
-- 周度任务：`YYYY-Wxx` 或 `YYYY-MM-DD`（周起始日）
+**Naming Standards**:
+- Date format: `YYYY-MM-DD` (easy to sort)
+- Monthly tasks: `YYYY-MM`
+- Weekly tasks: `YYYY-Wxx` or `YYYY-MM-DD` (week start date)
 
-### 实体分区
+### Entity-Based Partitioning
 
-**适用场景**：同一流程对多个独立实体分别运行
+**Applicable Scenarios**: Same process run separately for multiple independent entities
 
-- 区域国别研究（每个国家一次运行）
-- 多产业评估（每个产业一次运行）
-- 多组织分析（每个组织一次运行）
+- Regional/country research (one run per country)
+- Multi-industry assessment (one run per industry)
+- Multi-organization analysis (one run per organization)
 
-**目录结构**：
+**Directory Structure**:
 ```
 data/
-├── US/                      # 美国研究
+├── US/                      # United States research
 │   ├── 01.data_collection/
 │   ├── 02.analysis/
 │   └── 03.report/
-├── CN/                      # 中国研究
+├── CN/                      # China research
 │   ├── 01.data_collection/
 │   └── ...
-└── JP/                      # 日本研究
+└── JP/                      # Japan research
     └── ...
 ```
 
-**命名规范**：
-- 使用标准化ID（ISO国家代码、行业代码等）
-- 避免使用中文或特殊字符（跨平台兼容性）
-- 保持简短但可识别
+**Naming Standards**:
+- Use standardized IDs (ISO country codes, industry codes, etc.)
+- Avoid using Chinese or special characters (cross-platform compatibility)
+- Keep short but recognizable
 
-### 混合分区
+### Hybrid Partitioning
 
-**适用场景**：既有周期性，又有多实体
+**Applicable Scenarios**: Both periodic and multi-entity
 
-- 每月各国经济指标跟踪
-- 每周多产业动态监测
+- Monthly economic indicator tracking for multiple countries
+- Weekly multi-industry dynamics monitoring
 
-**目录结构**：
+**Directory Structure**:
 ```
 data/
-└── 2025-03/                 # 一级：时间
-    ├── US/                  # 二级：实体
+└── 2025-03/                 # First level: time
+    ├── US/                  # Second level: entity
     │   ├── 01.collection/
     │   └── 02.report/
     ├── CN/
     └── JP/
 ```
 
-**选择一级维度的原则**：
-- 哪个维度更常作为"一次运行"的单位？→ 作为一级
-- 时间周期固定、实体数量变化 → 时间在一级
-- 实体固定、时间周期灵活 → 实体在一级
+**Principles for Choosing First-Level Dimension**:
+- Which dimension is more commonly the unit of "one run"? → Use as first level
+- Fixed time period, variable entity count → Time at first level
+- Fixed entities, flexible time period → Entity at first level
 
-### 一次性任务
+### One-Time Tasks
 
-**适用场景**：只运行一次，不需要区分实例
+**Applicable Scenarios**: Run only once, no need to distinguish instances
 
-**目录结构**：
+**Directory Structure**:
 ```
 data/
 ├── 01.initial_scan/
@@ -340,47 +340,47 @@ data/
 └── 04.reports/
 ```
 
-无需一级分区，阶段目录直接位于 `data/` 下。
+No first-level partition needed, stage directories directly under `data/`.
 
-### Blueprint中的参数化
+### Parameterization in Blueprints
 
-**Orchestrator传递分区参数**：
+**Orchestrator Passes Partition Parameters**:
 ```markdown
-## 执行参数
+## Execution Parameters
 
-本次运行的参数：
-- INSTANCE_ID: {日期或实体ID，作为一级分区}
-- 例如：`2025-12-03` 或 `US`
+Parameters for this run:
+- INSTANCE_ID: {date or entity ID, used as first-level partition}
+- For example: `2025-12-03` or `US`
 
-所有Agent的输出路径均以 `data/{INSTANCE_ID}/` 为根目录。
+All Agent output paths use `data/{INSTANCE_ID}/` as root directory.
 ```
 
-**Agent Blueprint使用参数**：
+**Agent Blueprint Uses Parameters**:
 ```markdown
-## 输出位置
+## Output Location
 
 `data/{INSTANCE_ID}/02.analysis/`
 
-其中 {INSTANCE_ID} 由Orchestrator传入。
+Where {INSTANCE_ID} is passed in by Orchestrator.
 ```
 
-### 历史数据的引用
+### Referencing Historical Data
 
-当需要引用历史运行结果时：
+When needing to reference historical run results:
 
 ```markdown
-## 输入
+## Input
 
-**本期数据**：`data/{CURRENT_INSTANCE}/01.collection/`
-**上期数据**：`data/{PREVIOUS_INSTANCE}/01.collection/`（如需对比）
+**Current Period Data**: `data/{CURRENT_INSTANCE}/01.collection/`
+**Previous Period Data**: `data/{PREVIOUS_INSTANCE}/01.collection/` (if comparison needed)
 
-Orchestrator在调用时需提供 PREVIOUS_INSTANCE 参数。
+Orchestrator must provide PREVIOUS_INSTANCE parameter when invoking.
 ```
 
-## 何时不使用此模式
+## When Not to Use This Pattern
 
-- **实时系统**：需要毫秒级响应
-- **高并发写入**：大量Agent同时写入同一数据
-- **复杂查询需求**：需要SQL级别的查询能力
-- **大数据量**：文件系统I/O成为瓶颈
-- **需要事务保证**：必须保证原子性操作
+- **Realtime Systems**: Require millisecond-level response
+- **High Concurrent Writes**: Large number of Agents writing to the same data simultaneously
+- **Complex Query Requirements**: Need SQL-level query capabilities
+- **Large Data Volumes**: Filesystem I/O becomes a bottleneck
+- **Transaction Guarantees Required**: Must guarantee atomic operations

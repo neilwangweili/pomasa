@@ -1,193 +1,193 @@
 # Intelligent Runtime
 
-**分类**：核心模式
-**必要性**：必要
+**Category**: Core
+**Necessity**: Required
 
-## 问题
+## Problem
 
-谁来执行声明式定义的Agent行为？
+Who executes the behavior of declaratively defined Agents?
 
-传统运行时环境（如JVM、Python解释器）机械地执行代码指令，无法理解自然语言描述的意图。声明式Agent Blueprint需要一个能够理解语义、做出决策、适应变化的执行环境。
+Traditional runtime environments (such as JVM, Python interpreters) mechanically execute code instructions and cannot understand intents described in natural language. Declarative Agent Blueprints require an execution environment capable of understanding semantics, making decisions, and adapting to changes.
 
-## 语境
+## Context
 
-该模式适用于以下场景：
+This pattern applies to scenarios where:
 
-- 系统采用声明式Agent定义（Prompt-Defined Agent模式）
-- 任务执行需要语义理解和智能决策
-- 执行环境可能变化（如网页结构改变）
-- 希望在执行时做出最优决策，而非预先编码所有情况
+- The system uses declarative Agent definitions (Prompt-Defined Agent pattern)
+- Task execution requires semantic understanding and intelligent decision-making
+- The execution environment may change (e.g., web page structure changes)
+- Optimal decisions should be made at execution time rather than pre-coding all scenarios
 
-## 作用力
+## Forces
 
-- **智能程度 vs 可控性**：运行时越智能，行为越难预测
-- **适应性 vs 一致性**：适应变化的能力可能导致执行不一致
-- **自主性 vs 可审计性**：自主决策使审计变得困难
-- **能力 vs 成本**：智能运行时通常需要AI模型支持，有成本
+- **Intelligence Level vs Controllability**: The more intelligent the runtime, the harder behavior becomes to predict
+- **Adaptability vs Consistency**: The ability to adapt to changes may lead to inconsistent execution
+- **Autonomy vs Auditability**: Autonomous decision-making makes auditing difficult
+- **Capability vs Cost**: Intelligent runtimes typically require AI model support, which has costs
 
-## 解决方案
+## Solution
 
-**使用具有理解和决策能力的AI系统作为运行时环境，它能够理解自然语言Blueprint、选择执行方法、评估输出质量、处理异常情况。**
+**Use an AI system with understanding and decision-making capabilities as the runtime environment. It can understand natural language Blueprints, select execution methods, evaluate output quality, and handle exceptional situations.**
 
-### 智能运行时的能力层次
+### Capability Layers of Intelligent Runtime
 
 ```
-第四层：元认知能力
-        ├── 进度追踪与计划调整
-        ├── 执行反思与策略优化
-        └── 异常识别与恢复决策
+Layer 4: Metacognitive Capabilities
+        ├── Progress tracking and plan adjustment
+        ├── Execution reflection and strategy optimization
+        └── Exception identification and recovery decisions
 
-第三层：质量评估能力
-        ├── 理解质量标准
-        ├── 评估输出质量
-        └── 自我修正
+Layer 3: Quality Evaluation Capabilities
+        ├── Understanding quality standards
+        ├── Evaluating output quality
+        └── Self-correction
 
-第二层：执行决策能力
-        ├── 工具选择与组合
-        ├── 参数推断
-        └── 错误处理与降级
+Layer 2: Execution Decision Capabilities
+        ├── Tool selection and combination
+        ├── Parameter inference
+        └── Error handling and degradation
 
-第一层：基础执行能力
-        ├── 文件系统操作
-        ├── 网络访问
-        ├── Agent实例管理
-        └── 工具调用
+Layer 1: Basic Execution Capabilities
+        ├── Filesystem operations
+        ├── Network access
+        ├── Agent instance management
+        └── Tool invocation
 ```
 
-### 与传统运行时的本质区别
+### Essential Differences from Traditional Runtimes
 
-| 维度 | 传统运行时 | 智能运行时 |
+| Dimension | Traditional Runtime | Intelligent Runtime |
 |------|-----------|-----------|
-| **输入** | 字节码/源代码 | 自然语言Blueprint |
-| **执行方式** | 机械执行指令序列 | 理解意图，智能选择方法 |
-| **决策能力** | 无（完全由代码决定） | 强（执行时自适应决策） |
-| **错误处理** | 抛异常、停止执行 | 理解错误上下文，尝试恢复 |
-| **确定性** | 高（相同输入→相同输出） | 中（相同Blueprint可能有不同执行路径） |
+| **Input** | Bytecode/source code | Natural language Blueprint |
+| **Execution Method** | Mechanically execute instruction sequences | Understand intent, intelligently select methods |
+| **Decision-making Capability** | None (completely determined by code) | Strong (adaptive decision-making at execution time) |
+| **Error Handling** | Throw exceptions, halt execution | Understand error context, attempt recovery |
+| **Determinism** | High (same input → same output) | Medium (same Blueprint may have different execution paths) |
 
-## 结果
+## Consequences
 
-### 收益
+### Benefits
 
-- **声明式编程成为可能**：开发者描述意图，运行时实现
-- **运行时自适应**：自动适应环境变化（如网站结构改变）
-- **开放式智能**：可处理未预见的情况
-- **工具选择自由**：根据实际情况选择最优工具组合
-- **语义级质量意识**：理解"高质量"的含义
+- **Declarative Programming Becomes Possible**: Developers describe intent, runtime implements
+- **Runtime Adaptability**: Automatically adapts to environmental changes (e.g., website structure changes)
+- **Open-ended Intelligence**: Can handle unforeseen situations
+- **Tool Selection Freedom**: Select optimal tool combinations based on actual circumstances
+- **Semantic-level Quality Awareness**: Understands the meaning of "high quality"
 
-### 代价
+### Liabilities
 
-- **平台锁定**：强依赖特定AI平台
-- **在线依赖**：需要网络连接访问AI服务
-- **成本较高**：AI调用产生费用
-- **非确定性**：执行路径不完全可预测
-- **调试困难**：难以精确追踪决策过程
+- **Platform Lock-in**: Strong dependency on specific AI platforms
+- **Online Dependency**: Requires network connection to access AI services
+- **Higher Cost**: AI invocations incur fees
+- **Non-determinism**: Execution paths are not completely predictable
+- **Difficult Debugging**: Hard to precisely trace decision-making processes
 
-## 实现指南
+## Implementation Guidelines
 
-### Claude Code作为智能运行时
+### Claude Code as Intelligent Runtime
 
-当前最成熟的智能运行时实现是Claude Code，它提供：
+The most mature implementation of intelligent runtime currently is Claude Code, which provides:
 
-**基础能力**：
-- 文件读写：Read、Write、Edit工具
-- 文件搜索：Glob、Grep工具
-- 网络访问：WebSearch、WebFetch工具
-- 命令执行：Bash工具
+**Basic Capabilities**:
+- File reading/writing: Read, Write, Edit tools
+- File searching: Glob, Grep tools
+- Network access: WebSearch, WebFetch tools
+- Command execution: Bash tool
 
-**Agent管理**：
-- 通过Task工具启动Agent实例
-- 在同一消息中发起多个Task实现并行
-- 每个Agent实例有独立上下文
+**Agent Management**:
+- Launch Agent instances via Task tool
+- Initiate multiple Tasks in the same message for parallelism
+- Each Agent instance has independent context
 
-**智能决策**：
-- 理解自然语言Blueprint
-- 选择合适的工具和方法
-- 评估输出质量
-- 处理异常情况
+**Intelligent Decision-making**:
+- Understand natural language Blueprints
+- Select appropriate tools and methods
+- Evaluate output quality
+- Handle exceptional situations
 
-### 设计Blueprint时考虑运行时能力
+### Consider Runtime Capabilities When Designing Blueprints
 
 ```markdown
-## 工作流程
+## Workflow
 
-### 阶段一：信息采集
+### Phase 1: Information Collection
 
-**目标**：采集目标组织的活动信息
+**Objective**: Collect activity information from target organizations
 
-**策略指导**：
-1. 优先访问官方网站的活动日历
-2. 其次搜索相关新闻报道
-3. 如果官网无法访问，尝试其他权威来源
+**Strategy Guidance**:
+1. Prioritize accessing the official website's activity calendar
+2. Next, search for relevant news reports
+3. If the official website is inaccessible, try other authoritative sources
 
-[注：这里描述的是策略优先级，而非具体步骤。
-运行时会根据实际情况选择最优方法。]
+[Note: This describes strategy priorities, not specific steps.
+The runtime will select the optimal method based on actual circumstances.]
 ```
 
-### 理解"Agents on Rails"
+### Understanding "Agents on Rails"
 
-Blueprint提供"轨道"（方向和约束），运行时是"列车"（在轨道上有决策自由）：
+The Blueprint provides the "rails" (direction and constraints), while the runtime is the "train" (has decision-making freedom on the rails):
 
-- **轨道提供**：目标、策略优先级、质量标准、输出规范
-- **列车决定**：具体工具选择、执行顺序、错误恢复方式
+- **Rails Provide**: Objectives, strategy priorities, quality standards, output specifications
+- **Train Decides**: Specific tool selection, execution order, error recovery methods
 
-这种设计在可控性和灵活性之间取得平衡。
+This design strikes a balance between controllability and flexibility.
 
-### 信任与验证
+### Trust and Verification
 
-由于运行时有决策自主权，需要建立信任机制：
+Since the runtime has decision-making autonomy, trust mechanisms need to be established:
 
-1. **输出验证**：通过输出结果验证执行质量
-2. **过程追踪**：保留中间产物，支持事后审计
-3. **质量门禁**：在关键节点设置质量检查
-4. **人工介入点**：为重要决策保留人工审核机会
+1. **Output Validation**: Verify execution quality through output results
+2. **Process Tracking**: Preserve intermediate artifacts to support post-hoc auditing
+3. **Quality Gates**: Set quality checks at critical points
+4. **Human Intervention Points**: Reserve opportunities for manual review of important decisions
 
-## 示例
+## Examples
 
-### 工具选择的智能决策
+### Intelligent Decision-making in Tool Selection
 
-Blueprint中写道：
-> "访问组织官网，查找活动日历"
+The Blueprint states:
+> "Visit the organization's official website and look for the activity calendar"
 
-运行时的决策过程：
-1. 从配置中读取组织URL
-2. 使用WebFetch获取页面内容
-3. 如果页面结构简单，直接提取信息
-4. 如果页面结构复杂，可能先用WebSearch找到活动页面
-5. 如果官网不可访问，搜索替代来源
+The runtime's decision-making process:
+1. Read the organization URL from configuration
+2. Use WebFetch to retrieve page content
+3. If the page structure is simple, extract information directly
+4. If the page structure is complex, may first use WebSearch to find the activity page
+5. If the official website is inaccessible, search for alternative sources
 
-这种决策在Blueprint中没有明确规定，由运行时根据实际情况智能选择。
+These decisions are not explicitly specified in the Blueprint; the runtime intelligently selects based on actual circumstances.
 
-### 错误恢复的智能决策
+### Intelligent Decision-making in Error Recovery
 
-Blueprint中写道：
-> "如果某字段信息不可获得，留空或标记为'信息未披露'"
+The Blueprint states:
+> "If certain field information is unavailable, leave it blank or mark as 'information not disclosed'"
 
-运行时遇到某信息无法获取时：
-1. 尝试从替代来源获取
-2. 如果仍然失败，按规则标记
-3. 继续执行后续任务，而非中断
+When the runtime encounters information that cannot be obtained:
+1. Attempt to obtain from alternative sources
+2. If still unsuccessful, mark according to rules
+3. Continue with subsequent tasks rather than interrupting
 
-## 相关模式
+## Related Patterns
 
-- **[Prompt-Defined Agent](./COR-01-prompt-defined-agent.md)**：本模式是执行Prompt-Defined Agent的基础
-- **[Embedded Quality Standards](./QUA-01-embedded-quality-standards.md)**：运行时需要理解并执行质量标准
-- **[Parallel Instance Execution](./BHV-03-parallel-instance-execution.md)**：运行时提供并行执行能力
+- **[Prompt-Defined Agent](./COR-01-prompt-defined-agent.md)**: This pattern is the foundation for executing Prompt-Defined Agents
+- **[Embedded Quality Standards](./QUA-01-embedded-quality-standards.md)**: The runtime needs to understand and enforce quality standards
+- **[Parallel Instance Execution](./BHV-03-parallel-instance-execution.md)**: The runtime provides parallel execution capabilities
 
-## 演进方向
+## Evolution Directions
 
-### 多运行时支持
+### Multi-runtime Support
 
-未来可能出现多种智能运行时，Blueprint应保持一定的可移植性：
-- 避免依赖特定运行时的独特功能
-- 使用通用的工具描述方式
-- 为不同运行时提供适配层
+Multiple intelligent runtimes may emerge in the future; Blueprints should maintain a degree of portability:
+- Avoid depending on unique features of specific runtimes
+- Use generic tool description methods
+- Provide adaptation layers for different runtimes
 
-### 能力增强
+### Capability Enhancement
 
-运行时能力持续增强：
-- 更长的上下文窗口
-- 更强的推理能力
-- 更丰富的工具生态
-- 更好的多模态支持
+Runtime capabilities continue to evolve:
+- Longer context windows
+- Stronger reasoning capabilities
+- Richer tool ecosystems
+- Better multimodal support
 
-设计Blueprint时应考虑这些演进可能。
+When designing Blueprints, these evolutionary possibilities should be considered.

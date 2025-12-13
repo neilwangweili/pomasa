@@ -1,283 +1,283 @@
 # Orchestrated Agent Pipeline
 
-**分类**：行为模式
-**必要性**：推荐
+**Category**: Behavior
+**Necessity**: Recommended
 
-## 问题
+## Problem
 
-如何组织多个Agent协作完成复杂任务？
+How to organize multiple Agents to collaborate on complex tasks?
 
-单个Agent可以完成特定任务，但端到端的复杂任务往往需要多个性质不同的步骤。如果让一个Agent完成所有工作，会导致：
-- 认知负担过重，质量难以保证
-- 错误可能传播到后续所有步骤
-- 无法并行化，效率低下
-- 中间产物不可见，难以调试和审计
+A single Agent can complete specific tasks, but end-to-end complex tasks often require multiple steps of different natures. Having one Agent perform all the work leads to:
+- Excessive cognitive load, making quality difficult to guarantee
+- Errors that may propagate to all subsequent steps
+- Inability to parallelize, resulting in low efficiency
+- Invisible intermediate artifacts, making debugging and auditing difficult
 
-## 语境
+## Context
 
-该模式适用于以下场景：
+This pattern applies to scenarios where:
 
-- 任务可以自然分解为多个阶段
-- 每个阶段有明确不同的职责
-- 阶段之间存在数据依赖关系
-- 需要保留和审查中间产物
-- 部分阶段可以并行化
+- Tasks can be naturally decomposed into multiple stages
+- Each stage has clearly different responsibilities
+- Data dependencies exist between stages
+- Intermediate artifacts need to be preserved and reviewed
+- Some stages can be parallelized
 
-## 作用力
+## Forces
 
-- **专业化 vs 通用化**：专业Agent效果好，但增加协调复杂度
-- **解耦 vs 紧密协作**：解耦便于独立演进，但可能增加通信开销
-- **顺序执行 vs 并行执行**：顺序简单可靠，并行提高效率
-- **中间产物 vs 端到端效率**：保留中间产物便于审计，但增加存储
+- **Specialization vs Generalization**: Specialized Agents produce better results but increase coordination complexity
+- **Decoupling vs Tight Collaboration**: Decoupling facilitates independent evolution but may increase communication overhead
+- **Sequential vs Parallel Execution**: Sequential execution is simple and reliable, parallel execution improves efficiency
+- **Intermediate Artifacts vs End-to-End Efficiency**: Preserving intermediate artifacts facilitates auditing but increases storage requirements
 
-## 解决方案
+## Solution
 
-**将任务分解为多个顺序执行的阶段，每个阶段由专门的Agent类型处理，由Orchestrator Agent协调整个流程。数据在阶段之间逐层精炼。**
+**Decompose tasks into multiple sequentially executed stages, with each stage handled by a specialized Agent type, coordinated by an Orchestrator Agent. Data is progressively refined between stages.**
 
-### 流水线结构
+### Pipeline Structure
 
 ```
 Orchestrator
      │
-     ├── 阶段一：数据采集
+     ├── Stage 1: Data Collection
      │   ├── Agent Instance 1 ──┐
-     │   ├── Agent Instance 2 ──┼── 并行执行
+     │   ├── Agent Instance 2 ──┼── Parallel Execution
      │   └── Agent Instance N ──┘
      │         │
      │         ▼
-     │   [阶段一输出]
+     │   [Stage 1 Output]
      │
-     ├── 阶段二：分析处理
+     ├── Stage 2: Analysis
      │   ├── Agent Instance 1 ──┐
      │   └── Agent Instance M ──┘
      │         │
      │         ▼
-     │   [阶段二输出]
+     │   [Stage 2 Output]
      │
-     └── 阶段三：报告生成
+     └── Stage 3: Report Generation
          └── Agent Instance 1
                │
                ▼
-         [最终输出]
+         [Final Output]
 ```
 
-### 核心机制
+### Core Mechanisms
 
-1. **Orchestrator负责**：
-   - 读取和理解整体任务
-   - 确定执行顺序和并行机会
-   - 启动各阶段的Agent
-   - 传递参数和上下文
-   - 监控执行状态
-   - 处理异常情况
+1. **Orchestrator Responsibilities**:
+   - Read and understand the overall task
+   - Determine execution order and parallelization opportunities
+   - Launch Agents for each stage
+   - Pass parameters and context
+   - Monitor execution status
+   - Handle exceptions
 
-2. **阶段间同步**：
-   - 使用Barrier同步：等待所有Agent完成再进入下一阶段
-   - 通过文件系统检测完成状态
+2. **Inter-Stage Synchronization**:
+   - Use barrier synchronization: wait for all Agents to complete before entering next stage
+   - Detect completion status through filesystem
 
-3. **数据传递**：
-   - 阶段N的输出目录 = 阶段N+1的输入目录
-   - 通过目录约定而非显式传递
+3. **Data Passing**:
+   - Output directory of Stage N = Input directory of Stage N+1
+   - Through directory conventions rather than explicit passing
 
-## 结果
+## Consequences
 
-### 收益
+### Benefits
 
-- **职责清晰**：每个Agent专注于单一类型的任务
-- **并行能力**：独立任务可以并行执行
-- **中间产物有价值**：可以审查、复用、手动修正
-- **容错性好**：某阶段失败不影响前序阶段的产出
-- **可观测性**：可以监控每个阶段的进度
-- **支持渐进式开发**：可以逐阶段开发和测试
+- **Clear Responsibilities**: Each Agent focuses on a single type of task
+- **Parallel Capability**: Independent tasks can execute in parallel
+- **Valuable Intermediate Artifacts**: Can be reviewed, reused, manually corrected
+- **Good Fault Tolerance**: Failure of one stage doesn't affect outputs of previous stages
+- **Observability**: Progress of each stage can be monitored
+- **Supports Incremental Development**: Can develop and test stage by stage
 
-### 代价
+### Liabilities
 
-- **协调开销**：需要Orchestrator协调
-- **数据转换成本**：阶段间可能需要数据格式转换
-- **整体延迟增加**：阶段间有同步等待
-- **中间存储需求**：需要存储各阶段产出
-- **灵活性受限**：单向数据流，不支持反馈循环
+- **Coordination Overhead**: Requires Orchestrator coordination
+- **Data Transformation Cost**: May require data format conversion between stages
+- **Increased Overall Latency**: Synchronization waiting between stages
+- **Intermediate Storage Requirements**: Need to store outputs of each stage
+- **Limited Flexibility**: Unidirectional data flow, doesn't support feedback loops
 
-## 实现指南
+## Implementation Guidelines
 
-### Orchestrator Blueprint结构
+### Orchestrator Blueprint Structure
 
 ```markdown
 # Orchestrator
 
-## 你的角色
-你是系统的主协调者，负责协调整个研究流程。
+## Your Role
+You are the main coordinator of the system, responsible for orchestrating the entire research process.
 
-## 执行流程
+## Execution Flow
 
-### 阶段零：初始化
-1. 验证参考文件完整性
-2. 创建本次执行的目录结构
-3. 记录执行开始时间
+### Stage Zero: Initialization
+1. Verify integrity of reference files
+2. Create directory structure for this execution
+3. Record execution start time
 
-### 阶段一：数据采集
-**目标**：采集原始数据
-**执行方式**：
-- 读取 `agents/01.data_collector.md`
-- 为每个数据源启动一个Agent Instance
-- 可并行执行
-- 等待所有Instance完成
-**完成标志**：`data/01.materials/` 目录下有完整输出
+### Stage One: Data Collection
+**Goal**: Collect raw data
+**Execution Method**:
+- Read `agents/01.data_collector.md`
+- Launch one Agent Instance for each data source
+- Can execute in parallel
+- Wait for all Instances to complete
+**Completion Indicator**: Complete output in `data/01.materials/` directory
 
-### 阶段二：分析处理
-**目标**：分析原始数据
-**前置条件**：阶段一完成
-**执行方式**：
-- 读取 `agents/02.analyzer.md`
-- 根据分析任务启动Agent Instance
-- 等待所有Instance完成
-**完成标志**：`data/02.analysis/` 目录下有完整输出
+### Stage Two: Analysis
+**Goal**: Analyze raw data
+**Precondition**: Stage One completed
+**Execution Method**:
+- Read `agents/02.analyzer.md`
+- Launch Agent Instances according to analysis tasks
+- Wait for all Instances to complete
+**Completion Indicator**: Complete output in `data/02.analysis/` directory
 
-### 阶段三：报告生成
-**目标**：生成最终报告
-**前置条件**：阶段二完成
-**执行方式**：
-- 读取 `agents/03.reporter.md`
-- 启动单个Reporter Agent
-**完成标志**：`data/03.reports/final_report.md` 存在
+### Stage Three: Report Generation
+**Goal**: Generate final report
+**Precondition**: Stage Two completed
+**Execution Method**:
+- Read `agents/03.reporter.md`
+- Launch single Reporter Agent
+**Completion Indicator**: `data/03.reports/final_report.md` exists
 
-### 阶段四：质量检查（可选）
+### Stage Four: Quality Check (Optional)
 ...
 
-## 异常处理
-- 如果某阶段失败，记录错误信息到 `wip/notes.md`
-- 尝试提供部分结果
-- 通知用户失败情况和已完成的部分
+## Exception Handling
+- If a stage fails, record error information to `wip/notes.md`
+- Attempt to provide partial results
+- Notify user of failure and completed portions
 ```
 
-### 阶段划分原则
+### Stage Division Principles
 
-1. **按任务性质划分**：
-   - 采集、分析、生成是本质不同的任务
-   - 每种任务需要不同的能力和策略
+1. **Divide by Task Nature**:
+   - Collection, analysis, generation are fundamentally different tasks
+   - Each type of task requires different capabilities and strategies
 
-2. **按依赖关系划分**：
-   - 后续阶段依赖前序阶段的输出
-   - 同一阶段内的任务相互独立
+2. **Divide by Dependencies**:
+   - Subsequent stages depend on outputs of previous stages
+   - Tasks within the same stage are independent of each other
 
-3. **按并行机会划分**：
-   - 可以并行的任务放在同一阶段
-   - 必须串行的任务放在不同阶段
+3. **Divide by Parallelization Opportunities**:
+   - Tasks that can be parallelized are placed in the same stage
+   - Tasks that must be sequential are placed in different stages
 
-### 三阶段参考模型
-
-```
-阶段一：数据采集 (Collection)
-├── 从外部源获取数据
-├── 非结构化 → 结构化
-└── 输出：原始结构化数据
-
-阶段二：分析处理 (Analysis)
-├── 对数据进行分析、分类、提取
-├── 结构化数据 → 分析结果
-└── 输出：分析产出
-
-阶段三：报告生成 (Reporting)
-├── 整合分析结果，生成报告
-├── 分析结果 → 叙事文档
-└── 输出：最终交付物
-```
-
-### 可选的第四阶段
+### Three-Stage Reference Model
 
 ```
-阶段四：质量审核 (Quality Assurance)
-├── 审核报告质量
-├── 进行一致性检查
-├── 生成质量检查报告
-└── 标记需要人工关注的问题
+Stage 1: Data Collection
+├── Retrieve data from external sources
+├── Unstructured → Structured
+└── Output: Raw structured data
+
+Stage 2: Analysis
+├── Analyze, classify, extract data
+├── Structured data → Analysis results
+└── Output: Analysis products
+
+Stage 3: Report Generation
+├── Integrate analysis results, generate report
+├── Analysis results → Narrative document
+└── Output: Final deliverable
 ```
 
-## 示例
-
-### 来自 industry_assessment 系统
-
-**四阶段流水线**：
+### Optional Fourth Stage
 
 ```
-阶段一：初步感知 (Initial Scanner)
-├── 采集产业概况
-├── 制定问题清单
-└── 输出：01.materials/01.industry_overview/
+Stage 4: Quality Assurance
+├── Review report quality
+├── Perform consistency checks
+├── Generate quality check report
+└── Flag issues requiring human attention
+```
+
+## Examples
+
+### From the industry_assessment System
+
+**Four-Stage Pipeline**:
+
+```
+Stage 1: Initial Scanner
+├── Collect industry overview
+├── Formulate question list
+└── Output: 01.materials/01.industry_overview/
          01.materials/02.question_list/
 
-阶段二：深度调研 (Deep Researcher)
-├── 针对55个功能项采集资料
-├── 执行数据质检
-└── 输出：01.materials/03.deep_research/
+Stage 2: Deep Researcher
+├── Collect materials for 55 functional items
+├── Execute data quality check
+└── Output: 01.materials/03.deep_research/
          01.materials/quality_check_report.md
 
-阶段三：分析 (Analyzer)
-├── 功能项分析
-├── 特征→维度→整体综合
-└── 输出：02.analysis/functions/
+Stage 3: Analyzer
+├── Functional item analysis
+├── Feature→Dimension→Overall synthesis
+└── Output: 02.analysis/functions/
          02.analysis/features/
          02.analysis/dimensions/
          02.analysis/overall_synthesis.md
 
-阶段四：报告生成 (Reporter)
-├── 生成学术论文格式报告
-└── 输出：03.reports/final_report.md
+Stage 4: Reporter
+├── Generate academic paper format report
+└── Output: 03.reports/final_report.md
          03.reports/executive_summary.md
 ```
 
-**Orchestrator协调逻辑（概念性）**：
+**Orchestrator Coordination Logic (Conceptual)**:
 
 ```markdown
-## 执行流程
+## Execution Flow
 
-1. 验证 references/ 目录下的参考文件完整性
-2. 创建 data/{INDUSTRY_ID}/ 目录结构
+1. Verify integrity of reference files in references/ directory
+2. Create data/{INDUSTRY_ID}/ directory structure
 
-3. 启动阶段一：
-   - 使用 01.initial_scanner.md 启动Initial Scanner
-   - 传入参数：{INDUSTRY_ID}, {INDUSTRY_NAME}
-   - 等待完成
+3. Launch Stage 1:
+   - Use 01.initial_scanner.md to launch Initial Scanner
+   - Pass parameters: {INDUSTRY_ID}, {INDUSTRY_NAME}
+   - Wait for completion
 
-4. 启动阶段二：
-   - 读取问题清单，确定55个功能项
-   - 为每个功能项启动一个Deep Researcher实例（可并行）
-   - 等待所有实例完成
-   - 执行数据质检
+4. Launch Stage 2:
+   - Read question list, determine 55 functional items
+   - Launch one Deep Researcher instance for each functional item (can parallel)
+   - Wait for all instances to complete
+   - Execute data quality check
 
-5. 启动阶段三：
-   - 为每个功能项启动Analyzer（可并行）
-   - 执行特征级综合
-   - 执行维度级综合
-   - 执行整体综合
+5. Launch Stage 3:
+   - Launch Analyzer for each functional item (can parallel)
+   - Execute feature-level synthesis
+   - Execute dimension-level synthesis
+   - Execute overall synthesis
 
-6. 启动阶段四：
-   - 启动Reporter生成最终报告
+6. Launch Stage 4:
+   - Launch Reporter to generate final report
 
-7. 完成：向用户交付报告
+7. Complete: Deliver report to user
 ```
 
-## 相关模式
+## Related Patterns
 
-- **[Prompt-Defined Agent](./COR-01-prompt-defined-agent.md)**：流水线中的每个Agent都用Blueprint定义
-- **[Filesystem Data Bus](./STR-02-filesystem-data-bus.md)**：阶段间通过文件系统传递数据
-- **[Parallel Instance Execution](./BHV-03-parallel-instance-execution.md)**：阶段内可并行执行多个Instance
-- **[Progressive Data Refinement](./BHV-04-progressive-data-refinement.md)**：数据在阶段间逐步精炼
+- **[Prompt-Defined Agent](./COR-01-prompt-defined-agent.md)**: Each Agent in the pipeline is defined by a Blueprint
+- **[Filesystem Data Bus](./STR-02-filesystem-data-bus.md)**: Data is passed between stages through filesystem
+- **[Parallel Instance Execution](./BHV-03-parallel-instance-execution.md)**: Multiple Instances can execute in parallel within a stage
+- **[Progressive Data Refinement](./BHV-04-progressive-data-refinement.md)**: Data is progressively refined between stages
 
-## 变体
+## Variants
 
-### 条件分支流水线
-某些阶段根据条件决定是否执行或执行哪个分支。
+### Conditional Branch Pipeline
+Some stages execute or branch based on conditions.
 
-### 循环流水线
-某些阶段可能需要迭代执行，直到满足条件。
+### Iterative Pipeline
+Some stages may need to execute iteratively until conditions are met.
 
-### 混合流水线
-部分阶段串行，部分阶段并行，形成复杂的执行图。
+### Hybrid Pipeline
+Some stages are sequential, some parallel, forming a complex execution graph.
 
-## 何时不使用此模式
+## When Not to Use This Pattern
 
-- **简单任务**：单个Agent即可完成的任务
-- **实时交互系统**：需要即时响应的系统
-- **需要复杂反馈循环**：后续阶段需要修改前序阶段产出
-- **高度动态的任务**：执行路径高度不确定
+- **Simple Tasks**: Tasks that can be completed by a single Agent
+- **Real-Time Interactive Systems**: Systems requiring immediate response
+- **Complex Feedback Loops Needed**: Subsequent stages need to modify outputs of previous stages
+- **Highly Dynamic Tasks**: Execution path is highly uncertain

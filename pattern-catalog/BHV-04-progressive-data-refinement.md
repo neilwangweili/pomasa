@@ -1,252 +1,252 @@
 # Progressive Data Refinement
 
-**分类**：行为模式
-**必要性**：可选
+**Category**: Behavior
+**Necessity**: Optional
 
-## 问题
+## Problem
 
-如何处理复杂的数据转换需求？
+How to handle complex data transformation requirements?
 
-从原始输入到最终输出，数据需要经历多次转换。一步到位的转换难以保证质量，也难以调试和审计。需要一种方式来组织数据的渐进式处理，同时保留各阶段的中间产物。
+From raw input to final output, data needs to undergo multiple transformations. A single-step transformation is difficult to ensure quality and hard to debug and audit. A method is needed to organize progressive data processing while preserving intermediate artifacts at each stage.
 
-## 语境
+## Context
 
-该模式适用于以下场景：
+This pattern applies to scenarios where:
 
-- 数据需要多次转换才能达到最终形态
-- 每次转换都有独立的价值（可审查、可复用）
-- 需要追溯数据的演化过程
-- 转换过程中的质量需要分步检查
+- Data needs multiple transformations to reach its final form
+- Each transformation has independent value (can be reviewed, can be reused)
+- The evolution process of data needs to be traceable
+- Quality needs to be checked step-by-step during the transformation process
 
-## 作用力
+## Forces
 
-- **转换质量 vs 效率**：分步转换质量高，但效率可能较低
-- **中间产物价值 vs 存储成本**：保留中间产物有价值，但占用存储
-- **可追溯性 vs 简单性**：完整追溯有价值，但增加复杂度
-- **灵活性 vs 耦合度**：独立阶段便于调整，但需要定义接口
+- **Transformation Quality vs Efficiency**: Step-by-step transformation has higher quality, but may be less efficient
+- **Intermediate Artifact Value vs Storage Cost**: Preserving intermediate artifacts has value, but consumes storage
+- **Traceability vs Simplicity**: Complete traceability has value, but increases complexity
+- **Flexibility vs Coupling**: Independent stages are easier to adjust, but require defining interfaces
 
-## 解决方案
+## Solution
 
-**数据在系统中经历多个精炼层次，每个层次将数据转换为更接近最终形态的状态。每个层次的输出都被持久化，构成完整的数据血缘。**
+**Data undergoes multiple refinement levels in the system, with each level transforming data into a state closer to the final form. The output of each level is persisted, forming complete data lineage.**
 
-### 精炼层次模型
-
-```
-原始输入
-    │
-    ▼ 第一层：结构化
-非结构化内容 → 结构化数据
-    │
-    ▼ 第二层：分析
-结构化数据 → 分析结果
-    │
-    ▼ 第三层：整合
-分析结果 → 综合洞察
-    │
-    ▼ 第四层：叙事化
-综合洞察 → 最终报告
-```
-
-### 核心特征
-
-1. **单向数据流**：
-   - 数据只向前流动
-   - 每阶段产出新数据，不修改前序数据
-   - 形成完整的数据血缘
-
-2. **数据不可变性**：
-   - 一旦产出，数据不被修改
-   - 便于追溯和重现
-   - 支持并发访问
-
-3. **独立的转换逻辑**：
-   - 每个精炼层次有独立的Agent
-   - 输入输出格式明确
-   - 可以独立测试和优化
-
-## 结果
-
-### 收益
-
-- **质量可控**：每层转换都可以独立检查质量
-- **完全可追溯**：任何数据都能追溯到源头
-- **支持重跑**：可以从任意层次重新开始
-- **便于调试**：出错时可以检查各层产出
-- **中间产物可复用**：某些层次的产出可用于其他目的
-
-### 代价
-
-- **存储开销**：需要保存各层中间产物
-- **处理时间增加**：多层转换比单次转换耗时
-- **格式转换成本**：层间可能需要格式适配
-- **设计复杂度**：需要定义各层的职责和接口
-
-## 实现指南
-
-### 定义精炼层次
+### Refinement Level Model
 
 ```
-层次一：数据采集（Collection）
-├── 输入：外部数据源
-├── 输出：结构化原始数据
-├── 职责：获取、清洗、结构化
-└── 目录：data/01.materials/
-
-层次二：分析处理（Analysis）
-├── 输入：结构化原始数据
-├── 输出：分析结论
-├── 职责：分析、推理、评估
-└── 目录：data/02.analysis/
-
-层次三：报告生成（Reporting）
-├── 输入：分析结论
-├── 输出：最终报告
-├── 职责：整合、叙事、格式化
-└── 目录：data/03.reports/
+Raw Input
+    │
+    ▼ Level 1: Structuring
+Unstructured Content → Structured Data
+    │
+    ▼ Level 2: Analysis
+Structured Data → Analysis Results
+    │
+    ▼ Level 3: Integration
+Analysis Results → Synthesized Insights
+    │
+    ▼ Level 4: Narrativization
+Synthesized Insights → Final Report
 ```
 
-### 目录结构反映精炼层次
+### Core Characteristics
+
+1. **Unidirectional Data Flow**:
+   - Data only flows forward
+   - Each stage produces new data without modifying previous data
+   - Forms complete data lineage
+
+2. **Data Immutability**:
+   - Once produced, data is not modified
+   - Facilitates tracing and reproduction
+   - Supports concurrent access
+
+3. **Independent Transformation Logic**:
+   - Each refinement level has an independent Agent
+   - Input and output formats are clearly defined
+   - Can be independently tested and optimized
+
+## Consequences
+
+### Benefits
+
+- **Quality Control**: Each layer's transformation can be independently quality-checked
+- **Complete Traceability**: Any data can be traced back to its source
+- **Rerun Support**: Can restart from any level
+- **Ease of Debugging**: Can inspect outputs at each layer when errors occur
+- **Reusable Intermediate Artifacts**: Outputs from certain levels can be used for other purposes
+
+### Liabilities
+
+- **Storage Overhead**: Need to save intermediate artifacts at each layer
+- **Increased Processing Time**: Multi-layer transformation takes longer than single-step transformation
+- **Format Conversion Cost**: May need format adaptation between layers
+- **Design Complexity**: Need to define responsibilities and interfaces for each layer
+
+## Implementation Guidelines
+
+### Defining Refinement Levels
+
+```
+Level 1: Data Collection
+├── Input: External data sources
+├── Output: Structured raw data
+├── Responsibility: Fetch, clean, structure
+└── Directory: data/01.materials/
+
+Level 2: Analysis Processing
+├── Input: Structured raw data
+├── Output: Analysis conclusions
+├── Responsibility: Analyze, reason, evaluate
+└── Directory: data/02.analysis/
+
+Level 3: Report Generation
+├── Input: Analysis conclusions
+├── Output: Final report
+├── Responsibility: Integrate, narrate, format
+└── Directory: data/03.reports/
+```
+
+### Directory Structure Reflects Refinement Levels
 
 ```
 data/
-├── 01.materials/          # 第一层：原始材料
-│   ├── raw/               # 结构化原始数据
-│   └── sources/           # 来源信息
+├── 01.materials/          # Level 1: Raw Materials
+│   ├── raw/               # Structured raw data
+│   └── sources/           # Source information
 │
-├── 02.analysis/           # 第二层：分析结果
-│   ├── by_entity/         # 按实体的分析
-│   └── synthesis/         # 综合分析
+├── 02.analysis/           # Level 2: Analysis Results
+│   ├── by_entity/         # Analysis by entity
+│   └── synthesis/         # Synthesized analysis
 │
-└── 03.reports/            # 第三层：最终报告
+└── 03.reports/            # Level 3: Final Reports
     ├── main_report.md
     └── appendices/
 ```
 
-### 数据格式转换
+### Data Format Transformation
 
 ```
-第一层 → 第二层：
-JSON数据 → 分析Markdown
-{                         # 分析：{ENTITY}
+Level 1 → Level 2:
+JSON Data → Analysis Markdown
+{                         # Analysis: {ENTITY}
   "entity": "...",
-  "data": [...]           ## 关键发现
-}                         - 发现1
-                          - 发现2
+  "data": [...]           ## Key Findings
+}                         - Finding 1
+                          - Finding 2
 
-                          ## 数据支撑
-                          引用自 01.materials/...
+                          ## Data Support
+                          Referenced from 01.materials/...
 
-第二层 → 第三层：
-分析Markdown → 报告Markdown
-# 分析：{ENTITY}         # 综合报告
-## 关键发现
-...                       ## 第一章
-                          整合多个实体的分析...
+Level 2 → Level 3:
+Analysis Markdown → Report Markdown
+# Analysis: {ENTITY}     # Comprehensive Report
+## Key Findings
+...                       ## Chapter 1
+                          Integrating analysis from multiple entities...
 ```
 
-### 维护数据血缘
+### Maintaining Data Lineage
 
 ```markdown
-## 数据来源
+## Data Sources
 
-本分析基于以下原始数据：
-- `01.materials/entity_a/data.json` (采集于 2025-03-15)
-- `01.materials/entity_b/data.json` (采集于 2025-03-15)
+This analysis is based on the following raw data:
+- `01.materials/entity_a/data.json` (collected on 2025-03-15)
+- `01.materials/entity_b/data.json` (collected on 2025-03-15)
 
-## 引用说明
+## Reference Notes
 
-- [1] 原文来自 01.materials/entity_a/sources.md#source-1
-- [2] 原文来自 01.materials/entity_b/sources.md#source-3
+- [1] Original from 01.materials/entity_a/sources.md#source-1
+- [2] Original from 01.materials/entity_b/sources.md#source-3
 ```
 
-## 示例
+## Examples
 
-### 来自 industry_assessment 系统
+### From the industry_assessment System
 
-**四层精炼模型**：
-
-```
-层次一：初步感知
-├── 输入：公开网络信息
-├── 输出：
-│   ├── 01.industry_overview/ (产业概况)
-│   └── 02.question_list/ (问题清单)
-├── 转换：非结构化网页 → 结构化概况 + 问题清单
-└── Agent：Initial Scanner
-
-层次二：深度调研
-├── 输入：问题清单 + 公开网络信息
-├── 输出：03.deep_research/ (55个功能项的详尽资料)
-├── 转换：问题驱动的信息采集 → 分类存储的证据材料
-└── Agent：Deep Researcher
-
-层次三：分析综合
-├── 输入：深度调研资料
-├── 输出：
-│   ├── 02.analysis/functions/ (功能项分析)
-│   ├── 02.analysis/features/ (特征综合)
-│   ├── 02.analysis/dimensions/ (维度综合)
-│   └── 02.analysis/overall_synthesis.md (整体综合)
-├── 转换：证据材料 → 分层分析结论
-└── Agent：Analyzer
-
-层次四：报告生成
-├── 输入：分析综合结果
-├── 输出：03.reports/final_report.md
-├── 转换：分析结论 → 学术报告
-└── Agent：Reporter
-```
-
-**数据血缘示例**：
+**Four-Layer Refinement Model**:
 
 ```
-最终报告中的一个论断：
-"新能源汽车产业的公有制主体地位体现程度为'强'"
+Level 1: Initial Perception
+├── Input: Public web information
+├── Output:
+│   ├── 01.industry_overview/ (Industry overview)
+│   └── 02.question_list/ (Question list)
+├── Transformation: Unstructured web pages → Structured overview + Question list
+└── Agent: Initial Scanner
 
-数据血缘追溯：
+Level 2: Deep Research
+├── Input: Question list + Public web information
+├── Output: 03.deep_research/ (Detailed materials for 55 functional items)
+├── Transformation: Question-driven information collection → Categorized evidence materials
+└── Agent: Deep Researcher
+
+Level 3: Analysis and Synthesis
+├── Input: Deep research materials
+├── Output:
+│   ├── 02.analysis/functions/ (Functional item analysis)
+│   ├── 02.analysis/features/ (Feature synthesis)
+│   ├── 02.analysis/dimensions/ (Dimension synthesis)
+│   └── 02.analysis/overall_synthesis.md (Overall synthesis)
+├── Transformation: Evidence materials → Layered analysis conclusions
+└── Agent: Analyzer
+
+Level 4: Report Generation
+├── Input: Analysis and synthesis results
+├── Output: 03.reports/final_report.md
+├── Transformation: Analysis conclusions → Academic report
+└── Agent: Reporter
+```
+
+**Data Lineage Example**:
+
+```
+A conclusion in the final report:
+"The degree of public ownership dominance in the new energy vehicle industry is 'Strong'"
+
+Data lineage trace:
 └── 03.reports/final_report.md
-    └── 引用自 02.analysis/dimensions/dimension_1.md
-        └── 综合自 02.analysis/features/feature_1.md
-            └── 基于 02.analysis/functions/1.1_control_strategic_sectors.md
-                └── 分析自 01.materials/03.deep_research/1.1_control_strategic_sectors/
-                    ├── policies.md (政策证据)
-                    ├── statistics.md (数据证据)
-                    └── cases.md (案例证据)
-                        └── 原始来源：[URL] (采集于 2025-03-15)
+    └── Referenced from 02.analysis/dimensions/dimension_1.md
+        └── Synthesized from 02.analysis/features/feature_1.md
+            └── Based on 02.analysis/functions/1.1_control_strategic_sectors.md
+                └── Analyzed from 01.materials/03.deep_research/1.1_control_strategic_sectors/
+                    ├── policies.md (Policy evidence)
+                    ├── statistics.md (Statistical evidence)
+                    └── cases.md (Case evidence)
+                        └── Original source: [URL] (collected on 2025-03-15)
 ```
 
-## 相关模式
+## Related Patterns
 
-- **[Orchestrated Agent Pipeline](./BHV-01-orchestrated-agent-pipeline.md)**：Pipeline的各阶段实现数据精炼
-- **[Filesystem Data Bus](./STR-02-filesystem-data-bus.md)**：精炼层次体现在目录结构中
-- **[Layered Quality Assurance](./QUA-02-layered-quality-assurance.md)**：每个精炼层次都有质量检查
+- **[Orchestrated Agent Pipeline](./BHV-01-orchestrated-agent-pipeline.md)**: Each stage of the Pipeline implements data refinement
+- **[Filesystem Data Bus](./STR-02-filesystem-data-bus.md)**: Refinement levels are reflected in directory structure
+- **[Layered Quality Assurance](./QUA-02-layered-quality-assurance.md)**: Each refinement level has quality checks
 
-## 变体
+## Variants
 
-### 分支精炼
-同一层次的数据可能产出多种不同的下游产物：
+### Branched Refinement
+Data at the same level may produce multiple different downstream artifacts:
 ```
-分析结果
-├── → 执行摘要（给管理层）
-├── → 详细报告（给研究人员）
-└── → 数据附录（给验证人员）
-```
-
-### 迭代精炼
-某些层次可能需要多次迭代：
-```
-初稿 → 审核反馈 → 修订稿 → 再审核 → 定稿
+Analysis Results
+├── → Executive Summary (for management)
+├── → Detailed Report (for researchers)
+└── → Data Appendix (for validators)
 ```
 
-### 增量精炼
-新数据到来时，增量更新而非全量重跑：
+### Iterative Refinement
+Certain levels may require multiple iterations:
 ```
-已有数据 + 新增数据 → 增量分析 → 合并到已有分析
+Draft → Review Feedback → Revision → Re-review → Final Version
 ```
 
-## 何时不使用此模式
+### Incremental Refinement
+When new data arrives, incrementally update rather than complete rerun:
+```
+Existing Data + New Data → Incremental Analysis → Merge into Existing Analysis
+```
 
-- **简单转换**：单步转换即可完成
-- **实时系统**：无法接受多层处理的延迟
-- **存储受限**：无法保存大量中间产物
-- **不需要追溯**：最终结果足够，不关心过程
+## When Not to Use This Pattern
+
+- **Simple Transformation**: Can be completed in a single step
+- **Real-time Systems**: Cannot accept the latency of multi-layer processing
+- **Storage Constraints**: Cannot save large amounts of intermediate artifacts
+- **No Need for Traceability**: Final results are sufficient, process doesn't matter

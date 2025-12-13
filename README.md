@@ -2,91 +2,91 @@
 
 **Pattern-Oriented Multi-Agent System Architecture**
 
-## 项目用途
+## Purpose
 
-POMASA是一套用于构建声明式多智能体系统（Declarative Multi-Agent System）的模式语言和生成工具。
+POMASA is a pattern language and generation toolkit for building Declarative Multi-Agent Systems.
 
-它的核心价值是：**让AI能够根据模式指导，快速构建新的MAS系统**。
+Its core value proposition: **Enable AI to rapidly construct new MAS systems guided by patterns**.
 
-## 总体思路
+## Overall Approach
 
-### 问题
+### Problem
 
-构建多智能体系统时，每个团队都在用自己的方式搭建系统、用自己的术语描述架构。缺乏共同的模式语言使得：
-- 知识难以传播
-- 经验难以复用
-- 问题难以讨论清楚
+When building multi-agent systems, every team uses their own approach to construct systems and their own terminology to describe architecture. The lack of a common pattern language makes it difficult to:
+- Disseminate knowledge
+- Reuse experience
+- Discuss problems clearly
 
-### 方案
+### Solution
 
-POMASA采用"模式语言+生成器"的方式：
+POMASA adopts a "pattern language + generator" approach:
 
-1. **模式目录**（`pattern-catalog/`）：从实际系统中提炼的可复用架构模式，每个模式描述一个特定问题及其解决方案
-2. **生成器**（`generator.md`）：引导AI根据模式构建新系统的prompt
+1. **Pattern Catalog** (`pattern-catalog/`): Reusable architectural patterns extracted from real systems, each describing a specific problem and its solution
+2. **Generator** (`generator.md`): A prompt that guides AI to build new systems based on patterns
 
-### 核心理念
+### Core Principles
 
-- **模式是知识载体**：将隐性的架构经验显式化为可传播的模式
-- **模式有必要性分级**：必要、推荐、可选——系统可以灵活组合
-- **AI是执行者**：AI阅读模式文档，理解设计原则，生成符合模式的系统
-- **持续演进**：随着实践积累，不断补充新模式
+- **Patterns are knowledge carriers**: Transform tacit architectural experience into explicit, shareable patterns
+- **Patterns have necessity levels**: Required, Recommended, Optional—systems can be flexibly composed
+- **AI is the executor**: AI reads pattern documents, understands design principles, and generates pattern-conforming systems
+- **Continuous evolution**: New patterns are added as practice accumulates
 
-## 目录结构
+## Directory Structure
 
 ```
 pomasa/
-├── README.md                # 本文件
-├── generator.md             # MAS生成器prompt
-├── user_input_template.md   # 用户输入模板
-├── pattern-catalog/         # 模式目录
-│   ├── README.md            # 模式一览和使用说明
+├── README.md                # This file
+├── generator.md             # MAS generator prompt
+├── user_input_template.md   # User input template
+├── pattern-catalog/         # Pattern catalog
+│   ├── README.md            # Pattern overview and usage guide
 │   ├── COR-01-prompt-defined-agent.md
 │   ├── COR-02-intelligent-runtime.md
 │   ├── STR-01-...
 │   ├── BHV-01-...
 │   ├── QUA-01-...
 │   └── ...
-└── references/              # 参考资料
+└── references/              # Reference materials
     ├── declarative-multi-agent-architecture-part1-en.md
     └── declarative-multi-agent-architecture-part2-en.md
 ```
 
-## 如何使用Generator
+## How to Use the Generator
 
-### 场景一：构建新的研究型MAS
+### Scenario 1: Building a New Research-Oriented MAS
 
-**第一步**：复制 `user_input_template.md` 到你的工作目录，填写研究项目信息
+**Step 1**: Copy `user_input_template.md` to your working directory and fill in your research project information
 
-**第二步**：向Claude Code发出指令：
-
-```
-请阅读 pomasa/generator.md，然后根据 [你的user_input文件路径] 生成多智能体研究系统。
-```
-
-Generator会引导AI：
-1. 阅读你填写的user_input
-2. 阅读pattern-catalog中的相关模式
-3. 根据你的需求选择合适的模式组合
-4. 生成完整的系统文件
-
-### 场景二：理解或改进现有系统
+**Step 2**: Issue a command to Claude Code:
 
 ```
-请阅读 pomasa/pattern-catalog/README.md，然后分析 [某系统目录] 使用了哪些模式，有哪些可以改进的地方。
+Please read pomasa/generator.md, then generate a multi-agent research system based on [your user_input file path].
 ```
 
-### 场景三：学习MAS架构
+The Generator will guide the AI to:
+1. Read your completed user_input
+2. Read the relevant patterns in pattern-catalog
+3. Select the appropriate pattern combination based on your needs
+4. Generate the complete system files
 
-直接阅读 `pattern-catalog/` 下的模式文档，了解声明式MAS的设计原则和最佳实践。
+### Scenario 2: Understanding or Improving an Existing System
 
-## 模式概览
+```
+Please read pomasa/pattern-catalog/README.md, then analyze which patterns [a system directory] uses and what improvements could be made.
+```
 
-详见 [pattern-catalog/README.md](./pattern-catalog/README.md)
+### Scenario 3: Learning MAS Architecture
 
-## 演进计划
+Read the pattern documents under `pattern-catalog/` directly to learn about declarative MAS design principles and best practices.
 
-POMASA是一个持续演进的项目：
+## Pattern Overview
 
-- 随着更多系统的构建和运行，提炼新的模式
-- 根据实践反馈，完善现有模式的描述
-- 探索模式在不同领域的变体和适配
+See [pattern-catalog/README.md](./pattern-catalog/README.md)
+
+## Evolution Plan
+
+POMASA is a continuously evolving project:
+
+- Extract new patterns as more systems are built and operated
+- Refine existing pattern descriptions based on practical feedback
+- Explore pattern variants and adaptations across different domains

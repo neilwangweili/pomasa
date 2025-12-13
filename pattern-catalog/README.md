@@ -1,113 +1,113 @@
-# POMASA 模式目录
+# POMASA Pattern Catalog
 
 **Pattern-Oriented Multi-Agent System Architecture**
 
-本目录收录声明式多智能体系统（Declarative Multi-Agent System）的架构模式。这些模式源自对实际运行系统的分析和提炼，可用于指导新的MAS系统建设。
+This catalog contains architectural patterns for Declarative Multi-Agent Systems. These patterns are derived from analysis and extraction of real running systems and can be used to guide the construction of new MAS systems.
 
-## 模式语言说明
+## Pattern Language Description
 
-### 格式约定
+### Format Conventions
 
-每个模式采用以下结构描述：
+Each pattern is described using the following structure:
 
 ```
-# 模式名称
+# Pattern Name
 
-**分类**：[核心/结构/行为/质量]
-**必要性**：[必要/推荐/可选]
+**Category**: [Core/Structure/Behavior/Quality]
+**Necessity**: [Required/Recommended/Optional]
 
-## 问题
+## Problem
 
-描述该模式要解决的问题。
+Describes the problem this pattern addresses.
 
-## 语境
+## Context
 
-描述该模式适用的场景和前提条件。
+Describes the scenarios and preconditions where this pattern applies.
 
-## 作用力
+## Forces
 
-列出影响解决方案选择的各种因素（forces），这些因素往往相互制约。
+Lists the various factors (forces) that influence solution selection; these factors often constrain each other.
 
-## 解决方案
+## Solution
 
-描述模式的核心解决方案。
+Describes the core solution of the pattern.
 
-## 结果
+## Consequences
 
-### 收益
-应用该模式带来的好处。
+### Benefits
+The advantages of applying this pattern.
 
-### 代价
-应用该模式需要付出的代价。
+### Liabilities
+The costs of applying this pattern.
 
-## 实现指南
+## Implementation Guidelines
 
-具体实现时的建议和注意事项。
+Suggestions and considerations for specific implementation.
 
-## 示例
+## Examples
 
-来自实际系统的示例。
+Examples from real systems.
 
-## 相关模式
+## Related Patterns
 
-与其他模式的关系（依赖、互补、替代等）。
+Relationships with other patterns (dependencies, complements, alternatives, etc.).
 ```
 
-### 模式分类与编号
+### Pattern Classification and Numbering
 
-模式按类别分组，使用三字母前缀标识：
+Patterns are grouped by category, identified by a three-letter prefix:
 
-| 前缀 | 类别 | 说明 |
-|------|------|------|
-| **COR** | Core (核心) | 定义系统基本特征的模式，通常是必要的 |
-| **STR** | Structure (结构) | 组织系统静态结构的模式 |
-| **BHV** | Behavior (行为) | 定义系统动态行为的模式 |
-| **QUA** | Quality (质量) | 保障系统质量的模式 |
+| Prefix | Category | Description |
+|--------|----------|-------------|
+| **COR** | Core | Patterns that define fundamental system characteristics; usually required |
+| **STR** | Structure | Patterns that organize the static structure of systems |
+| **BHV** | Behavior | Patterns that define dynamic system behavior |
+| **QUA** | Quality | Patterns that ensure system quality |
 
-### 必要性级别
+### Necessity Levels
 
-- **必要**：构建声明式MAS系统必须采用的模式
-- **推荐**：强烈建议采用，除非有明确的理由不用
-- **可选**：根据具体场景选择是否采用
+- **Required**: Patterns that must be adopted when building declarative MAS systems
+- **Recommended**: Strongly advised to adopt, unless there is a clear reason not to
+- **Optional**: Choose whether to adopt based on specific scenarios
 
-## 模式一览
+## Pattern Overview
 
-### COR - 核心模式
+### COR - Core Patterns
 
-| 编号 | 模式 | 必要性 | 说明 |
-|------|------|--------|------|
-| COR-01 | [Prompt-Defined Agent](./COR-01-prompt-defined-agent.md) | 必要 | 用自然语言蓝图定义Agent行为 |
-| COR-02 | [Intelligent Runtime](./COR-02-intelligent-runtime.md) | 必要 | 具有理解和决策能力的运行时环境 |
+| ID | Pattern | Necessity | Description |
+|----|---------|-----------|-------------|
+| COR-01 | [Prompt-Defined Agent](./COR-01-prompt-defined-agent.md) | Required | Define Agent behavior using natural language blueprints |
+| COR-02 | [Intelligent Runtime](./COR-02-intelligent-runtime.md) | Required | Runtime environment with understanding and decision-making capabilities |
 
-### STR - 结构模式
+### STR - Structure Patterns
 
-| 编号 | 模式 | 必要性 | 说明 |
-|------|------|--------|------|
-| STR-01 | [Reference Data Configuration](./STR-01-reference-data-configuration.md) | 推荐 | 领域知识外置为独立配置 |
-| STR-02 | [Filesystem Data Bus](./STR-02-filesystem-data-bus.md) | 推荐 | 用文件系统作为Agent间数据传递机制 |
-| STR-03 | [Workspace Isolation](./STR-03-workspace-isolation.md) | 推荐 | 限制Agent只能在指定目录内工作 |
-| STR-04 | [Business-Driven Agent Design](./STR-04-business-driven-agent-design.md) | 推荐 | Agent划分跟随业务流程，按执行顺序编号 |
-| STR-05 | [Composable Document Assembly](./STR-05-composable-document-assembly.md) | 推荐 | 长文档分章节生成，格式规范，机械拼接 |
-| STR-06 | [Methodological Guidance](./STR-06-methodological-guidance.md) | 推荐 | 方法论指导：数据来源、分析方法、输出模板 |
+| ID | Pattern | Necessity | Description |
+|----|---------|-----------|-------------|
+| STR-01 | [Reference Data Configuration](./STR-01-reference-data-configuration.md) | Recommended | Externalize domain knowledge as independent configuration |
+| STR-02 | [Filesystem Data Bus](./STR-02-filesystem-data-bus.md) | Recommended | Use filesystem as data transfer mechanism between Agents |
+| STR-03 | [Workspace Isolation](./STR-03-workspace-isolation.md) | Recommended | Restrict Agents to work only within designated directories |
+| STR-04 | [Business-Driven Agent Design](./STR-04-business-driven-agent-design.md) | Recommended | Agent division follows business process, numbered by execution order |
+| STR-05 | [Composable Document Assembly](./STR-05-composable-document-assembly.md) | Recommended | Generate long documents by sections, standardize format, mechanically assemble |
+| STR-06 | [Methodological Guidance](./STR-06-methodological-guidance.md) | Recommended | Methodological guidance: data sources, analysis methods, output templates |
 
-### BHV - 行为模式
+### BHV - Behavior Patterns
 
-| 编号 | 模式 | 必要性 | 说明 |
-|------|------|--------|------|
-| BHV-01 | [Orchestrated Agent Pipeline](./BHV-01-orchestrated-agent-pipeline.md) | 推荐 | 编排多Agent按阶段顺序执行 |
-| BHV-02 | [Faithful Agent Instantiation](./BHV-02-faithful-agent-instantiation.md) | 必要 | 调用Agent时必须让其读取完整Blueprint，每个任务独立调用 |
-| BHV-03 | [Parallel Instance Execution](./BHV-03-parallel-instance-execution.md) | 可选 | 并行启动多个Agent实例处理独立任务 |
-| BHV-04 | [Progressive Data Refinement](./BHV-04-progressive-data-refinement.md) | 可选 | 数据经多阶段逐步精炼 |
+| ID | Pattern | Necessity | Description |
+|----|---------|-----------|-------------|
+| BHV-01 | [Orchestrated Agent Pipeline](./BHV-01-orchestrated-agent-pipeline.md) | Recommended | Orchestrate multiple Agents to execute in staged sequence |
+| BHV-02 | [Faithful Agent Instantiation](./BHV-02-faithful-agent-instantiation.md) | Required | When invoking an Agent, must have it read the complete Blueprint; each task requires independent invocation |
+| BHV-03 | [Parallel Instance Execution](./BHV-03-parallel-instance-execution.md) | Optional | Launch multiple Agent instances in parallel to handle independent tasks |
+| BHV-04 | [Progressive Data Refinement](./BHV-04-progressive-data-refinement.md) | Optional | Data undergoes gradual refinement through multiple stages |
 
-### QUA - 质量模式
+### QUA - Quality Patterns
 
-| 编号 | 模式 | 必要性 | 说明 |
-|------|------|--------|------|
-| QUA-01 | [Embedded Quality Standards](./QUA-01-embedded-quality-standards.md) | 推荐 | 在Agent蓝图中嵌入质量标准 |
-| QUA-02 | [Layered Quality Assurance](./QUA-02-layered-quality-assurance.md) | 可选 | 多层次的质量保障机制 |
-| QUA-03 | [Verifiable Data Lineage](./QUA-03-verifiable-data-lineage.md) | 必要 | 全链路可验证的数据血缘，防范AI幻觉 |
+| ID | Pattern | Necessity | Description |
+|----|---------|-----------|-------------|
+| QUA-01 | [Embedded Quality Standards](./QUA-01-embedded-quality-standards.md) | Recommended | Embed quality standards in Agent blueprints |
+| QUA-02 | [Layered Quality Assurance](./QUA-02-layered-quality-assurance.md) | Optional | Multi-layered quality assurance mechanism |
+| QUA-03 | [Verifiable Data Lineage](./QUA-03-verifiable-data-lineage.md) | Required | End-to-end verifiable data lineage to prevent AI hallucination |
 
-## 模式关系图
+## Pattern Relationship Diagram
 
 ```
                     ┌─────────────────────┐
@@ -115,12 +115,12 @@
                     │  Intelligent        │
                     │  Runtime            │
                     └─────────┬───────────┘
-                              │ 支撑
+                              │ supports
                               ▼
 ┌─────────────────────────────────────────────────────────┐
 │                  COR-01                                  │
 │                  Prompt-Defined Agent                    │
-│                     (核心基础)                           │
+│                     (Core Foundation)                    │
 └────────────┬────────────────────────────┬───────────────┘
              │                            │
      ┌───────▼───────┐            ┌───────▼───────┐
@@ -166,32 +166,32 @@
     └───────────────┘
 ```
 
-## 如何使用本目录
+## How to Use This Catalog
 
-### 构建新系统
+### Building New Systems
 
-1. **必要模式**：首先确保采用所有标记为"必要"的模式
-   - COR-01, COR-02（核心）
-   - BHV-02（行为）
-   - QUA-03（质量）
-2. **评估推荐模式**：根据系统需求评估每个"推荐"模式是否适用
-3. **选择可选模式**：根据具体场景选择合适的"可选"模式
-4. **组合应用**：参考模式关系图，确保相关模式配合使用
+1. **Required Patterns**: First ensure adoption of all patterns marked as "Required"
+   - COR-01, COR-02 (Core)
+   - BHV-02 (Behavior)
+   - QUA-03 (Quality)
+2. **Evaluate Recommended Patterns**: Assess whether each "Recommended" pattern applies based on system requirements
+3. **Select Optional Patterns**: Choose appropriate "Optional" patterns based on specific scenarios
+4. **Combined Application**: Refer to the pattern relationship diagram to ensure related patterns work together
 
-### 理解现有系统
+### Understanding Existing Systems
 
-1. **识别模式**：对照模式目录，识别系统中使用了哪些模式
-2. **理解变体**：注意系统可能使用了模式的变体形式
-3. **发现缺失**：识别可能遗漏的有价值模式
+1. **Identify Patterns**: Compare against the pattern catalog to identify which patterns a system uses
+2. **Understand Variants**: Note that systems may use variant forms of patterns
+3. **Discover Gaps**: Identify potentially valuable patterns that may have been overlooked
 
-## 版本历史
+## Version History
 
-- **v0.4** (2025-12): 基于 demo_mas 事故回溯，更新 BHV-02（增加验收侧忠实性和不可变通原则）和 QUA-02（增加流程执行符合性层）
-- **v0.3** (2025-12): 新增STR-06 Methodological Guidance，更新STR-01区分领域知识与方法论
-- **v0.2** (2025-12): 重构模式编号，按类别分组（COR/STR/BHV/QUA）
-- **v0.1** (2025-12): 初始版本，提炼自 industry_assessment 系统
+- **v0.4** (2025-12): Based on demo_mas incident retrospective, updated BHV-02 (added acceptance-side faithfulness and non-negotiable principle) and QUA-02 (added process execution compliance layer)
+- **v0.3** (2025-12): Added STR-06 Methodological Guidance, updated STR-01 to distinguish domain knowledge from methodology
+- **v0.2** (2025-12): Restructured pattern numbering, grouped by category (COR/STR/BHV/QUA)
+- **v0.1** (2025-12): Initial version, extracted from the industry_assessment system
 
-## 参考资料
+## References
 
-- [声明式多智能体系统架构剖析（第一部分）](../references/declarative-multi-agent-architecture-part1-en.md)
-- [声明式多智能体系统架构剖析（第二部分）](../references/declarative-multi-agent-architecture-part2-en.md)
+- [Anatomy of Declarative Multi-Agent System Architecture (Part 1)](../references/declarative-multi-agent-architecture-part1-en.md)
+- [Anatomy of Declarative Multi-Agent System Architecture (Part 2)](../references/declarative-multi-agent-architecture-part2-en.md)

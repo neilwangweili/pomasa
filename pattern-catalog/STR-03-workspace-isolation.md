@@ -1,153 +1,153 @@
 # Workspace Isolation
 
-**分类**：结构模式
-**必要性**：推荐
+**Category**: Structure
+**Necessity**: Recommended
 
-## 问题
+## Problem
 
-如何防止Agent访问或修改不该访问的文件？
+How to prevent Agents from accessing or modifying files they should not access?
 
-AI Agent具有读写文件系统的能力，如果不加限制，可能：
-- 意外读取其他项目的文件，造成上下文污染
-- 意外修改系统文件或其他项目的数据
-- 导致不同项目之间的干扰
-- 使系统行为依赖于项目外部的状态
+AI Agents have the capability to read and write the filesystem. Without restrictions, they may:
+- Accidentally read files from other projects, causing context pollution
+- Accidentally modify system files or data from other projects
+- Lead to interference between different projects
+- Make system behavior dependent on state external to the project
 
-## 语境
+## Context
 
-该模式适用于以下场景：
+This pattern applies to the following scenarios:
 
-- 同一环境中存在多个独立项目
-- Agent有文件系统访问能力
-- 需要确保系统行为的可重复性
-- 需要清晰的数据依赖边界
+- Multiple independent projects exist in the same environment
+- Agents have filesystem access capabilities
+- Need to ensure repeatability of system behavior
+- Need clear data dependency boundaries
 
-## 作用力
+## Forces
 
-- **安全性 vs 便利性**：限制访问增加安全性，但可能增加不便
-- **隔离性 vs 共享需求**：完全隔离可能阻碍合理的资源共享
-- **显式约束 vs 隐式假设**：显式约束更可靠，但增加配置负担
+- **Security vs Convenience**: Restricting access increases security, but may add inconvenience
+- **Isolation vs Sharing Needs**: Complete isolation may prevent legitimate resource sharing
+- **Explicit Constraints vs Implicit Assumptions**: Explicit constraints are more reliable, but add configuration burden
 
-## 解决方案
+## Solution
 
-**在每个Agent Blueprint的开头明确声明工作空间边界，禁止读写指定目录之外的任何文件。**
+**Explicitly declare workspace boundaries at the beginning of each Agent Blueprint, prohibiting reading or writing any files outside the designated directory.**
 
-### 标准约束声明
+### Standard Constraint Declaration
 
 ```markdown
-## 工作空间隔离要求
+## Workspace Isolation Requirement
 
-**重要**：你必须且只能在项目目录 `{PROJECT_PATH}/` 内工作。
-- 你**禁止**读取该目录之外的任何文件
-- 你**禁止**写入该目录之外的任何文件
-- 你使用的所有文件路径必须是该项目根目录的相对路径或该目录内的绝对路径
-- 这一约束确保系统隔离，防止上下文污染
+**IMPORTANT**: You must work ONLY within the project directory `{PROJECT_PATH}/`.
+- You **MUST NOT** read any files outside this directory
+- You **MUST NOT** write any files outside this directory
+- All file paths you use must be relative paths from this project root or absolute paths within this directory
+- This constraint ensures system isolation and prevents context pollution
 ```
 
-### 放置位置
+### Placement
 
-约束声明应放在Agent Blueprint的**最开头**（仅次于标题），确保：
-1. 最先被Agent读取
-2. 强调其重要性
-3. 在任何具体任务之前建立边界
+The constraint declaration should be placed at the **very beginning** of the Agent Blueprint (immediately after the title), ensuring:
+1. It is read first by the Agent
+2. Its importance is emphasized
+3. Boundaries are established before any specific tasks
 
-## 结果
+## Consequences
 
-### 收益
+### Benefits
 
-- **防止上下文污染**：Agent不会意外读取其他项目的文件
-- **确保可重复性**：系统行为只依赖于项目内的文件
-- **支持并行项目**：多个研究项目可以安全共存
-- **清晰的依赖边界**：所有数据依赖都在项目目录内可见
-- **便于项目迁移**：整个项目目录可以独立移动
+- **Prevent Context Pollution**: Agents won't accidentally read files from other projects
+- **Ensure Repeatability**: System behavior depends only on files within the project
+- **Support Parallel Projects**: Multiple research projects can coexist safely
+- **Clear Dependency Boundaries**: All data dependencies are visible within the project directory
+- **Facilitate Project Migration**: The entire project directory can be moved independently
 
-### 代价
+### Liabilities
 
-- **灵活性受限**：无法访问项目外的公共资源
-- **可能需要复制**：共享资源可能需要复制到每个项目
-- **依赖约定而非技术强制**：运行时可能无法技术上阻止越界访问
+- **Limited Flexibility**: Cannot access public resources outside the project
+- **May Require Duplication**: Shared resources may need to be copied to each project
+- **Relies on Convention Rather Than Technical Enforcement**: Runtime may not technically prevent out-of-bounds access
 
-## 实现指南
+## Implementation Guidelines
 
-### Blueprint模板
+### Blueprint Template
 
 ```markdown
-# Agent名称
+# Agent Name
 
-## 工作空间隔离要求
+## Workspace Isolation Requirement
 
-**重要**：你必须且只能在项目目录 `industry_assessment/` 内工作。
-- 你**禁止**读取该目录之外的任何文件
-- 你**禁止**写入该目录之外的任何文件
-- 你使用的所有文件路径必须是该项目根目录的相对路径或该目录内的绝对路径
-- 这一约束确保系统隔离，防止上下文污染
+**IMPORTANT**: You must work ONLY within the project directory `industry_assessment/`.
+- You **MUST NOT** read any files outside this directory
+- You **MUST NOT** write any files outside this directory
+- All file paths you use must be relative paths from this project root or absolute paths within this directory
+- This constraint ensures system isolation and prevents context pollution
 
 ---
 
-## 你的角色
-[后续内容...]
+## Your Role
+[Subsequent content...]
 ```
 
-### 路径使用规范
+### Path Usage Conventions
 
-**推荐**：使用项目相对路径
+**Recommended**: Use project-relative paths
 ```markdown
-## 输出位置
+## Output Location
 `data/{INDUSTRY_ID}/01.materials/`
 ```
 
-**可接受**：使用项目内的绝对路径
+**Acceptable**: Use absolute paths within the project
 ```markdown
-## 输出位置
+## Output Location
 `/full/path/to/project/data/{INDUSTRY_ID}/01.materials/`
 ```
 
-**禁止**：引用项目外路径
+**Prohibited**: Reference paths outside the project
 ```markdown
-## 参考资料
-阅读 `/etc/config` 或 `../other-project/data/`  # 禁止！
+## Reference Materials
+Read `/etc/config` or `../other-project/data/`  # Prohibited!
 ```
 
-### 处理共享资源
+### Handling Shared Resources
 
-如果多个项目确实需要共享某些资源：
+If multiple projects truly need to share certain resources:
 
-1. **复制到项目内**：将共享资源复制到每个项目的`references/`目录
-2. **符号链接**：在技术允许的情况下使用符号链接（需在文档中说明）
-3. **外部获取**：通过网络获取公共资源，而非访问本地其他位置
+1. **Copy into Project**: Copy shared resources into each project's `references/` directory
+2. **Symbolic Links**: Use symbolic links where technically feasible (must be documented)
+3. **External Retrieval**: Obtain public resources via network rather than accessing other local locations
 
-### 验证隔离性
+### Verifying Isolation
 
-项目应能够通过以下测试：
-1. 将项目目录移动到另一位置
-2. 重新执行系统
-3. 应能正常运行，产生相同结果
+A project should be able to pass the following test:
+1. Move the project directory to another location
+2. Re-execute the system
+3. It should run normally and produce the same results
 
-## 示例
+## Examples
 
-### 来自 industry_assessment 系统
+### From the industry_assessment System
 
-每个Agent Blueprint都包含工作空间隔离声明：
+Every Agent Blueprint includes a workspace isolation declaration:
 
-**01.initial_scanner.md**：
+**01.initial_scanner.md**:
 ```markdown
-# 初步感知器 (Initial Scanner)
+# Initial Scanner
 
-## 工作空间隔离要求
+## Workspace Isolation Requirement
 
-**重要**：你必须且只能在项目目录 `industry_assessment/` 内工作。
-- 你**禁止**读取该目录之外的任何文件
-- 你**禁止**写入该目录之外的任何文件
-- 你使用的所有文件路径必须是该项目根目录的相对路径或该目录内的绝对路径
-- 这一约束确保系统隔离，防止上下文污染
+**IMPORTANT**: You must work ONLY within the project directory `industry_assessment/`.
+- You **MUST NOT** read any files outside this directory
+- You **MUST NOT** write any files outside this directory
+- All file paths you use must be relative paths from this project root or absolute paths within this directory
+- This constraint ensures system isolation and prevents context pollution
 
 ---
 
-## 你的角色
+## Your Role
 ...
 ```
 
-**generator.md中的要求**：
+**Requirement in generator.md**:
 ```markdown
 **CRITICAL WORKSPACE ISOLATION REQUIREMENT**:
 
@@ -165,34 +165,34 @@ IMPORTANT: You must work ONLY within the project directory: {PROJECT_ID}/
 This workspace boundary constraint must be emphasized in all agent blueprints.
 ```
 
-## 相关模式
+## Related Patterns
 
-- **[Prompt-Defined Agent](./COR-01-prompt-defined-agent.md)**：工作空间约束是Blueprint的一部分
-- **[Filesystem Data Bus](./STR-02-filesystem-data-bus.md)**：数据总线限定在工作空间内
-- **[Reference Data Configuration](./STR-01-reference-data-configuration.md)**：参考数据应位于工作空间内
+- **[Prompt-Defined Agent](./COR-01-prompt-defined-agent.md)**: Workspace constraints are part of the Blueprint
+- **[Filesystem Data Bus](./STR-02-filesystem-data-bus.md)**: Data bus is confined within the workspace
+- **[Reference Data Configuration](./STR-01-reference-data-configuration.md)**: Reference data should be located within the workspace
 
-## 变体
+## Variants
 
-### 多级工作空间
-对于大型系统，可能需要多级工作空间：
+### Multi-Level Workspace
+For large systems, multi-level workspaces may be needed:
 ```
 organization/
-├── shared/           # 组织级共享资源
-├── project_a/        # 项目A工作空间
-└── project_b/        # 项目B工作空间
+├── shared/           # Organization-level shared resources
+├── project_a/        # Project A workspace
+└── project_b/        # Project B workspace
 ```
-Agent可访问`shared/`和自己的项目目录。
+Agents can access `shared/` and their own project directory.
 
-### 只读外部访问
-某些场景允许只读访问项目外资源：
+### Read-Only External Access
+Some scenarios allow read-only access to resources outside the project:
 ```markdown
-- 你可以读取 `../shared-references/` 中的文件
-- 你**禁止**写入任何项目目录外的文件
+- You MAY read files from `../shared-references/`
+- You **MUST NOT** write any files outside the project directory
 ```
 
-### 临时目录例外
-允许访问系统临时目录用于中间处理：
+### Temporary Directory Exception
+Allow access to system temporary directories for intermediate processing:
 ```markdown
-- 你可以使用系统临时目录进行中间处理
-- 最终输出必须写入项目目录内
+- You MAY use the system temporary directory for intermediate processing
+- Final output MUST be written within the project directory
 ```

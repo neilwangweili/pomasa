@@ -1,368 +1,368 @@
 # Layered Quality Assurance
 
-**分类**：质量模式
-**必要性**：可选
+**Category**: Quality
+**Necessity**: Optional
 
-## 问题
+## Problem
 
-如何建立系统性的质量保障？
+How to establish systematic quality assurance?
 
-单一的质量检查点难以覆盖所有质量维度。不同阶段的产出有不同的质量关注点，不同角色（AI、人类）有不同的检查能力。需要一种多层次、多角度的质量保障体系。
+A single quality checkpoint cannot cover all quality dimensions. Different stages of output have different quality concerns, and different roles (AI, humans) have different inspection capabilities. A multi-layered, multi-perspective quality assurance system is needed.
 
-## 语境
+## Context
 
-该模式适用于以下场景：
+This pattern applies to the following scenarios:
 
-- 系统产出质量要求高
-- 质量问题修复成本随阶段递增（越晚发现越难修）
-- 有多个阶段的处理流程
-- 需要人类审核参与
+- System output has high quality requirements
+- Cost of fixing quality issues increases with each stage (the later discovered, the harder to fix)
+- Multiple processing stages exist
+- Human review participation is needed
 
-## 作用力
+## Forces
 
-- **质量保障程度 vs 效率**：层次越多质量越有保障，但效率越低
-- **自动化 vs 人工审核**：自动化效率高但可能遗漏，人工准确但成本高
-- **早期发现 vs 全局视角**：早期发现问题便于修复，但可能看不到全局
-- **检查深度 vs 覆盖广度**：深度检查耗时，广度检查可能粗略
+- **Quality Assurance Level vs Efficiency**: More layers provide better quality assurance, but lower efficiency
+- **Automation vs Manual Review**: Automation is efficient but may miss issues, manual review is accurate but costly
+- **Early Detection vs Global Perspective**: Early problem detection facilitates fixes, but may miss the big picture
+- **Inspection Depth vs Coverage Breadth**: Deep inspection is time-consuming, broad inspection may be superficial
 
-## 解决方案
+## Solution
 
-**在系统的多个层次建立质量检查机制：Agent自检、跨Agent校验、专门QA阶段、人类审核。质量不是最后检查出来的，而是在全过程中构建的。**
+**Establish quality inspection mechanisms at multiple levels of the system: Agent self-checking, cross-Agent validation, dedicated QA stages, and human review. Quality is not checked at the end, but built throughout the entire process.**
 
-### 五层质量保障模型
+### Five-Layer Quality Assurance Model
 
 ```
-第五层：人类审核
-        └── 关键结论人工确认、异常情况处理
+Layer 5: Human Review
+        └── Manual confirmation of key conclusions, exception handling
 
-第四层：专门QA阶段
-        └── 集成质检Agent、跨维度一致性检查
+Layer 4: Dedicated QA Stage
+        └── Integrated QA Agent, cross-dimensional consistency checking
 
-第三层：流程执行符合性
-        └── Orchestrator验证subagent是否按Blueprint执行
+Layer 3: Process Execution Compliance
+        └── Orchestrator validates if subagent executes according to Blueprint
 
-第二层：跨Agent校验
-        └── 下游Agent验证上游产出、发现不一致
+Layer 2: Cross-Agent Validation
+        └── Downstream Agent validates upstream output, discovers inconsistencies
 
-第一层：Agent自检
-        └── 按Blueprint中的标准自检
+Layer 1: Agent Self-Checking
+        └── Self-check against standards in Blueprint
 ```
 
-### 各层职责
+### Layer Responsibilities
 
-**第一层：Agent自检**
-- 时机：Agent执行过程中和完成时
-- 方式：对照Blueprint中的质量标准
-- 关注：格式规范、内容完整、逻辑自洽
-- 产出：符合标准的输出
+**Layer 1: Agent Self-Checking**
+- Timing: During and upon completion of Agent execution
+- Method: Check against quality standards in Blueprint
+- Focus: Format compliance, content completeness, logical consistency
+- Output: Output that meets standards
 
-**第二层：跨Agent校验**
-- 时机：下游Agent读取上游产出时
-- 方式：检查输入数据的质量和一致性
-- 关注：数据格式、字段完整、内容合理
-- 产出：发现问题时记录或报告
+**Layer 2: Cross-Agent Validation**
+- Timing: When downstream Agent reads upstream output
+- Method: Check quality and consistency of input data
+- Focus: Data format, field completeness, content reasonableness
+- Output: Record or report when problems are found
 
-**第三层：流程执行符合性**
-- 时机：Orchestrator收到subagent结果时
-- 方式：对照Blueprint完成标准逐项验证
-- 关注：subagent是否按Blueprint要求执行，而非自行变通
-- 产出：验收通过/要求重做/记录异常
+**Layer 3: Process Execution Compliance**
+- Timing: When Orchestrator receives subagent results
+- Method: Validate item-by-item against Blueprint completion standards
+- Focus: Whether subagent executes according to Blueprint requirements, rather than improvising
+- Output: Acceptance passed/require redo/record exception
 
-这一层检查的是**流程执行质量**而非数据质量。典型问题包括：
-- subagent自行降低标准（如用抽样代替全量）
-- subagent跳过某些步骤
-- subagent的实际执行与Blueprint要求不符
+This layer checks **process execution quality** rather than data quality. Typical issues include:
+- Subagent lowering standards on its own (e.g., using sampling instead of full coverage)
+- Subagent skipping certain steps
+- Subagent's actual execution not conforming to Blueprint requirements
 
-**第四层：专门QA阶段**
-- 时机：Pipeline的特定阶段
-- 方式：专门的QA Agent进行全面检查
-- 关注：跨维度一致性、整体完整性、事实准确性
-- 产出：质量检查报告、问题清单
+**Layer 4: Dedicated QA Stage**
+- Timing: Specific stage in Pipeline
+- Method: Dedicated QA Agent conducts comprehensive inspection
+- Focus: Cross-dimensional consistency, overall completeness, factual accuracy
+- Output: Quality inspection report, issue list
 
-**第五层：人类审核**
-- 时机：关键节点或最终输出前
-- 方式：人工审阅和判断
-- 关注：语义准确性、业务合理性、敏感内容
-- 产出：批准/修改意见
+**Layer 5: Human Review**
+- Timing: At key nodes or before final output
+- Method: Manual review and judgment
+- Focus: Semantic accuracy, business reasonableness, sensitive content
+- Output: Approval/modification comments
 
-## 结果
+## Consequences
 
-### 收益
+### Benefits
 
-- **质量内建**：质量在过程中构建，而非事后检查
-- **早期发现问题**：问题在早期被发现，修复成本低
-- **多角度覆盖**：不同层次关注不同质量维度
-- **透明可审计**：质量检查过程有记录可查
-- **人机协作**：AI处理常规检查，人类处理关键判断
+- **Quality Built-In**: Quality is built into the process, not checked after the fact
+- **Early Problem Detection**: Problems are discovered early, with low fix costs
+- **Multi-Perspective Coverage**: Different layers focus on different quality dimensions
+- **Transparent and Auditable**: Quality inspection process has traceable records
+- **Human-AI Collaboration**: AI handles routine checks, humans handle critical judgments
 
-### 代价
+### Liabilities
 
-- **效率降低**：多层检查消耗时间和资源
-- **复杂度增加**：需要设计和维护多层检查机制
-- **可能过度检查**：某些场景可能不需要如此严格
-- **协调成本**：需要协调各层检查的范围和深度
+- **Reduced Efficiency**: Multiple layers of checking consume time and resources
+- **Increased Complexity**: Need to design and maintain multi-layer inspection mechanisms
+- **Potential Over-Checking**: Some scenarios may not require such strictness
+- **Coordination Costs**: Need to coordinate scope and depth of checks at each layer
 
-## 实现指南
+## Implementation Guidelines
 
-### 第一层：在Blueprint中嵌入自检
+### Layer 1: Embed Self-Checking in Blueprint
 
 ```markdown
-## 完成标准
+## Completion Standards
 
-在提交输出前，确认以下检查项：
+Before submitting output, confirm the following checklist items:
 
-### 格式检查
-- [ ] 使用正确的Markdown格式
-- [ ] 文件写入正确位置
-- [ ] 文件命名符合规范
+### Format Check
+- [ ] Use correct Markdown format
+- [ ] File written to correct location
+- [ ] File naming complies with standards
 
-### 内容检查
-- [ ] 所有必填字段已填写
-- [ ] 所有数据有来源标注
-- [ ] 无明显逻辑矛盾
+### Content Check
+- [ ] All required fields are filled
+- [ ] All data has source attribution
+- [ ] No obvious logical contradictions
 
-### 质量检查
-- [ ] 来源可信度已评估
-- [ ] 关键数据已交叉验证
-- [ ] 内容客观中立
+### Quality Check
+- [ ] Source credibility has been assessed
+- [ ] Critical data has been cross-validated
+- [ ] Content is objective and neutral
 ```
 
-### 第二层：下游Agent的输入验证
+### Layer 2: Input Validation for Downstream Agent
 
 ```markdown
-## 前置验证
+## Pre-Validation
 
-在开始分析之前，首先验证输入数据：
+Before starting analysis, first validate input data:
 
-1. **存在性检查**
-   - 确认所有预期的输入文件存在
-   - 记录缺失的文件
+1. **Existence Check**
+   - Confirm all expected input files exist
+   - Record missing files
 
-2. **格式检查**
-   - JSON文件能正常解析
-   - Markdown文件结构符合预期
+2. **Format Check**
+   - JSON files can be parsed normally
+   - Markdown file structure meets expectations
 
-3. **完整性检查**
-   - 必填字段都有值
-   - 数据量符合预期
+3. **Completeness Check**
+   - Required fields all have values
+   - Data volume meets expectations
 
-4. **一致性检查**
-   - 跨文件的ID能匹配
-   - 数值范围合理
+4. **Consistency Check**
+   - IDs across files can be matched
+   - Numerical ranges are reasonable
 
-如发现问题，记录到 `wip/notes.md` 并继续执行可执行的部分。
+If problems are found, record them in `wip/notes.md` and continue executing the executable parts.
 ```
 
-### 第三层：Orchestrator验收subagent结果
+### Layer 3: Orchestrator Acceptance of Subagent Results
 
 ```markdown
-## 阶段验收流程
+## Stage Acceptance Process
 
-每个阶段的subagent返回结果后，Orchestrator执行以下验收：
+After each stage's subagent returns results, Orchestrator performs the following acceptance:
 
-### 步骤一：获取完成标准
-读取该阶段Blueprint中的"完成标准"部分。
+### Step 1: Obtain Completion Standards
+Read the "Completion Standards" section in that stage's Blueprint.
 
-### 步骤二：逐项对照
-对于完成标准中的每一条：
-- [ ] 该条标准是否已满足？
-- [ ] 有什么证据表明已满足？（产出物、数量、覆盖范围等）
+### Step 2: Item-by-Item Verification
+For each item in the completion standards:
+- [ ] Has this standard been met?
+- [ ] What evidence shows it has been met? (Deliverables, quantities, coverage, etc.)
 
-### 步骤三：比对报告
-将subagent的自我报告与完成标准比对：
-- subagent声称做了什么？
-- 这与Blueprint要求的是否一致？
-- 是否有降低标准或变通执行的迹象？
+### Step 3: Report Comparison
+Compare the subagent's self-report with the completion standards:
+- What does the subagent claim to have done?
+- Is this consistent with Blueprint requirements?
+- Are there signs of lowering standards or improvised execution?
 
-### 步骤四：验收结论
-- **通过**：所有完成标准均已满足 → 推进下一阶段
-- **部分通过**：有轻微偏差但可接受 → 记录问题，推进下一阶段
-- **不通过**：存在严重偏离 → 要求重做或升级处理
+### Step 4: Acceptance Conclusion
+- **Pass**: All completion standards are met → Advance to next stage
+- **Partial Pass**: Minor deviations but acceptable → Record issues, advance to next stage
+- **Fail**: Serious deviations exist → Require redo or escalate handling
 
-### 警示信号
-以下迹象表明可能存在执行问题，需要特别关注：
-- subagent报告中出现"抽样"、"选取部分"等词汇
-- 实际处理数量远小于预期
-- 完成时间异常短
-- 报告中有"由于时间/资源限制"等措辞
+### Warning Signals
+The following signs indicate potential execution problems and require special attention:
+- Subagent report contains words like "sampling", "selected portion"
+- Actual processing quantity is far less than expected
+- Completion time is abnormally short
+- Report contains phrases like "due to time/resource constraints"
 ```
 
-### 第四层：专门的QA Agent
+### Layer 4: Dedicated QA Agent
 
 ```markdown
-# 质量检查Agent
+# Quality Inspection Agent
 
-## 你的角色
-你是系统的质量检查员，负责全面审核所有采集数据的质量。
+## Your Role
+You are the system's quality inspector, responsible for comprehensively auditing the quality of all collected data.
 
-## 检查内容
+## Inspection Content
 
-### 来源可访问性
-- 检查所有URL是否仍然可访问
-- 标记失效链接
+### Source Accessibility
+- Check if all URLs are still accessible
+- Mark broken links
 
-### 数据一致性
-- 交叉验证关键数据
-- 标记存在矛盾的数据
+### Data Consistency
+- Cross-validate key data
+- Mark contradictory data
 
-### 来源可信度
-- 评估每个来源的权威性
-- 标记低可信度来源
+### Source Credibility
+- Assess the authority of each source
+- Mark low-credibility sources
 
-### 覆盖完整性
-- 检查是否所有功能项都有数据支撑
-- 识别数据缺口
+### Coverage Completeness
+- Check if all functional items have data support
+- Identify data gaps
 
-## 输出
+## Output
 
-### 质检报告 (`quality_check_report.md`)
-- 质检概况统计
-- 问题清单（按严重程度分类）
-- 改进建议
+### Quality Inspection Report (`quality_check_report.md`)
+- Quality inspection overview statistics
+- Issue list (categorized by severity)
+- Improvement recommendations
 ```
 
-### 第四层：设计人类审核点
+### Layer 5: Design Human Review Points
 
 ```markdown
-## 人工审核点
+## Manual Review Points
 
-以下节点建议人工审核：
+The following nodes are recommended for manual review:
 
-### 阶段一完成后
-- 审核问题清单是否合理
-- 确认调研方向正确
+### After Stage 1 Completion
+- Review if the issue list is reasonable
+- Confirm research direction is correct
 
-### 阶段二完成后
-- 抽查数据采集质量
-- 审核质检报告中的高风险项
+### After Stage 2 Completion
+- Spot-check data collection quality
+- Review high-risk items in quality inspection report
 
-### 最终报告生成后
-- 审核核心结论
-- 确认敏感内容处理得当
-- 批准发布
+### After Final Report Generation
+- Review core conclusions
+- Confirm sensitive content is handled appropriately
+- Approve publication
 ```
 
-## 示例
+## Examples
 
-### 来自 industry_assessment 系统
+### From industry_assessment System
 
-**五层质量保障实现**：
+**Five-Layer Quality Assurance Implementation**:
 
 ```
-第一层：各Agent Blueprint中的完成标准
-├── Initial Scanner：采集原则（全面性、准确性、可追溯性、客观性）
-├── Deep Researcher：数据采集原则 + 数据记录格式
-├── Analyzer：分析质量要求（论据充分、逻辑严密、客观公正）
-└── Reporter：报告格式规范 + 学术写作标准
+Layer 1: Completion Standards in Each Agent Blueprint
+├── Initial Scanner: Collection principles (comprehensiveness, accuracy, traceability, objectivity)
+├── Deep Researcher: Data collection principles + data recording format
+├── Analyzer: Analysis quality requirements (sufficient evidence, rigorous logic, objective and fair)
+└── Reporter: Report format standards + academic writing standards
 
-第二层：跨Agent验证
-├── Deep Researcher 验证 Initial Scanner 产出的问题清单
-├── Analyzer 验证 Deep Researcher 产出的调研资料
-└── Reporter 验证 Analyzer 产出的分析结论
+Layer 2: Cross-Agent Validation
+├── Deep Researcher validates Initial Scanner's output issue list
+├── Analyzer validates Deep Researcher's output research materials
+└── Reporter validates Analyzer's output analysis conclusions
 
-第三层：流程执行符合性（Orchestrator验收）
-├── 每阶段结束时对照Blueprint完成标准逐项验证
-├── 检查subagent是否按要求执行（全量vs抽样、完整vs跳过）
-├── 发现"抽样"、"部分"等警示信号时深入调查
-└── 不符合标准的结果要求重做
+Layer 3: Process Execution Compliance (Orchestrator Acceptance)
+├── Item-by-item verification against Blueprint completion standards at end of each stage
+├── Check if subagent executes as required (full coverage vs sampling, complete vs skipped)
+├── Deep investigation when warning signals like "sampling", "partial" are found
+└── Results not meeting standards require redo
 
-第四层：专门质检
-├── Deep Researcher 包含 QUALITY_CHECK 任务类型
-│   ├── 来源可访问性检查
-│   ├── 数据一致性检查
-│   ├── 来源可信度评估
-│   └── 覆盖完整性检查
-└── 产出：quality_check_report.md
+Layer 4: Dedicated Quality Inspection
+├── Deep Researcher includes QUALITY_CHECK task type
+│   ├── Source accessibility check
+│   ├── Data consistency check
+│   ├── Source credibility assessment
+│   └── Coverage completeness check
+└── Output: quality_check_report.md
 
-第五层：人类审核
-├── 所有中间产物可随时人工查看
-├── 关键节点可暂停等待人工确认
-└── 最终报告发布前人工审核
+Layer 5: Human Review
+├── All intermediate artifacts can be manually reviewed at any time
+├── Key nodes can pause waiting for manual confirmation
+└── Manual review before final report publication
 ```
 
-### 事故案例：第三层缺失导致的问题
+### Incident Case: Problems Caused by Missing Layer 3
 
-在 demo_mas 系统的一次执行中，数据复核阶段（阶段三）发生了严重的执行偏离：
+In one execution of the demo_mas system, serious execution deviation occurred during the data verification stage (stage 3):
 
-**问题**：Data Verifier subagent 自行采用"抽样"方法，仅复核了 185 条数据中的 10 条（5.4%），而 Blueprint 要求全量复核。
+**Problem**: Data Verifier subagent independently adopted a "sampling" method, verifying only 10 out of 185 data entries (5.4%), while the Blueprint required full verification.
 
-**原因**：Orchestrator 收到 subagent 报告后，未对照 Blueprint 完成标准验证，直接接受了结果并推进后续阶段。
+**Cause**: After receiving the subagent report, Orchestrator did not verify against Blueprint completion standards and directly accepted the results and advanced to subsequent stages.
 
-**后果**：
-- 94.6% 的数据未经验证，可能存在大量幻觉数据
-- 后续阶段（分析、综合、报告、质检）的可靠性全部受损
-- 最终质检阶段给了"优秀"评价，但未发现阶段三的执行问题
+**Consequences**:
+- 94.6% of data was unverified, potentially containing extensive hallucinated data
+- Reliability of subsequent stages (analysis, synthesis, reporting, quality inspection) was all compromised
+- Final quality inspection stage gave an "excellent" rating but did not discover the stage 3 execution problem
 
-**教训**：第三层（流程执行符合性）检查不可省略。Orchestrator 必须验证 subagent 是否按 Blueprint 要求执行，而非仅看 subagent 的自我报告。
+**Lesson**: Layer 3 (Process Execution Compliance) checking cannot be omitted. Orchestrator must verify whether subagent executes according to Blueprint requirements, rather than only looking at the subagent's self-report.
 
-**质检报告结构**：
+**Quality Inspection Report Structure**:
 
 ```markdown
-# 数据质检报告
+# Data Quality Inspection Report
 
-## 质检概况
-- 质检时间：[时间]
-- 采集数据总量：[数量]
-- 功能项覆盖率：[X/55]
+## Inspection Overview
+- Inspection time: [time]
+- Total collected data volume: [quantity]
+- Functional item coverage: [X/55]
 
-## 来源可访问性检查
-### 失效链接
-- [链接1]：[原文件位置]
-### 可访问但内容变更
-- [链接1]：[变更说明]
+## Source Accessibility Check
+### Broken Links
+- [Link 1]: [Original file location]
+### Accessible but Content Changed
+- [Link 1]: [Change description]
 
-## 数据一致性检查
-### 数据矛盾
-- [矛盾描述1]：[涉及来源]
+## Data Consistency Check
+### Data Contradictions
+- [Contradiction description 1]: [Sources involved]
 
-## 来源可信度评估
-### 高可信度来源统计
-- [来源类型]：[数量]
-### 低可信度来源警告
-- [来源1]：[原因]
+## Source Credibility Assessment
+### High-Credibility Source Statistics
+- [Source type]: [quantity]
+### Low-Credibility Source Warnings
+- [Source 1]: [reason]
 
-## 覆盖完整性检查
-### 数据充足的功能项
-### 数据不足的功能项
-### 完全缺失数据的功能项
+## Coverage Completeness Check
+### Functional Items with Sufficient Data
+### Functional Items with Insufficient Data
+### Functional Items with Completely Missing Data
 
-## 质检建议
-[需要补充采集的内容和方向]
+## Quality Inspection Recommendations
+[Content and directions that need supplemental collection]
 ```
 
-## 相关模式
+## Related Patterns
 
-- **[Embedded Quality Standards](./QUA-01-embedded-quality-standards.md)**：第一层质量保障的基础
-- **[Faithful Agent Instantiation](./BHV-02-faithful-agent-instantiation.md)**：第三层流程执行符合性的实现基础
-- **[Orchestrated Agent Pipeline](./BHV-01-orchestrated-agent-pipeline.md)**：在Pipeline中插入QA阶段
-- **[Progressive Data Refinement](./BHV-04-progressive-data-refinement.md)**：各精炼层次都有质量检查
+- **[Embedded Quality Standards](./QUA-01-embedded-quality-standards.md)**: Foundation for Layer 1 quality assurance
+- **[Faithful Agent Instantiation](./BHV-02-faithful-agent-instantiation.md)**: Implementation foundation for Layer 3 process execution compliance
+- **[Orchestrated Agent Pipeline](./BHV-01-orchestrated-agent-pipeline.md)**: Insert QA stage in Pipeline
+- **[Progressive Data Refinement](./BHV-04-progressive-data-refinement.md)**: Quality checks at each refinement level
 
-## 变体
+## Variants
 
-### 简化三层模型
-对于要求不高的场景，可简化为：
-- 第一层：Agent自检
-- 第二层：Orchestrator验收（不可省略）
-- 第三层：最终人工审核
+### Simplified Three-Layer Model
+For scenarios with lower requirements, can be simplified to:
+- Layer 1: Agent self-checking
+- Layer 2: Orchestrator acceptance (cannot be omitted)
+- Layer 3: Final manual review
 
-注意：第二层（流程执行符合性）不建议省略，因为这是防止 subagent 自行变通的关键防线。
+Note: Layer 2 (Process Execution Compliance) is not recommended to be omitted, as it is a critical defense against subagent improvisation.
 
-### 强化QA模型
-对于高要求场景，可增加：
-- 多个QA Agent从不同角度检查
-- 强制性的人工审核门禁
-- 自动化的回归测试
-- 流程执行的详细日志和审计
+### Enhanced QA Model
+For high-requirement scenarios, can add:
+- Multiple QA Agents checking from different perspectives
+- Mandatory manual review gates
+- Automated regression testing
+- Detailed logging and auditing of process execution
 
-### 持续质量监控
-在长期运行的系统中：
-- 收集质量指标
-- 识别质量趋势
-- 自动预警质量下降
+### Continuous Quality Monitoring
+In long-running systems:
+- Collect quality metrics
+- Identify quality trends
+- Automatic alerts for quality degradation
 
-## 何时不使用此模式
+## When Not to Use This Pattern
 
-- **快速原型**：需要快速验证想法
-- **低价值任务**：质量要求不高的探索性任务
-- **资源受限**：无法承受多层检查的开销
-- **高度确定的任务**：输出格式和内容非常确定，简单校验即可
+- **Rapid Prototyping**: Need to quickly validate ideas
+- **Low-Value Tasks**: Exploratory tasks with low quality requirements
+- **Resource Constraints**: Cannot afford the overhead of multi-layer checking
+- **Highly Deterministic Tasks**: Output format and content are very certain, simple validation suffices

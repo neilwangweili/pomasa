@@ -1,190 +1,190 @@
 # Parallel Instance Execution
 
-**分类**：行为模式
-**必要性**：可选
+**Category**: Behavior
+**Necessity**: Optional
 
-## 问题
+## Problem
 
-如何利用并行提高效率？
+How to leverage parallelism to improve efficiency?
 
-单个任务可能涉及处理多个独立的数据分区。串行处理耗时很长，但并非所有任务都能安全并行化。需要识别并行机会、实现并行执行、同步和聚合结果。
+A single task may involve processing multiple independent data partitions. Serial processing takes a long time, but not all tasks can be safely parallelized. There is a need to identify parallel opportunities, implement parallel execution, and synchronize and aggregate results.
 
-## 语境
+## Context
 
-该模式适用于以下场景：
+This pattern applies to the following scenarios:
 
-- 任务可以按数据分区
-- 分区之间完全独立，无需通信
-- 任务是I/O密集型（网络请求、文件读写）
-- 有足够的资源支持并行执行
-- 可以接受独立失败的隔离
+- Tasks can be partitioned by data
+- Partitions are completely independent with no need for communication
+- Tasks are I/O-intensive (network requests, file read/write)
+- Sufficient resources are available to support parallel execution
+- Independent failure isolation can be tolerated
 
-## 作用力
+## Forces
 
-- **效率 vs 资源消耗**：并行提高效率，但消耗更多资源
-- **简单性 vs 性能**：串行实现简单，并行增加复杂度
-- **隔离性 vs 协调需求**：完全隔离便于并行，但可能需要协调
-- **确定性 vs 速度**：并行执行的顺序不确定
+- **Efficiency vs Resource Consumption**: Parallelism improves efficiency but consumes more resources
+- **Simplicity vs Performance**: Serial implementation is simple; parallelism adds complexity
+- **Isolation vs Coordination Needs**: Complete isolation facilitates parallelism, but may require coordination
+- **Determinism vs Speed**: The order of parallel execution is non-deterministic
 
-## 解决方案
+## Solution
 
-**当任务可按数据分区且分区完全独立时，为每个分区实例化一个Agent Instance，并行执行，等待全部完成后聚合结果。**
+**When a task can be partitioned by data and partitions are completely independent, instantiate an Agent Instance for each partition, execute them in parallel, wait for all to complete, and then aggregate the results.**
 
-### 并行执行模型
+### Parallel Execution Model
 
 ```
 Orchestrator
      │
-     │ 识别并行机会
-     │ (N个独立分区)
+     │ Identify parallel opportunities
+     │ (N independent partitions)
      │
-     ├──→ Task: Agent Instance 1 (分区1) ──→ 输出1
-     ├──→ Task: Agent Instance 2 (分区2) ──→ 输出2
-     ├──→ Task: Agent Instance 3 (分区3) ──→ 输出3
+     ├──→ Task: Agent Instance 1 (Partition 1) ──→ Output 1
+     ├──→ Task: Agent Instance 2 (Partition 2) ──→ Output 2
+     ├──→ Task: Agent Instance 3 (Partition 3) ──→ Output 3
      │    ...
-     └──→ Task: Agent Instance N (分区N) ──→ 输出N
+     └──→ Task: Agent Instance N (Partition N) ──→ Output N
            │
-           │ Barrier同步
-           │ (等待所有完成)
+           │ Barrier synchronization
+           │ (Wait for all to complete)
            ▼
-     [聚合/进入下一阶段]
+     [Aggregation/Proceed to next stage]
 ```
 
-### 核心机制
+### Core Mechanisms
 
-1. **数据分区识别**：
-   - 读取配置数据确定分区（如组织列表）
-   - 分区数量决定并行度
+1. **Data Partition Identification**:
+   - Read configuration data to determine partitions (e.g., organization list)
+   - Number of partitions determines degree of parallelism
 
-2. **批量Task启动**：
-   - Orchestrator在同一消息中发起多个Task
-   - 运行时自动识别并行机会
+2. **Batch Task Launch**:
+   - Orchestrator initiates multiple Tasks in the same message
+   - Runtime automatically identifies parallel opportunities
 
-3. **独立执行**：
-   - 每个Instance有独立上下文
-   - 写入不同的输出目录
+3. **Independent Execution**:
+   - Each Instance has independent context
+   - Writes to different output directories
 
-4. **Barrier同步**：
-   - 等待所有Instance完成
-   - 检查各分区输出完整性
+4. **Barrier Synchronization**:
+   - Wait for all Instances to complete
+   - Check output completeness for each partition
 
-## 结果
+## Consequences
 
-### 收益
+### Benefits
 
-- **显著性能提升**：接近线性加速（对于I/O密集任务）
-- **充分利用等待时间**：网络请求并行等待
-- **实现简单**：声明式并行（在同一消息中启动多个Task）
-- **数据驱动的可扩展性**：分区数增加，并行度自动增加
-- **良好的容错隔离**：单个Instance失败不影响其他Instance
+- **Significant performance improvement**: Near-linear speedup (for I/O-intensive tasks)
+- **Full utilization of wait time**: Network requests wait in parallel
+- **Simple implementation**: Declarative parallelism (launch multiple Tasks in the same message)
+- **Data-driven scalability**: As partition count increases, parallelism automatically increases
+- **Good fault isolation**: Single Instance failure does not affect other Instances
 
-### 代价
+### Liabilities
 
-- **资源消耗增加**：更多并行请求，更多API调用
-- **调试复杂度增加**：需要追踪多个并行执行
-- **潜在资源竞争**：可能受限于外部API的并发限制
-- **一致性挑战**：并行执行的顺序不确定
-- **同步等待时间**：最慢的Instance决定整体时间
+- **Increased resource consumption**: More parallel requests, more API calls
+- **Increased debugging complexity**: Need to trace multiple parallel executions
+- **Potential resource contention**: May be limited by external API concurrency limits
+- **Consistency challenges**: Order of parallel execution is non-deterministic
+- **Synchronization wait time**: Slowest Instance determines overall time
 
-## 实现指南
+## Implementation Guidelines
 
-### 识别并行机会
+### Identifying Parallel Opportunities
 
-**可以并行的条件**：
-- 各分区处理逻辑相同（同一Blueprint）
-- 各分区输入数据独立
-- 各分区输出目录不同
-- 不需要分区间通信
+**Conditions for parallelization**:
+- Each partition has the same processing logic (same Blueprint)
+- Input data for each partition is independent
+- Output directories for each partition are different
+- No inter-partition communication needed
 
-**不能并行的情况**：
-- 后续分区依赖前序分区的输出
-- 需要全局视角的任务（如整合报告）
-- 有共享状态需要同步
+**Cases where parallelization is not possible**:
+- Subsequent partitions depend on outputs from previous partitions
+- Tasks require global perspective (e.g., consolidation reports)
+- Shared state requires synchronization
 
-### 在Orchestrator中启动并行Task
+### Launching Parallel Tasks in Orchestrator
 
 ```markdown
-## 阶段一执行
+## Stage One Execution
 
-**并行策略**：为每个组织启动独立的Research Agent
+**Parallel Strategy**: Launch independent Research Agent for each organization
 
-1. 读取 `references/organizations.json` 获取组织列表
-2. 读取 `agents/01.research_agent.md` 获取Agent Blueprint
-3. **在同一消息中**为每个组织启动Task：
+1. Read `references/organizations.json` to get organization list
+2. Read `agents/01.research_agent.md` to get Agent Blueprint
+3. **In the same message** launch Task for each organization:
    - Task 1: Research Agent for Organization A
    - Task 2: Research Agent for Organization B
    - Task 3: Research Agent for Organization C
    - ...
-4. 等待所有Task完成
-5. 验证各分区输出完整性
+4. Wait for all Tasks to complete
+5. Verify output completeness for each partition
 ```
 
-### 目录分区避免写冲突
+### Directory Partitioning to Avoid Write Conflicts
 
 ```
 data/2025-09/raw/
-├── org_1/          # Instance 1 写入
+├── org_1/          # Instance 1 writes here
 │   ├── activities.json
 │   └── sources.md
-├── org_2/          # Instance 2 写入
+├── org_2/          # Instance 2 writes here
 │   ├── activities.json
 │   └── sources.md
-└── org_3/          # Instance 3 写入
+└── org_3/          # Instance 3 writes here
     ├── activities.json
     └── sources.md
 ```
 
-### 参数化Blueprint支持并行
+### Parameterized Blueprint to Support Parallelism
 
 ```markdown
-## 输入参数
+## Input Parameters
 
-- `{ORGANIZATION_ID}`：当前处理的组织ID
-- `{ORGANIZATION_NAME}`：当前处理的组织名称
+- `{ORGANIZATION_ID}`: ID of the organization being processed
+- `{ORGANIZATION_NAME}`: Name of the organization being processed
 
-## 输出位置
+## Output Location
 
 `data/{PERIOD}/raw/{ORGANIZATION_ID}/`
 
-[注：通过参数化，同一Blueprint可以实例化为多个
-并行执行的Instance，每个写入不同目录]
+[Note: Through parameterization, the same Blueprint can be instantiated
+into multiple parallel Instances, each writing to a different directory]
 ```
 
-### 处理部分失败
+### Handling Partial Failures
 
 ```markdown
-## 异常处理
+## Exception Handling
 
-如果某个Organization的采集失败：
-1. 记录失败信息到 `wip/notes.md`
-2. 继续等待其他Organization完成
-3. 在阶段总结中标记失败的分区
-4. 决定是否重试或继续下一阶段
+If collection for an Organization fails:
+1. Record failure information to `wip/notes.md`
+2. Continue waiting for other Organizations to complete
+3. Mark failed partitions in stage summary
+4. Decide whether to retry or proceed to next stage
 ```
 
-## 示例
+## Examples
 
-### 来自 industry_assessment 系统
+### From the industry_assessment System
 
-**阶段二：深度调研的并行执行**：
+**Stage Two: Parallel Execution of Deep Research**:
 
 ```markdown
-## 深度调研执行策略
+## Deep Research Execution Strategy
 
-### 并行方案
-- ESSCC框架有55个功能项
-- 为每个功能项启动独立的Deep Researcher实例
-- 最大55路并行
+### Parallel Approach
+- ESSCC framework has 55 function items
+- Launch independent Deep Researcher instance for each function item
+- Maximum 55-way parallelism
 
-### 执行方式
-1. 读取问题清单确定所有功能项
-2. 对每个功能项 {FUNCTION_ID}：
-   - 读取对应的问题列表
-   - 启动 Deep Researcher Task
-   - 参数：{INDUSTRY_ID}, {FUNCTION_ID}, {FUNCTION_NAME}
-3. 等待所有Task完成
+### Execution Method
+1. Read question list to determine all function items
+2. For each function item {FUNCTION_ID}:
+   - Read corresponding question list
+   - Launch Deep Researcher Task
+   - Parameters: {INDUSTRY_ID}, {FUNCTION_ID}, {FUNCTION_NAME}
+3. Wait for all Tasks to complete
 
-### 输出目录
+### Output Directory
 data/{INDUSTRY_ID}/01.materials/03.deep_research/
 ├── 1.1_control_strategic_sectors/    # Instance 1
 ├── 1.2_provide_public_goods/         # Instance 2
@@ -192,66 +192,66 @@ data/{INDUSTRY_ID}/01.materials/03.deep_research/
 ...
 └── 12.5_execute_national_strategic_will/  # Instance 55
 
-### 效率分析
-- 单个功能项调研：约10-15分钟
-- 55个串行执行：约10-14小时
-- 55个并行执行：约15-20分钟（受限于最慢的）
-- 加速比：约30-40倍
+### Efficiency Analysis
+- Single function item research: approximately 10-15 minutes
+- 55 serial executions: approximately 10-14 hours
+- 55 parallel executions: approximately 15-20 minutes (limited by slowest)
+- Speedup ratio: approximately 30-40x
 ```
 
-**阶段三：分析的分层并行**：
+**Stage Three: Layered Parallelism in Analysis**:
 
 ```markdown
-## 分析执行策略
+## Analysis Execution Strategy
 
-### 第一层：功能项分析（55路并行）
-- 55个功能项可完全并行分析
-- 每个产出独立的功能项分析报告
+### Layer One: Function Item Analysis (55-way parallelism)
+- 55 function items can be analyzed completely in parallel
+- Each produces independent function item analysis report
 
-### 第二层：特征综合（12路并行）
-- 等待第一层完成
-- 12个特征可并行综合（每个特征下的功能项分析已完成）
+### Layer Two: Feature Synthesis (12-way parallelism)
+- Wait for Layer One to complete
+- 12 features can be synthesized in parallel (function item analyses under each feature are complete)
 
-### 第三层：维度综合（4路并行）
-- 等待第二层完成
-- 4个维度可并行综合
+### Layer Three: Dimension Synthesis (4-way parallelism)
+- Wait for Layer Two to complete
+- 4 dimensions can be synthesized in parallel
 
-### 第四层：整体综合（串行）
-- 等待第三层完成
-- 需要全局视角，必须串行
+### Layer Four: Overall Synthesis (serial)
+- Wait for Layer Three to complete
+- Requires global perspective, must be serial
 ```
 
-## 相关模式
+## Related Patterns
 
-- **[Orchestrated Agent Pipeline](./BHV-01-orchestrated-agent-pipeline.md)**：并行执行发生在Pipeline的各阶段内
-- **[Filesystem Data Bus](./STR-02-filesystem-data-bus.md)**：通过目录分区支持并行写入
-- **[Prompt-Defined Agent](./COR-01-prompt-defined-agent.md)**：同一Blueprint实例化为多个并行Instance
+- **[Orchestrated Agent Pipeline](./BHV-01-orchestrated-agent-pipeline.md)**: Parallel execution occurs within stages of the Pipeline
+- **[Filesystem Data Bus](./STR-02-filesystem-data-bus.md)**: Supports parallel writes through directory partitioning
+- **[Prompt-Defined Agent](./COR-01-prompt-defined-agent.md)**: Same Blueprint instantiated into multiple parallel Instances
 
-## 变体
+## Variants
 
-### 批次并行
-当分区数量很大时，分批并行执行：
+### Batch Parallelism
+When the number of partitions is very large, execute in batches in parallel:
 ```
-第一批：Instance 1-10 并行
-第二批：Instance 11-20 并行
+Batch 1: Instance 1-10 in parallel
+Batch 2: Instance 11-20 in parallel
 ...
 ```
 
-### 优先级并行
-重要分区先执行，次要分区后执行：
+### Priority Parallelism
+Important partitions execute first, secondary partitions execute later:
 ```
-高优先级：Instance 1-3 并行
-    ↓ 完成后
-低优先级：Instance 4-10 并行
+High priority: Instance 1-3 in parallel
+    ↓ After completion
+Low priority: Instance 4-10 in parallel
 ```
 
-### 动态并行度
-根据资源使用情况动态调整并行度。
+### Dynamic Parallelism
+Dynamically adjust parallelism based on resource usage.
 
-## 何时不使用此模式
+## When Not to Use This Pattern
 
-- **分区间有依赖**：后续分区需要前序分区的输出
-- **需要全局协调**：分区间需要通信或共享状态
-- **资源受限**：并行会导致资源竞争或超出限制
-- **分区数很少**：只有1-2个分区，并行收益有限
-- **CPU密集型任务**：并行收益主要来自I/O等待，CPU密集任务收益有限
+- **Inter-partition dependencies**: Subsequent partitions need outputs from previous partitions
+- **Need for global coordination**: Partitions need to communicate or share state
+- **Resource constraints**: Parallelism would cause resource contention or exceed limits
+- **Few partitions**: Only 1-2 partitions, limited benefit from parallelism
+- **CPU-intensive tasks**: Parallel benefits mainly come from I/O waiting; CPU-intensive tasks have limited benefit

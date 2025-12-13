@@ -1,347 +1,347 @@
 # Methodological Guidance
 
-**分类**：结构模式
-**必要性**：推荐
+**Category**: Structure
+**Necessity**: Recommended
 
-## 问题
+## Problem
 
-如何确保AI Agent按照正确的方法论执行任务？
+How to ensure AI Agents execute tasks according to correct methodology?
 
-领域知识告诉Agent"是什么"，但不告诉它"怎么做"。Agent需要方法论指导来知道：数据从哪里来、如何评估可信度、用什么方法分析、输出什么格式。如果这些信息缺失或隐含在Blueprint中，会导致：
+Domain knowledge tells Agents "what is", but not "how to do it". Agents need methodological guidance to know: where data comes from, how to assess credibility, what methods to use for analysis, and what format to output. If this information is missing or implicit in the Blueprint, it leads to:
 
-- 数据质量参差不齐（不知道什么来源可信）
-- 分析深度不足（不知道要回答哪些问题）
-- 输出格式不一致（每个Agent自行决定格式）
-- 难以调整方法论（需要修改多个Blueprint）
+- Inconsistent data quality (not knowing which sources are credible)
+- Insufficient analysis depth (not knowing which questions to answer)
+- Inconsistent output formats (each Agent decides format independently)
+- Difficulty adjusting methodology (requiring modifications to multiple Blueprints)
 
-## 语境
+## Context
 
-该模式适用于以下场景：
+This pattern applies in the following scenarios:
 
-- 系统需要执行有明确方法论的任务（如学术研究、数据分析）
-- 多个Agent需要遵循统一的方法和标准
-- 方法论可能需要独立于Agent逻辑进行调整
-- 需要让领域专家能够审核和改进方法论
+- System needs to execute tasks with clear methodology (e.g., academic research, data analysis)
+- Multiple Agents need to follow unified methods and standards
+- Methodology may need to be adjusted independently of Agent logic
+- Domain experts need to be able to review and improve methodology
 
-## 作用力
+## Forces
 
-- **具体 vs 灵活**：太具体限制Agent发挥，太灵活导致执行不一致
-- **完整 vs 简洁**：完整的指南冗长，简洁的可能遗漏关键点
-- **通用 vs 专用**：通用方法适用性广，专用方法更精确
-- **规范 vs 创新**：严格规范保证一致性，但可能抑制创新
+- **Specific vs Flexible**: Too specific limits Agent flexibility, too flexible leads to inconsistent execution
+- **Complete vs Concise**: Complete guides are lengthy, concise ones may miss key points
+- **General vs Specialized**: General methods have broad applicability, specialized methods are more precise
+- **Standardized vs Innovative**: Strict standards ensure consistency but may inhibit innovation
 
-## 解决方案
+## Solution
 
-**将方法论指导外置为独立的配置文件，与领域知识分开管理。方法论文件应该具体到可执行的程度，包含明确的检查清单。**
+**Externalize methodological guidance as independent configuration files, managed separately from domain knowledge. Methodology files should be specific enough to be executable, including explicit checklists.**
 
-### 方法论指导的四个组成部分
+### Four Components of Methodological Guidance
 
 ```
-方法论指导：
-├── 研究概述（research-overview）
-│   ├── 研究目标：要回答什么问题
-│   ├── 研究范围：边界在哪里
-│   ├── 研究立场：价值取向和原则
-│   └── 核心问题：具体要回答的问题清单
+Methodological Guidance:
+├── Research Overview (research-overview)
+│   ├── Research Objectives: What questions to answer
+│   ├── Research Scope: Where the boundaries are
+│   ├── Research Stance: Value orientation and principles
+│   └── Core Questions: Specific list of questions to answer
 │
-├── 数据来源指南（data-sources）
-│   ├── 来源类型：哪些类型的数据源
-│   ├── 可信度评级：各类来源的可信度
-│   ├── 慎用来源：应该避免的来源
-│   └── 记录格式：数据记录的标准格式
+├── Data Sources Guide (data-sources)
+│   ├── Source Types: What types of data sources
+│   ├── Credibility Ratings: Credibility of each source type
+│   ├── Sources to Use Cautiously: Sources to avoid
+│   └── Recording Format: Standard format for data records
 │
-├── 分析方法指南（analysis-methods）
-│   ├── 分析框架：用什么框架分析
-│   ├── 核心问题：每个分析点要回答的问题
-│   ├── 分析流程：具体的步骤
-│   └── 结果格式：分析结果的存储格式
+├── Analysis Methods Guide (analysis-methods)
+│   ├── Analysis Framework: What framework to use for analysis
+│   ├── Core Questions: Questions to answer at each analysis point
+│   ├── Analysis Process: Specific steps
+│   └── Results Format: Storage format for analysis results
 │
-└── 输出模板（output-template）
-    ├── 文档结构：章节安排
-    ├── 格式规范：标题、引用、列表等格式
-    ├── 写作风格：语言风格要求
-    └── 质量检查清单：交付前的检查项
+└── Output Template (output-template)
+    ├── Document Structure: Chapter arrangement
+    ├── Format Specifications: Headings, citations, lists, etc.
+    ├── Writing Style: Language style requirements
+    └── Quality Checklist: Items to check before delivery
 ```
 
-### 各部分的详细内容
+### Detailed Content for Each Component
 
-#### 1. 研究概述（research-overview.md）
+#### 1. Research Overview (research-overview.md)
 
 ```markdown
-# 研究概述
+# Research Overview
 
-## 研究主题
-[简明描述研究什么]
+## Research Topic
+[Brief description of what is being researched]
 
-## 核心研究问题
-1. [问题1]：[具体描述]
-2. [问题2]：[具体描述]
-3. [问题3]：[具体描述]
+## Core Research Questions
+1. [Question 1]: [Specific description]
+2. [Question 2]: [Specific description]
+3. [Question 3]: [Specific description]
 ...
 
-## 研究范围
-- 包含：[明确包含的内容]
-- 不包含：[明确排除的内容]
+## Research Scope
+- Includes: [Explicitly included content]
+- Excludes: [Explicitly excluded content]
 
-## 研究立场
-[声明研究的价值取向、客观性要求等]
+## Research Stance
+[Declare research value orientation, objectivity requirements, etc.]
 
-## 输入参数
-[说明系统接受什么参数]
+## Input Parameters
+[Explain what parameters the system accepts]
 ```
 
-#### 2. 数据来源指南（data-sources.md）
+#### 2. Data Sources Guide (data-sources.md)
 
 ```markdown
-# 数据来源指南
+# Data Sources Guide
 
-## 数据来源类型
+## Data Source Types
 
-### 1. [来源类型A]
-- 说明：[什么是这类来源]
-- 优先级：[高/中/低]
-- 可信度：[高/中高/中/低]
-- 示例：[具体例子]
+### 1. [Source Type A]
+- Description: [What this type of source is]
+- Priority: [High/Medium/Low]
+- Credibility: [High/Medium-High/Medium/Low]
+- Examples: [Specific examples]
 
-### 2. [来源类型B]
+### 2. [Source Type B]
 ...
 
-## 慎用来源
-- [应避免的来源类型1]：[原因]
-- [应避免的来源类型2]：[原因]
+## Sources to Use Cautiously
+- [Source type to avoid 1]: [Reason]
+- [Source type to avoid 2]: [Reason]
 
-## 数据记录格式
+## Data Recording Format
 
-每条数据记录应包含：
-- 标题
-- 来源类型
-- 来源URL
-- 采集时间
-- 发布时间
-- 关联分析点
-- 核心内容摘要
-- 原文关键引用
-- 可信度评估
-- 备注
+Each data record should include:
+- Title
+- Source Type
+- Source URL
+- Collection Time
+- Publication Time
+- Related Analysis Point
+- Core Content Summary
+- Key Quotes from Original Text
+- Credibility Assessment
+- Notes
 ```
 
-#### 3. 分析方法指南（analysis-methods.md）
+#### 3. Analysis Methods Guide (analysis-methods.md)
 
 ```markdown
-# 分析方法指南
+# Analysis Methods Guide
 
-## 分析框架
-[使用什么理论框架或分析模型]
+## Analysis Framework
+[What theoretical framework or analysis model to use]
 
-## 核心问题
-针对每个分析点，需要回答：
-1. [问题1]：[分析要点]
-2. [问题2]：[分析要点]
-3. [问题3]：[分析要点]
+## Core Questions
+For each analysis point, need to answer:
+1. [Question 1]: [Analysis points]
+2. [Question 2]: [Analysis points]
+3. [Question 3]: [Analysis points]
 ...
 
-## 分析流程
+## Analysis Process
 
-### 第一阶段：[阶段名]
-[具体步骤]
+### Stage 1: [Stage Name]
+[Specific steps]
 
-### 第二阶段：[阶段名]
-[具体步骤]
+### Stage 2: [Stage Name]
+[Specific steps]
 
 ...
 
-## 分析结果存储格式
+## Analysis Results Storage Format
 
-每个分析点的结果应按以下格式存储：
+Results for each analysis point should be stored in the following format:
 ```
-[具体的Markdown模板]
+[Specific Markdown template]
 ```
 
-## 质量要求
-- [要求1]
-- [要求2]
+## Quality Requirements
+- [Requirement 1]
+- [Requirement 2]
 ...
 ```
 
-#### 4. 输出模板（output-template.md）
+#### 4. Output Template (output-template.md)
 
 ```markdown
-# 输出模板
+# Output Template
 
-## 文档结构
+## Document Structure
 
 ```
-# 标题
+# Title
 
-## 第一章 [章节名]
-### 1.1 [小节名]
+## Chapter 1 [Chapter Name]
+### 1.1 [Section Name]
 ...
 
-## 第二章 [章节名]
-...
-```
-
-## 格式规范
-
-### 标题
-- 一级标题：[规范]
-- 二级标题：[规范]
-- 三级标题：[规范]
-
-### 引用
-- [引用格式规范]
-
-### 列表
-- [列表格式规范]
-
-## 写作风格
-- [风格要求1]
-- [风格要求2]
-
-## 质量检查清单
-- [ ] [检查项1]
-- [ ] [检查项2]
+## Chapter 2 [Chapter Name]
 ...
 ```
 
-## 结果
+## Format Specifications
 
-### 收益
+### Headings
+- Level 1 heading: [Specification]
+- Level 2 heading: [Specification]
+- Level 3 heading: [Specification]
 
-- **执行一致性**：所有Agent遵循统一的方法论
-- **质量可控**：明确的标准便于质量检查
-- **方法可调**：修改方法论文件即可调整执行方式
-- **知识传承**：方法论显式化，便于学习和改进
-- **专家参与**：领域专家可直接审核和改进方法论
+### Citations
+- [Citation format specification]
 
-### 代价
+### Lists
+- [List format specification]
 
-- **前期投入**：需要花时间撰写详细的方法论文档
-- **维护成本**：方法论演进需要同步更新文档
-- **灵活性降低**：严格的方法论可能限制Agent的灵活应对
+## Writing Style
+- [Style requirement 1]
+- [Style requirement 2]
 
-## 实现指南
+## Quality Checklist
+- [ ] [Check item 1]
+- [ ] [Check item 2]
+...
+```
 
-### 详细程度的把握
+## Consequences
 
-方法论指导应该**具体到可执行**，而不是泛泛而谈：
+### Benefits
 
-| 不好的写法 | 好的写法 |
-|-----------|---------|
-| "注意数据质量" | "数据来源分为5类，可信度评级如下：学术文章（高）、政策文件（高）、行业研报（中高）..." |
-| "按照学术规范" | "每个论点都要有数据或案例支撑，引用格式为[来源名称](URL)" |
-| "保持客观" | "既要看到成就也要看到问题，避免一边倒的倾向性表述" |
-| "输出格式规范" | "一级标题使用#，全文仅一个；二级标题使用##；列表前后各空一行" |
+- **Execution Consistency**: All Agents follow unified methodology
+- **Quality Control**: Clear standards facilitate quality checking
+- **Adjustable Methods**: Modify methodology files to adjust execution approach
+- **Knowledge Transfer**: Explicit methodology facilitates learning and improvement
+- **Expert Participation**: Domain experts can directly review and improve methodology
 
-### 检查清单的价值
+### Liabilities
 
-每个方法论文件都应该包含**可勾选的检查清单**，便于验证执行质量：
+- **Upfront Investment**: Time needed to write detailed methodology documentation
+- **Maintenance Costs**: Methodology evolution requires synchronized document updates
+- **Reduced Flexibility**: Strict methodology may limit Agent's flexible response
+
+## Implementation Guidelines
+
+### Determining Level of Detail
+
+Methodological guidance should be **specific enough to be executable**, not vague generalizations:
+
+| Poor Approach | Good Approach |
+|--------------|---------------|
+| "Pay attention to data quality" | "Data sources are divided into 5 categories with credibility ratings as follows: Academic articles (High), Policy documents (High), Industry reports (Medium-High)..." |
+| "Follow academic standards" | "Every argument must be supported by data or cases, citation format is [Source Name](URL)" |
+| "Maintain objectivity" | "Must see both achievements and problems, avoid one-sided tendency in expressions" |
+| "Standardized output format" | "Level 1 heading uses #, only one in the entire document; Level 2 heading uses ##; lists have blank lines before and after" |
+
+### Value of Checklists
+
+Each methodology file should include **checkable checklists** to facilitate verification of execution quality:
 
 ```markdown
-## 质量检查清单
+## Quality Checklist
 
-- [ ] 是否覆盖了所有分析点？
-- [ ] 每个分析点是否都有实证资料支撑？
-- [ ] 是否既有正面分析也有问题识别？
-- [ ] 所有引用是否都能追溯到原始来源？
-- [ ] 语言是否正式、客观？
-- [ ] 结构是否完整、逻辑是否清晰？
+- [ ] Are all analysis points covered?
+- [ ] Does each analysis point have empirical material support?
+- [ ] Is there both positive analysis and problem identification?
+- [ ] Can all citations be traced to original sources?
+- [ ] Is the language formal and objective?
+- [ ] Is the structure complete and logic clear?
 ```
 
-### 与领域知识的关系
+### Relationship with Domain Knowledge
 
-方法论指导和领域知识应该**分开管理**：
+Methodological guidance and domain knowledge should be **managed separately**:
 
 ```
 references/
-├── domain/                    # 领域知识
+├── domain/                    # Domain Knowledge
 │   ├── theoretical_framework.md
 │   └── literature_review.md
 │
-└── methodology/               # 方法论指导
+└── methodology/               # Methodological Guidance
     ├── research-overview.md
     ├── data-sources.md
     ├── analysis-methods.md
     └── output-template.md
 ```
 
-这样区分的好处：
-- 领域知识可以复用于不同方法论
-- 方法论可以独立于领域知识演进
-- 职责清晰，便于不同角色维护
+Benefits of this separation:
+- Domain knowledge can be reused across different methodologies
+- Methodology can evolve independently of domain knowledge
+- Clear responsibilities, facilitating maintenance by different roles
 
-## 示例
+## Examples
 
-### 来自 industry_assessment 系统
+### From industry_assessment System
 
-**analysis-methods.md（核心问题部分）**：
+**analysis-methods.md (Core Questions section)**:
 
 ```markdown
-## 分析框架
+## Analysis Framework
 
-本研究采用ESSCC理论框架进行系统性分析。针对每个功能项，需要回答以下五个核心问题：
+This research adopts the ESSCC theoretical framework for systematic analysis. For each functional item, the following five core questions need to be answered:
 
-### 问题1：功能体现
-**ESSCC的这项功能，在这个行业中是如何体现的？**
+### Question 1: Function Manifestation
+**How is this ESSCC function manifested in this industry?**
 
-分析要点：
-- 寻找具体的制度安排、政策措施、企业行为等实例
-- 用数据和案例说明功能的具体表现形式
-- 区分"直接体现"和"间接体现"
+Analysis points:
+- Look for specific instances such as institutional arrangements, policy measures, corporate behaviors
+- Use data and cases to illustrate specific manifestations of the function
+- Distinguish between "direct manifestation" and "indirect manifestation"
 
-### 问题2：正面效果
-**这种体现，对这个行业的发展带来了什么好处？**
+### Question 2: Positive Effects
+**What benefits has this manifestation brought to the development of this industry?**
 
-分析要点：
-- 量化的发展成果（规模、增速、市场份额等）
-- 技术进步和创新成果
-- 国际竞争力提升
+Analysis points:
+- Quantified development achievements (scale, growth rate, market share, etc.)
+- Technological progress and innovation achievements
+- Enhancement of international competitiveness
 ...
 
-### 问题3：不足之处
-**是否存在这项功能在这个行业中体现不足的情况？**
+### Question 3: Deficiencies
+**Are there situations where this function is insufficiently manifested in this industry?**
 
-分析要点：
-- 客观评估，不回避问题
-- 与理想状态或国际标杆的差距
+Analysis points:
+- Objective assessment, do not avoid problems
+- Gaps compared to ideal state or international benchmarks
 ...
 ```
 
-**data-sources.md（可信度评级部分）**：
+**data-sources.md (Credibility Rating section)**:
 
 ```markdown
-## 数据来源类型
+## Data Source Types
 
-### 1. 学术文章
-- 知网、万方等数据库的学术论文
-- SSRN、ResearchGate等平台的工作论文
-- **优先级**：高
-- **可信度**：高
+### 1. Academic Articles
+- Academic papers from databases like CNKI, Wanfang
+- Working papers from platforms like SSRN, ResearchGate
+- **Priority**: High
+- **Credibility**: High
 
-### 2. 政策文件
-- 国务院及各部委发布的政策文件
-- 地方政府的相关政策
-- **优先级**：高
-- **可信度**：高
+### 2. Policy Documents
+- Policy documents issued by the State Council and various ministries
+- Relevant policies from local governments
+- **Priority**: High
+- **Credibility**: High
 
-### 3. 行业研报
-- 券商研究报告
-- 咨询公司行业分析报告
-- **优先级**：高
-- **可信度**：中高
+### 3. Industry Research Reports
+- Brokerage research reports
+- Industry analysis reports from consulting firms
+- **Priority**: High
+- **Credibility**: Medium-High
 
-## 慎用来源
+## Sources to Use Cautiously
 
-以下类型的信息来源应**谨慎使用**或**避免使用**：
+The following types of information sources should be **used cautiously** or **avoided**:
 
-- 完全个人的博客文章（非专业人士）
-- 自媒体的主观评论（缺乏数据支撑）
-- 明显带有商业推广目的的内容
+- Purely personal blog articles (non-professionals)
+- Subjective comments from self-media (lacking data support)
+- Content with obvious commercial promotional purposes
 ```
 
-## 相关模式
+## Related Patterns
 
-- **[Reference Data Configuration](./STR-01-reference-data-configuration.md)**：方法论指导是Reference Data的一个子类
-- **[Embedded Quality Standards](./QUA-01-embedded-quality-standards.md)**：方法论中的质量检查清单是质量标准的具体化
-- **[Composable Document Assembly](./STR-05-composable-document-assembly.md)**：输出模板为文档组装提供格式规范
-- **[Verifiable Data Lineage](./QUA-03-verifiable-data-lineage.md)**：数据来源指南支持数据血缘追溯
+- **[Reference Data Configuration](./STR-01-reference-data-configuration.md)**: Methodological guidance is a subtype of Reference Data
+- **[Embedded Quality Standards](./QUA-01-embedded-quality-standards.md)**: Quality checklists in methodology are specific implementations of quality standards
+- **[Composable Document Assembly](./STR-05-composable-document-assembly.md)**: Output templates provide format specifications for document assembly
+- **[Verifiable Data Lineage](./QUA-03-verifiable-data-lineage.md)**: Data sources guide supports data lineage tracing
