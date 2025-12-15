@@ -89,6 +89,7 @@ Patterns are grouped by category, identified by a three-letter prefix:
 | STR-04 | [Business-Driven Agent Design](./STR-04-business-driven-agent-design.md) | Recommended | Agent division follows business process, numbered by execution order |
 | STR-05 | [Composable Document Assembly](./STR-05-composable-document-assembly.md) | Recommended | Generate long documents by sections, standardize format, mechanically assemble |
 | STR-06 | [Methodological Guidance](./STR-06-methodological-guidance.md) | Recommended | Methodological guidance: data sources, analysis methods, output templates |
+| STR-07 | [Concept-to-Questions Decomposition](./STR-07-concept-to-questions.md) | Optional | Transform abstract concepts into concrete question items via conceptualization and operationalization |
 
 ### BHV - Behavior Patterns
 
@@ -129,10 +130,13 @@ Patterns are grouped by category, identified by a three-letter prefix:
      │  Data Config  │            │  Quality      │
      └───────┬───────┘            └───────┬───────┘
              │                            │
-     ┌───────▼───────┐                    │
-     │  STR-06       │                    │
-     │  Methodolog.  │                    │
-     │  Guidance     │                    │
+     ┌───────┴───────┐                    │
+     │               │                    │
+┌────▼────┐   ┌──────▼──────┐             │
+│ STR-06  │   │   STR-07    │             │
+│ Method. │   │  Concept-to │             │
+│ Guidance│   │  Questions  │             │
+└────┬────┘   └──────┬──────┘             │
      └───────┬───────┘                    │
              │                            │
              ▼                            ▼
@@ -187,6 +191,7 @@ Patterns are grouped by category, identified by a three-letter prefix:
 
 ## Version History
 
+- **v0.5** (2025-12): Added STR-07 Concept-to-Questions Decomposition, providing systematic methodology for transforming abstract concepts into concrete question items
 - **v0.4** (2025-12): Based on demo_mas incident retrospective, updated BHV-02 (added acceptance-side faithfulness and non-negotiable principle) and QUA-02 (added process execution compliance layer)
 - **v0.3** (2025-12): Added STR-06 Methodological Guidance, updated STR-01 to distinguish domain knowledge from methodology
 - **v0.2** (2025-12): Restructured pattern numbering, grouped by category (COR/STR/BHV/QUA)
