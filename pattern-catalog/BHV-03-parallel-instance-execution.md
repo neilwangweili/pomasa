@@ -88,6 +88,17 @@ Orchestrator
 
 ## Implementation Guidelines
 
+### Maximum Parallelism Constraint
+
+**Recommended maximum fan-out: 7 parallel tasks**
+
+While theoretically more tasks can run in parallel, practical experience shows that excessive parallelism often leads to:
+- System instability or hanging
+- API rate limiting issues
+- Resource contention problems
+
+When the number of partitions exceeds 7, use **Batch Parallelism** (see Variants section) to execute in batches of at most 7.
+
 ### Identifying Parallel Opportunities
 
 **Conditions for parallelization**:
@@ -174,7 +185,7 @@ If collection for an Organization fails:
 ### Parallel Approach
 - ESSCC framework has 55 function items
 - Launch independent Deep Researcher instance for each function item
-- Maximum 55-way parallelism
+- Execute in batches of 7 (8 batches total, respecting the max 7 parallelism constraint)
 
 ### Execution Method
 1. Read question list to determine all function items
@@ -195,8 +206,8 @@ data/{INDUSTRY_ID}/01.materials/03.deep_research/
 ### Efficiency Analysis
 - Single function item research: approximately 10-15 minutes
 - 55 serial executions: approximately 10-14 hours
-- 55 parallel executions: approximately 15-20 minutes (limited by slowest)
-- Speedup ratio: approximately 30-40x
+- 55 items in 8 batches of 7: approximately 2-2.5 hours
+- Speedup ratio: approximately 5-6x
 ```
 
 **Stage Three: Layered Parallelism in Analysis**:
@@ -204,13 +215,13 @@ data/{INDUSTRY_ID}/01.materials/03.deep_research/
 ```markdown
 ## Analysis Execution Strategy
 
-### Layer One: Function Item Analysis (55-way parallelism)
-- 55 function items can be analyzed completely in parallel
+### Layer One: Function Item Analysis (55 items in batches of 7)
+- 55 function items can be analyzed in parallel batches
 - Each produces independent function item analysis report
 
-### Layer Two: Feature Synthesis (12-way parallelism)
+### Layer Two: Feature Synthesis (12 items in batches of 7)
 - Wait for Layer One to complete
-- 12 features can be synthesized in parallel (function item analyses under each feature are complete)
+- 12 features can be synthesized in 2 parallel batches (function item analyses under each feature are complete)
 
 ### Layer Three: Dimension Synthesis (4-way parallelism)
 - Wait for Layer Two to complete
@@ -230,10 +241,13 @@ data/{INDUSTRY_ID}/01.materials/03.deep_research/
 ## Variants
 
 ### Batch Parallelism
-When the number of partitions is very large, execute in batches in parallel:
+When the number of partitions exceeds 7, execute in batches with at most 7 instances per batch:
 ```
-Batch 1: Instance 1-10 in parallel
-Batch 2: Instance 11-20 in parallel
+Batch 1: Instance 1-7 in parallel
+    ↓ After completion
+Batch 2: Instance 8-14 in parallel
+    ↓ After completion
+Batch 3: Instance 15-21 in parallel
 ...
 ```
 
