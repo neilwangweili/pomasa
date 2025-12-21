@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import ViewPage from './pages/ViewPage'
+import CreatePage from './pages/CreatePage'
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/view" element={<ViewPage />} />
+        <Route path="/create" element={<CreatePage />} />
       </Routes>
     </BrowserRouter>
   )

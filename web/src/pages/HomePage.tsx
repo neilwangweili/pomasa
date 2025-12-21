@@ -2,10 +2,12 @@ import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { FolderOpen, Plus } from 'lucide-react'
 import LanguageSwitcher from '../components/LanguageSwitcher'
+import { usePageTitle } from '../hooks/usePageTitle'
 
 export default function HomePage() {
   const navigate = useNavigate()
   const { t } = useTranslation()
+  usePageTitle('home.pageTitle')
 
   const handleOpenMAS = async () => {
     try {
@@ -22,7 +24,7 @@ export default function HomePage() {
   }
 
   const handleCreateMAS = () => {
-    alert(t('home.createNotImplemented'))
+    navigate('/create')
   }
 
   return (

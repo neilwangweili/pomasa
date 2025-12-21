@@ -5,6 +5,7 @@ import { ArrowLeft, Folder, FileText, ChevronRight, ChevronDown } from 'lucide-r
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import LanguageSwitcher from '../components/LanguageSwitcher'
+import { usePageTitle } from '../hooks/usePageTitle'
 
 interface FileNode {
   name: string
@@ -84,6 +85,7 @@ export default function ViewPage() {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const { t } = useTranslation()
+  usePageTitle('view.pageTitle')
   const masPath = searchParams.get('path')
 
   const [masInfo, setMasInfo] = useState<MasInfo | null>(null)
