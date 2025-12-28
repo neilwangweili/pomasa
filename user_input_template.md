@@ -76,8 +76,8 @@ For the complete pattern list, see [pattern-catalog/README.md](./pattern-catalog
 **Quality Assurance Level**:
 
 - [ ] Simple: Only adopt required patterns, no additional quality checks
-- [x] Standard (default): Adopt QUA-01 Embedded Quality Standards
-- [ ] Strict: Adopt QUA-01 + QUA-02 Multi-Layer Quality Assurance
+- [x] Standard (default): Adopt QUA-01 Embedded Quality Standards + BHV-05 Grounded Web Research
+- [ ] Strict: Adopt QUA-01 + QUA-02 Multi-Layer Quality Assurance + BHV-05 Grounded Web Research
 
 **Other Patterns to Enable or Disable**:
 

@@ -99,6 +99,7 @@ Patterns are grouped by category, identified by a three-letter prefix:
 | BHV-02 | [Faithful Agent Instantiation](./BHV-02-faithful-agent-instantiation.md) | Required | When invoking an Agent, must have it read the complete Blueprint; each task requires independent invocation |
 | BHV-03 | [Parallel Instance Execution](./BHV-03-parallel-instance-execution.md) | Optional | Launch multiple Agent instances in parallel to handle independent tasks |
 | BHV-04 | [Progressive Data Refinement](./BHV-04-progressive-data-refinement.md) | Optional | Data undergoes gradual refinement through multiple stages |
+| BHV-05 | [Grounded Web Research](./BHV-05-grounded-web-research.md) | Recommended | Fetch original content before using web information |
 
 ### QUA - Quality Patterns
 
@@ -191,6 +192,7 @@ Patterns are grouped by category, identified by a three-letter prefix:
 
 ## Version History
 
+- **v0.6** (2025-12): Added BHV-05 Grounded Web Research, requiring agents to fetch original web content rather than trusting search summaries
 - **v0.5** (2025-12): Added STR-07 Concept-to-Questions Decomposition, providing systematic methodology for transforming abstract concepts into concrete question items
 - **v0.4** (2025-12): Based on demo_mas incident retrospective, updated BHV-02 (added acceptance-side faithfulness and non-negotiable principle) and QUA-02 (added process execution compliance layer)
 - **v0.3** (2025-12): Added STR-06 Methodological Guidance, updated STR-01 to distinguish domain knowledge from methodology
