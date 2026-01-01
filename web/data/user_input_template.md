@@ -67,6 +67,14 @@ List your reference materials below (file paths or URLs). The Generator will con
 
 [Describe: The organizational structure of the report. You can also write "to be suggested by AI"]
 
+**Deliverable File Formats**:
+
+- [x] Markdown (always generated)
+- [x] DOCX (recommended, for editing)
+- [x] PDF (recommended, for distribution)
+
+If DOCX/PDF are selected, the Generator will set up an export pipeline with templates (STR-09).
+
 ---
 
 ## Pattern Selection
@@ -76,8 +84,8 @@ For the complete pattern list, see [pattern-catalog/README.md](./pattern-catalog
 **Quality Assurance Level**:
 
 - [ ] Simple: Only adopt required patterns, no additional quality checks
-- [x] Standard (default): Adopt QUA-01 Embedded Quality Standards
-- [ ] Strict: Adopt QUA-01 + QUA-02 Multi-Layer Quality Assurance
+- [x] Standard (default): Adopt QUA-01 Embedded Quality Standards + BHV-05 Grounded Web Research
+- [ ] Strict: Adopt QUA-01 + QUA-02 Multi-Layer Quality Assurance + BHV-05 Grounded Web Research
 
 **Other Patterns to Enable or Disable**:
 

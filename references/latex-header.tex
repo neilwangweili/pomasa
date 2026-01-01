@@ -1,0 +1,19 @@
+% PDF 导出 LaTeX 头部设置
+
+% 首段缩进
+\usepackage{indentfirst}
+
+% 标题格式
+\usepackage{titlesec}
+% 一级标题（section）：居中
+\titleformat{\section}{\centering\Large\bfseries}{\thesection}{1em}{}
+% 二级标题（subsection）：居中
+\titleformat{\subsection}{\centering\large\bfseries}{\thesubsection}{1em}{}
+% 三级标题（subsubsection）：缩进两个字
+\titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection}{0pt}{\hspace{2em}}
+
+% 脚注与正文间距
+\setlength{\skip\footins}{1.5em}
+
+% 段落首行缩进两个字
+\setlength{\parindent}{2em}

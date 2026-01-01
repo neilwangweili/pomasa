@@ -90,6 +90,8 @@ Patterns are grouped by category, identified by a three-letter prefix:
 | STR-05 | [Composable Document Assembly](./STR-05-composable-document-assembly.md) | Recommended | Generate long documents by sections, standardize format, mechanically assemble |
 | STR-06 | [Methodological Guidance](./STR-06-methodological-guidance.md) | Recommended | Methodological guidance: data sources, analysis methods, output templates |
 | STR-07 | [Concept-to-Questions Decomposition](./STR-07-concept-to-questions.md) | Optional | Transform abstract concepts into concrete question items via conceptualization and operationalization |
+| STR-08 | [Pandoc-Ready Markdown Format](./STR-08-pandoc-ready-markdown.md) | Recommended | Markdown format specification ensuring correct conversion to DOCX/PDF |
+| STR-09 | [Deliverable Export Pipeline](./STR-09-deliverable-export-pipeline.md) | Recommended | Export final reports to DOCX/PDF with templates and timestamped filenames |
 
 ### BHV - Behavior Patterns
 
@@ -192,6 +194,8 @@ Patterns are grouped by category, identified by a three-letter prefix:
 
 ## Version History
 
+- **v0.8** (2026-01): Added STR-09 Deliverable Export Pipeline for exporting final reports to DOCX/PDF
+- **v0.7** (2025-12): Added STR-08 Pandoc-Ready Markdown Format, extracted from STR-05 as independent format specification pattern
 - **v0.6** (2025-12): Added BHV-05 Grounded Web Research, requiring agents to fetch original web content rather than trusting search summaries
 - **v0.5** (2025-12): Added STR-07 Concept-to-Questions Decomposition, providing systematic methodology for transforming abstract concepts into concrete question items
 - **v0.4** (2025-12): Based on demo_mas incident retrospective, updated BHV-02 (added acceptance-side faithfulness and non-negotiable principle) and QUA-02 (added process execution compliance layer)

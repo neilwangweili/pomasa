@@ -84,59 +84,17 @@ data/
     └── assemble.sh           # Assembly script
 ```
 
-### Markdown Format Specification (for pandoc)
+### Markdown Format Specification
 
-The following specification should be an independent file (such as `references/markdown-format-spec.md`), referenced in the Blueprint of each section generation Agent:
+Each section must follow **[Pandoc-Ready Markdown Format](./STR-08-pandoc-ready-markdown.md)** to ensure correct assembly and conversion.
 
-```markdown
-## Markdown Format Specification
+Key points for section generation:
+- Sections start with level-2 headings (##), not level-1
+- Level-1 heading is reserved for the document title (in frontmatter only)
+- Blank lines around all block elements (headings, lists, code blocks, tables)
+- One blank line at beginning and end of each section file
 
-This specification ensures that sections can be correctly assembled and properly processed by pandoc.
-
-### Heading Specification
-
-- [ ] Sections start with level-2 headings (##), do not use level-1 headings
-- [ ] Level-1 headings are only used for the final report's main title (in frontmatter)
-- [ ] Heading levels are continuous, do not skip levels (## followed by ###, cannot jump directly to ####)
-
-### Blank Line Specification
-
-- [ ] Beginning of file: one blank line
-- [ ] End of file: one blank line
-- [ ] Before heading: one blank line
-- [ ] After heading: one blank line
-- [ ] Between paragraphs: one blank line
-
-### List Specification
-
-- [ ] Before bullet list: must have one blank line
-- [ ] After bullet list: must have one blank line
-- [ ] Nested lists: use 2-space indentation
-- [ ] Line breaks within list items: use 2-space indentation for continuation
-
-### Code Block Specification
-
-- [ ] Before code block: one blank line
-- [ ] After code block: one blank line
-- [ ] Use three backticks, specify language
-
-### Quote Block Specification
-
-- [ ] Before quote block: one blank line
-- [ ] After quote block: one blank line
-- [ ] Multi-line quotes start each line with >
-
-### Table Specification
-
-- [ ] Before table: one blank line
-- [ ] After table: one blank line
-- [ ] Use standard markdown table syntax
-
-### Special Characters
-
-- [ ] Avoid using special characters that may cause pandoc parsing issues
-- [ ] If special characters are needed, use HTML entities or escaping
-```
+See the full specification in the referenced pattern.
 
 ### Assembly Script Example
 
@@ -302,6 +260,8 @@ Local governments actively respond...            ❌ No blank line after list
 
 ## Related Patterns
 
+- **[Pandoc-Ready Markdown Format](./STR-08-pandoc-ready-markdown.md)**: Format specification for sections to ensure correct conversion
+- **[Deliverable Export Pipeline](./STR-09-deliverable-export-pipeline.md)**: Exports assembled report to DOCX/PDF
 - **[Faithful Agent Instantiation](./BHV-02-faithful-agent-instantiation.md)**: Independent subagent invocation for each section
 - **[Filesystem Data Bus](./STR-02-filesystem-data-bus.md)**: Section files stored as intermediate artifacts
 - **[Embedded Quality Standards](./QUA-01-embedded-quality-standards.md)**: Format specifications embedded in Blueprint

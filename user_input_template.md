@@ -67,6 +67,14 @@ List your reference materials below (file paths or URLs). The Generator will con
 
 [Describe: The organizational structure of the report. You can also write "to be suggested by AI"]
 
+**Deliverable File Formats**:
+
+- [x] Markdown (always generated)
+- [x] DOCX (recommended, for editing)
+- [x] PDF (recommended, for distribution)
+
+If DOCX/PDF are selected, the Generator will set up an export pipeline with templates (STR-09).
+
 ---
 
 ## Pattern Selection
