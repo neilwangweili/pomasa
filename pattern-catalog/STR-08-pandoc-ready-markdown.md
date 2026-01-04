@@ -111,6 +111,40 @@ The following specification should be embedded in or referenced by any Agent Blu
 - [ ] Escape characters that have Markdown meaning when used literally: `\*`, `\_`, `\#`
 - [ ] Smart quotes and em-dashes are acceptable (pandoc handles these well)
 
+### Chinese Typography Specification
+
+When generating Chinese-language documents, use proper Chinese punctuation marks instead of ASCII equivalents:
+
+- [ ] Use fullwidth quotation marks: `“...”` (U+201C, U+201D) not `"..."` (U+0022)
+- [ ] Use fullwidth single quotes: `‘...’` (U+2018, U+2019) not `'...'` (U+0027)
+- [ ] Use fullwidth colon: `：` (U+FF1A) not `:` (U+003A) in Chinese sentences
+- [ ] Use fullwidth comma: `，` (U+FF0C) not `,` (U+002C) in Chinese sentences
+- [ ] Use fullwidth period: `。` (U+3002) not `.` (U+002E) in Chinese sentences
+- [ ] Use fullwidth parentheses: `（）` (U+FF08, U+FF09) not `()` in Chinese context
+- [ ] Use Chinese book title marks for titles: `《书名》` (U+300A, U+300B)
+
+**Important**: AI models (including Claude) have a known tendency to use ASCII straight quotes (`"`) instead of proper Chinese quotation marks (`“”`). This must be explicitly corrected.
+
+**Correction Method**: If post-processing is needed, use paired replacement:
+
+```python
+def replace_quotes(text):
+    """Replace ASCII quotes with Chinese fullwidth quotes."""
+    result = []
+    in_quote = False
+    for char in text:
+        if char == '"':
+            if not in_quote:
+                result.append('\u201C')  # "
+                in_quote = True
+            else:
+                result.append('\u201D')  # "
+                in_quote = False
+        else:
+            result.append(char)
+    return ''.join(result)
+```
+
 ## Consequences
 
 ### Benefits
@@ -259,3 +293,5 @@ When implementing this pattern, confirm:
 - [ ] Do all document-generating Agent Blueprints reference the specification?
 - [ ] Has test conversion been performed to verify pandoc compatibility?
 - [ ] Is there a process for updating specifications if issues are found?
+- [ ] For Chinese documents: Are Chinese typography rules included in the specification?
+- [ ] For Chinese documents: Is there a post-processing step to fix AI-generated ASCII quotes?
