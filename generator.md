@@ -61,7 +61,7 @@ Referring to the selected pattern documents, generate:
 │   ├── export.sh            # Export to DOCX/PDF
 │   ├── docx-template.docx   # DOCX format template
 │   └── latex-header.tex     # PDF format control (for CJK support)
-├── data/                    # Runtime Data (directory structure)
+├── workspace/               # Runtime workspace (created during execution)
 │   └── ...
 ├── _output/                 # Deliverables (if using STR-09, may be gitignored)
 ├── wip/                     # Work in Progress

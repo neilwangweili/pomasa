@@ -87,7 +87,7 @@ project/
 │   └── methodology/  # Methodological guidance
 │       └── ...
 │
-└── data/             # Runtime data
+└── workspace/             # Runtime data
     └── ...
 ```
 

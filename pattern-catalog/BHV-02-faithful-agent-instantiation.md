@@ -233,7 +233,7 @@ Please launch a subagent to execute the following task:
 ## Stage Two Execution
 
 ### 2.1 Preparation
-Read `data/{INDUSTRY_ID}/01.materials/02.question_list/` to obtain complete function item list.
+Read `workspace/{INDUSTRY_ID}/01.materials/02.question_list/` to obtain complete function item list.
 
 ### 2.2 Launch Deep Research
 For each function item in the question list, launch independent research task:

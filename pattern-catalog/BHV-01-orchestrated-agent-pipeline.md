@@ -122,7 +122,7 @@ You are the main coordinator of the system, responsible for orchestrating the en
 - Launch one Agent Instance for each data source
 - Can execute in parallel
 - Wait for all Instances to complete
-**Completion Indicator**: Complete output in `data/01.materials/` directory
+**Completion Indicator**: Complete output in `workspace/01.materials/` directory
 
 ### Stage Two: Analysis
 **Goal**: Analyze raw data
@@ -131,7 +131,7 @@ You are the main coordinator of the system, responsible for orchestrating the en
 - Read `agents/02.analyzer.md`
 - Launch Agent Instances according to analysis tasks
 - Wait for all Instances to complete
-**Completion Indicator**: Complete output in `data/02.analysis/` directory
+**Completion Indicator**: Complete output in `workspace/02.analysis/` directory
 
 ### Stage Three: Report Generation
 **Goal**: Generate final report
@@ -139,7 +139,7 @@ You are the main coordinator of the system, responsible for orchestrating the en
 **Execution Method**:
 - Read `agents/03.reporter.md`
 - Launch single Reporter Agent
-**Completion Indicator**: `data/03.reports/final_report.md` exists
+**Completion Indicator**: `workspace/03.reports/final_report.md` exists
 
 ### Stage Four: Quality Check (Optional)
 ...
@@ -232,7 +232,7 @@ Stage 4: Reporter
 ## Execution Flow
 
 1. Verify integrity of reference files in references/ directory
-2. Create data/{INDUSTRY_ID}/ directory structure
+2. Create workspace/{INDUSTRY_ID}/ directory structure
 
 3. Launch Stage 1:
    - Use 01.initial_scanner.md to launch Initial Scanner

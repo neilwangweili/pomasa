@@ -33,7 +33,7 @@ This pattern applies to the following scenarios:
 
 1. **Dedicated Output Directory**
    - Export deliverables to `_output/` in the project root
-   - Keep separate from `data/` which holds intermediate artifacts
+   - Keep separate from `workspace/` which holds intermediate artifacts
    - Consider adding `_output/` to `.gitignore` (user's choice)
 
 2. **Script-Based Automation**
@@ -74,7 +74,7 @@ This pattern applies to the following scenarios:
 my-mas/
 ├── agents/
 ├── references/
-├── data/
+├── workspace/
 │   └── 05.report/
 │       └── final_report.md      # Source for export
 ├── scripts/
@@ -99,7 +99,7 @@ PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 OUTPUT_DIR="${PROJECT_ROOT}/_output"
 
 # Input file (default or from argument)
-INPUT_FILE="${1:-${PROJECT_ROOT}/data/05.report/final_report.md}"
+INPUT_FILE="${1:-${PROJECT_ROOT}/workspace/05.report/final_report.md}"
 
 if [ ! -f "$INPUT_FILE" ]; then
     echo "Error: Input file not found: $INPUT_FILE"
@@ -205,7 +205,7 @@ Basic usage (uses default input path):
 
 With explicit input file:
 ```bash
-./scripts/export.sh data/05.report/final_report.md
+./scripts/export.sh workspace/05.report/final_report.md
 ```
 
 ## Examples
@@ -218,7 +218,7 @@ industry-assessment/
 │   └── ...
 ├── references/
 │   └── ...
-├── data/
+├── workspace/
 │   ├── 01.raw/
 │   ├── 02.processed/
 │   └── 05.report/
@@ -244,12 +244,12 @@ industry-assessment/
 
 When using STR-05 (Composable Document Assembly), the workflow is:
 
-1. Generate sections independently → `data/04.sections/`
-2. Assemble into final report → `data/05.report/final_report.md`
+1. Generate sections independently → `workspace/04.sections/`
+2. Assemble into final report → `workspace/05.report/final_report.md`
 3. Export to deliverables → `_output/`
 
 The assembly script and export script are separate:
-- `scripts/assemble.sh` - combines sections (may be in `data/scripts/`)
+- `scripts/assemble.sh` - combines sections (may be in `workspace/scripts/`)
 - `scripts/export.sh` - converts to DOCX/PDF
 
 ## Related Patterns

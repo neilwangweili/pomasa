@@ -201,7 +201,7 @@ Before finalizing your output, verify:
 
 ## Output
 
-Write to `data/04.sections/{section_name}.md`
+Write to `workspace/04.sections/{section_name}.md`
 ```
 
 ### Creating a Reusable Reference File

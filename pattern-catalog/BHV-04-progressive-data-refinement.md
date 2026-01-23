@@ -90,25 +90,25 @@ Level 1: Data Collection
 ├── Input: External data sources
 ├── Output: Structured raw data
 ├── Responsibility: Fetch, clean, structure
-└── Directory: data/01.materials/
+└── Directory: workspace/01.materials/
 
 Level 2: Analysis Processing
 ├── Input: Structured raw data
 ├── Output: Analysis conclusions
 ├── Responsibility: Analyze, reason, evaluate
-└── Directory: data/02.analysis/
+└── Directory: workspace/02.analysis/
 
 Level 3: Report Generation
 ├── Input: Analysis conclusions
 ├── Output: Final report
 ├── Responsibility: Integrate, narrate, format
-└── Directory: data/03.reports/
+└── Directory: workspace/03.reports/
 ```
 
 ### Directory Structure Reflects Refinement Levels
 
 ```
-data/
+workspace/
 ├── 01.materials/          # Level 1: Raw Materials
 │   ├── raw/               # Structured raw data
 │   └── sources/           # Source information

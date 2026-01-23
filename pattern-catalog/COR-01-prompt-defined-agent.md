@@ -179,7 +179,7 @@ subsequent in-depth research.
 3. Policy environment overview (national policies, local measures, regulatory framework)
 4. Development history overview (key stages, major events, technology evolution)
 
-**Output Location**: `data/{INDUSTRY_ID}/01.materials/01.industry_overview/`
+**Output Location**: `workspace/{INDUSTRY_ID}/01.materials/01.industry_overview/`
 
 ### Stage 2: Problem Checklist Refinement
 

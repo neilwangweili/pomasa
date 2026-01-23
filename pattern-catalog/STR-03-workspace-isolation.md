@@ -93,19 +93,19 @@ The constraint declaration should be placed at the **very beginning** of the Age
 **Recommended**: Use project-relative paths
 ```markdown
 ## Output Location
-`data/{INDUSTRY_ID}/01.materials/`
+`workspace/{INDUSTRY_ID}/01.materials/`
 ```
 
 **Acceptable**: Use absolute paths within the project
 ```markdown
 ## Output Location
-`/full/path/to/project/data/{INDUSTRY_ID}/01.materials/`
+`/full/path/to/project/workspace/{INDUSTRY_ID}/01.materials/`
 ```
 
 **Prohibited**: Reference paths outside the project
 ```markdown
 ## Reference Materials
-Read `/etc/config` or `../other-project/data/`  # Prohibited!
+Read `/etc/config` or `../other-project/workspace/`  # Prohibited!
 ```
 
 ### Handling Shared Resources

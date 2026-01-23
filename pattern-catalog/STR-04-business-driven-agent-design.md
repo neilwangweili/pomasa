@@ -88,7 +88,7 @@ agents/
 Agent numbers correspond to data directories:
 
 ```
-data/
+workspace/
 ├── 01.initial_scan/        # Output from 01.initial_scanner.md
 ├── 02.question_list/       # Output from 02.question_designer.md
 ├── 03.deep_research/       # Output from 03.deep_researcher.md
@@ -214,7 +214,7 @@ agents/
 
 **Data transfer**:
 ```
-data/
+workspace/
 ├── 03.reports/              # First group output: Assessment reports
 │   └── assessment_202503.md
 └── 13.paper/                # Second group output: Academic paper

@@ -33,7 +33,7 @@ This pattern applies to the following scenarios:
 ### Directory Structure Reflects Data Flow
 
 ```
-data/
+workspace/
 ├── {TIME_PERIOD}/           # Partition by time period
 │   ├── 01.materials/        # Stage one output: raw data
 │   │   ├── {entity_1}/      # Partition by processing entity
@@ -127,11 +127,11 @@ executive_summary.md  # Executive summary
 ```markdown
 ## Output Requirements
 
-**Output Location**: `data/{INDUSTRY_ID}/01.materials/01.industry_overview/`
+**Output Location**: `workspace/{INDUSTRY_ID}/01.materials/01.industry_overview/`
 
 **Output Format**:
 ```
-data/{INDUSTRY_ID}/01.materials/01.industry_overview/
+workspace/{INDUSTRY_ID}/01.materials/01.industry_overview/
 ├── basic_profile.md          # Industry basic profile
 ├── ownership_structure.md    # Ownership structure profile
 ├── policy_environment.md     # Policy environment profile
@@ -148,9 +148,9 @@ Avoid multiple Agents writing to the same file simultaneously through data parti
 
 ```
 # During parallel execution, each Agent writes to a different directory
-Agent_1 → data/2025-09/raw/org_1/
-Agent_2 → data/2025-09/raw/org_2/
-Agent_3 → data/2025-09/raw/org_3/
+Agent_1 → workspace/2025-09/raw/org_1/
+Agent_2 → workspace/2025-09/raw/org_2/
+Agent_3 → workspace/2025-09/raw/org_3/
 ...
 ```
 
@@ -170,7 +170,7 @@ For important data, can adopt the "dual-file" pattern:
 
 **Data Directory Structure**:
 ```
-data/
+workspace/
 └── evtol/                           # Industry ID
     ├── 01.materials/                # Raw materials
     │   ├── 01.industry_overview/    # Industry overview
@@ -220,7 +220,7 @@ Reporter        → 03.reports/final_report.md
 
 ## Related Patterns
 
-- **[Reference Data Configuration](./STR-01-reference-data-configuration.md)**: Reference Data is also stored in the filesystem, but located in `references/` rather than `data/`
+- **[Reference Data Configuration](./STR-01-reference-data-configuration.md)**: Reference Data is also stored in the filesystem, but located in `references/` rather than `workspace/` (runtime workspace)
 - **[Workspace Isolation](./STR-03-workspace-isolation.md)**: Restricts Agents to access only specific directories
 - **[Progressive Data Refinement](./BHV-04-progressive-data-refinement.md)**: Data undergoes gradual refinement as it flows between directories
 - **[Parallel Instance Execution](./BHV-03-parallel-instance-execution.md)**: Supports parallel writes through directory partitioning
@@ -235,16 +235,16 @@ Choose appropriate first-level partitioning based on task characteristics:
 
 | Task Type | Partition Dimension | Example |
 |----------|----------|------|
-| Periodic tasks | Time/Date | `data/2025-12-03/` |
-| Multi-entity tasks | Entity ID | `data/US/`, `data/CN/` |
-| One-time tasks | No first-level partition | Directly `data/01.xxx/` |
+| Periodic tasks | Time/Date | `workspace/2025-12-03/` |
+| Multi-entity tasks | Entity ID | `workspace/US/`, `workspace/CN/` |
+| One-time tasks | No first-level partition | Directly `workspace/01.xxx/` |
 
 **Second-Level Directory = Agent Output Stage Division**
 
 Regardless of first-level partitioning approach, second-level directories always follow Agent stage numbering:
 
 ```
-data/{first_level_partition}/
+workspace/{first_level_partition}/
 ├── 01.initial_scan/
 ├── 02.deep_research/
 ├── 03.analysis/
@@ -261,7 +261,7 @@ data/{first_level_partition}/
 
 **Directory Structure**:
 ```
-data/
+workspace/
 ├── 2025-12-01/              # Sunday digest
 │   ├── 01.news_collection/
 │   ├── 02.analysis/
@@ -287,7 +287,7 @@ data/
 
 **Directory Structure**:
 ```
-data/
+workspace/
 ├── US/                      # United States research
 │   ├── 01.data_collection/
 │   ├── 02.analysis/
@@ -313,7 +313,7 @@ data/
 
 **Directory Structure**:
 ```
-data/
+workspace/
 └── 2025-03/                 # First level: time
     ├── US/                  # Second level: entity
     │   ├── 01.collection/
@@ -333,14 +333,14 @@ data/
 
 **Directory Structure**:
 ```
-data/
+workspace/
 ├── 01.initial_scan/
 ├── 02.deep_research/
 ├── 03.analysis/
 └── 04.reports/
 ```
 
-No first-level partition needed, stage directories directly under `data/`.
+No first-level partition needed, stage directories directly under `workspace/`.
 
 ### Parameterization in Blueprints
 
@@ -352,14 +352,14 @@ Parameters for this run:
 - INSTANCE_ID: {date or entity ID, used as first-level partition}
 - For example: `2025-12-03` or `US`
 
-All Agent output paths use `data/{INSTANCE_ID}/` as root directory.
+All Agent output paths use `workspace/{INSTANCE_ID}/` as root directory.
 ```
 
 **Agent Blueprint Uses Parameters**:
 ```markdown
 ## Output Location
 
-`data/{INSTANCE_ID}/02.analysis/`
+`workspace/{INSTANCE_ID}/02.analysis/`
 
 Where {INSTANCE_ID} is passed in by Orchestrator.
 ```
@@ -371,8 +371,8 @@ When needing to reference historical run results:
 ```markdown
 ## Input
 
-**Current Period Data**: `data/{CURRENT_INSTANCE}/01.collection/`
-**Previous Period Data**: `data/{PREVIOUS_INSTANCE}/01.collection/` (if comparison needed)
+**Current Period Data**: `workspace/{CURRENT_INSTANCE}/01.collection/`
+**Previous Period Data**: `workspace/{PREVIOUS_INSTANCE}/01.collection/` (if comparison needed)
 
 Orchestrator must provide PREVIOUS_INSTANCE parameter when invoking.
 ```

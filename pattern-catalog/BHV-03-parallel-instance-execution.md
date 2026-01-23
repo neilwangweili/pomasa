@@ -133,7 +133,7 @@ When the number of partitions exceeds 7, use **Batch Parallelism** (see Variants
 ### Directory Partitioning to Avoid Write Conflicts
 
 ```
-data/2025-09/raw/
+workspace/2025-09/raw/
 ├── org_1/          # Instance 1 writes here
 │   ├── activities.json
 │   └── sources.md
@@ -155,7 +155,7 @@ data/2025-09/raw/
 
 ## Output Location
 
-`data/{PERIOD}/raw/{ORGANIZATION_ID}/`
+`workspace/{PERIOD}/raw/{ORGANIZATION_ID}/`
 
 [Note: Through parameterization, the same Blueprint can be instantiated
 into multiple parallel Instances, each writing to a different directory]
@@ -196,7 +196,7 @@ If collection for an Organization fails:
 3. Wait for all Tasks to complete
 
 ### Output Directory
-data/{INDUSTRY_ID}/01.materials/03.deep_research/
+workspace/{INDUSTRY_ID}/01.materials/03.deep_research/
 ├── 1.1_control_strategic_sectors/    # Instance 1
 ├── 1.2_provide_public_goods/         # Instance 2
 ├── 1.3_stabilize_macro_economy/      # Instance 3

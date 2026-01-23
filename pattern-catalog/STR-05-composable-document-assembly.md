@@ -71,7 +71,7 @@ This pattern applies to the following scenarios:
 ### Directory Structure
 
 ```
-data/
+workspace/
 ├── 04.sections/              # Independent files for each section
 │   ├── 00.frontmatter.md     # Cover, abstract, etc.
 │   ├── 01.introduction.md
@@ -102,8 +102,8 @@ See the full specification in the referenced pattern.
 #!/bin/bash
 # assemble.sh - Assemble sections into complete report
 
-OUTPUT_DIR="data/05.report"
-SECTIONS_DIR="data/04.sections"
+OUTPUT_DIR="workspace/05.report"
+SECTIONS_DIR="workspace/04.sections"
 OUTPUT_FILE="$OUTPUT_DIR/full_report.md"
 
 # Ensure output directory exists
@@ -136,12 +136,12 @@ Generate specified sections for the research report.
 ## Input
 
 - Section number and title
-- Analysis materials to be covered in this section (from data/03.analysis/)
+- Analysis materials to be covered in this section (from workspace/03.analysis/)
 - Format specification (see references/markdown-format-spec.md)
 
 ## Output
 
-Write the generated section to `data/04.sections/{section_number}.{section_name}.md`
+Write the generated section to `workspace/04.sections/{section_number}.{section_name}.md`
 
 ## Format Requirements
 
@@ -182,7 +182,7 @@ For each section, launch an independent subagent:
 > Parameters:
 > - SECTION_ID: 02
 > - SECTION_TITLE: xxx
-> - SOURCE_MATERIALS: data/03.analysis/xxx.md
+> - SOURCE_MATERIALS: workspace/03.analysis/xxx.md
 
 **Important**:
 - Launch independent subagent for each section
@@ -194,7 +194,7 @@ For each section, launch an independent subagent:
 After all sections are generated, run the assembly script:
 
 ```bash
-bash data/scripts/assemble.sh
+bash workspace/scripts/assemble.sh
 ```
 
 ### 4.4 Format Check
