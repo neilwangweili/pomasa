@@ -101,11 +101,11 @@ If you have custom MCP tools for web research, you can configure them here. This
 
 **Custom Web Search Tool**:
 
-[Fill in: Tool name for web search, e.g., `mcp__crawl4ai__search`. Leave blank to use default `WebSearch`]
+[Fill in: Tool name for web search, e.g., `mcp__crawl4ai__search` or `mcp__serper-search__google_search`. Leave blank to use default `WebSearch`]
 
 **Custom Web Fetch Tool**:
 
-[Fill in: Tool name for fetching web content, e.g., `mcp__crawl4ai__read_url`. Leave blank to use default `WebFetch`]
+[Fill in: Tool name for fetching web content, e.g., `mcp__crawl4ai__read_url` or `mcp__serper-search__scrape`. Leave blank to use default `WebFetch`]
 
 **Fallback Strategy**:
 
