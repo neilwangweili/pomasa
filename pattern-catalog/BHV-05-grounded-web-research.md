@@ -15,6 +15,12 @@ This problem is particularly insidious because:
 - AI tends to "fill in the gaps" when processing summaries, introducing further hallucinations
 - By the time data enters analysis stages, fabricated information gets "laundered" into seemingly reasonable conclusions
 
+A secondary problem arises when agents attempt to summarize or extract information during the collection phase. This introduces another layer of potential distortion:
+- The collecting agent may misunderstand or misinterpret the content
+- Important details may be lost in summarization
+- The summary becomes a "second-hand source" that downstream agents must trust
+- Analysis agents cannot verify claims against the original if only summaries are preserved
+
 ## Context
 
 This pattern applies when:
@@ -34,18 +40,19 @@ This pattern may be skipped when:
 - **Speed vs Accuracy**: Using search summaries directly is faster, but less reliable
 - **Convenience vs Rigor**: Summaries are readily available, but original content requires additional fetching
 - **Coverage vs Depth**: Search can find many sources quickly, but verifying each takes time
-- **Automation vs Verification**: Fully automated collection is efficient, but may propagate errors
+- **Storage vs Fidelity**: Saving full content uses more space, but preserves all information
+- **Separation of Concerns**: Collection agents should collect; analysis agents should analyze
 
 ## Solution
 
-**Treat web search results only as leads, not as data. Always fetch and read the original web page content before using any information. Only information extracted from the actual page content can be recorded as collected data.**
+**Treat web search results only as leads, not as data. Always fetch the original web page content and preserve it in full. Do not summarize, extract, or interpret content during the collection phase—save the complete original content and leave analysis to downstream agents.**
 
 ### The Two-Tool Distinction
 
 | Tool | Purpose | Output Reliability | Use Case |
 |------|---------|-------------------|----------|
 | **WebSearch** | Find potentially relevant URLs | **Low** - summaries are unreliable | Discovering sources, getting leads |
-| **WebFetch** | Retrieve actual page content | **High** - original content | Extracting usable information |
+| **WebFetch** | Retrieve actual page content | **High** - original content | Obtaining content to preserve |
 
 ### Core Principles
 
@@ -54,20 +61,30 @@ This pattern may be skipped when:
    - Summaries may be inaccurate, outdated, or hallucinated
    - Never quote or cite information from search summaries directly
 
-2. **Fetch Before You Use**
+2. **Fetch Before You Save**
    - Every piece of information must come from WebFetch content
-   - Read the actual page before extracting any facts
    - If a page cannot be fetched, that information cannot be used
 
-3. **Extract From Original Content**
-   - After fetching, carefully read the page content
-   - Extract specific facts, quotes, and data points
-   - Preserve the exact wording for important claims
+3. **Preserve Original Content in Full**
+   - Save the complete fetched content without modification
+   - Do not summarize, paraphrase, or extract during collection
+   - Analysis and interpretation belong to a later phase
+   - This ensures downstream agents work with primary sources, not second-hand summaries
 
 4. **Document the Source Precisely**
    - Record the URL that was actually fetched
    - Note the fetch timestamp
-   - Quote relevant passages from the original
+   - Record source type and credibility assessment based on the source (not the content)
+
+### Why Preserve Full Content?
+
+Separating collection from analysis provides several advantages:
+
+1. **No Information Loss**: Summaries inevitably lose details; full content preserves everything
+2. **No Interpretation Bias**: Collection agents may misunderstand content; saving verbatim avoids this
+3. **Verifiable by Downstream Agents**: Analysis agents can verify any claim against the original
+4. **Reusable for Different Analyses**: The same source can support multiple analytical perspectives
+5. **Clear Responsibility**: Collection agents are responsible for obtaining reliable sources; analysis agents are responsible for understanding them
 
 ### Correct Workflow
 
@@ -88,18 +105,14 @@ Step 3: Fetch Original Content
         │  WebFetch(url) for each promising URL
         │
         ▼
-Step 4: Extract Information
+Step 4: Save Complete Content
         │
-        │  Read the fetched content carefully
-        │  Extract relevant facts and quotes
-        │
-        ▼
-Step 5: Record with Source
-        │
-        │  Document: URL, fetch time, extracted content
+        │  Preserve the full fetched content
+        │  Add metadata (URL, timestamp, source type)
+        │  Do NOT summarize or extract
         │
         ▼
-[Usable Data]
+[Raw Data Ready for Analysis]
 ```
 
 ## Consequences
@@ -107,9 +120,10 @@ Step 5: Record with Source
 ### Benefits
 
 - **Reliable Data**: Information comes from verifiable original sources
-- **Reduced Hallucination**: Eliminates the "summary hallucination" problem
+- **Reduced Hallucination**: Eliminates both "summary hallucination" and "extraction distortion"
 - **Traceable Claims**: Every fact can be traced to its source page
-- **Verifiable**: Others can fetch the same URL and verify the information
+- **Verifiable**: Downstream agents can verify any claim against the preserved original
+- **Separation of Concerns**: Collection and analysis are cleanly separated responsibilities
 - **Supports QUA-03**: Clean integration with Verifiable Data Lineage pattern
 
 ### Liabilities
@@ -117,7 +131,8 @@ Step 5: Record with Source
 - **Slower Collection**: Fetching each page takes additional time
 - **More API Calls**: Each URL requires a separate fetch operation
 - **Some Pages Inaccessible**: Paywalls, dynamic content, or errors may block access
-- **Higher Token Usage**: Processing full page content uses more tokens than summaries
+- **Higher Storage Usage**: Full content takes more space than summaries
+- **Higher Token Usage**: Analysis agents must process full content (but this is appropriate—they need it anyway)
 
 ## Implementation Guidelines
 
@@ -136,24 +151,29 @@ Use WebSearch to find potentially relevant pages. The search results give you
 information from these summaries. They are only for identifying which URLs
 to fetch.
 
-### Step 2: Fetch and Read Original Content
+### Step 2: Fetch Original Content
 For each promising URL from search results:
 1. Use WebFetch to retrieve the actual page content
-2. Read the fetched content carefully
-3. Extract specific information from what you read
+2. Verify the fetch was successful
 
-### Step 3: Record Information with Sources
-When recording collected information:
-- Quote the exact text from the original page
+### Step 3: Save Complete Content with Metadata
+Save the fetched content in full:
+- Preserve the complete original content without modification
 - Record the URL you fetched
 - Note the collection timestamp
-- Assess source credibility
+- Assess source credibility (based on the source, not the content)
+
+**Important**: Do NOT summarize, paraphrase, or extract key points. Save the
+complete content. Analysis will be performed by downstream agents who need
+access to the full original.
 
 ### What NOT to Do
 - ❌ Do not cite information from search summaries
 - ❌ Do not assume search snippets are accurate
 - ❌ Do not use information from pages you couldn't fetch
-- ❌ Do not paraphrase without fetching the original
+- ❌ Do not summarize or paraphrase the fetched content
+- ❌ Do not extract "key points" or "relevant sections"
+- ❌ Do not interpret or analyze during collection
 ```
 
 ### Handling Inaccessible Pages
@@ -173,63 +193,92 @@ The correct response is to find another source or acknowledge the gap.
 ### Data Recording Format
 
 ```markdown
-## [SRC-XXX] Data Title
+## [SRC-XXX] Source Title
 
 **Source URL**: [The URL that was actually fetched]
 **Fetch Time**: [When WebFetch was performed]
 **Source Type**: [Academic Article / Policy Document / News Report / ...]
-**Publication Date**: [If available from the page]
+**Credibility**: [High / Medium / Low - based on source authority, not content]
 
-**Extracted Content**:
-[Information extracted from the fetched page content]
+**Original Content**:
 
-**Key Quote from Original**:
-> "[Exact quote from the page]"
-
-**Credibility Assessment**: [High / Medium / Low]
-**Assessment Basis**: [Why this credibility level]
+[Complete content from WebFetch, preserved verbatim]
 ```
+
+Note: The format is intentionally minimal. No "extracted content", "key quotes", or "relevance assessment" fields—these require interpretation and belong to the analysis phase.
 
 ## Examples
 
 ### Correct Example
 
 ```markdown
-Task: Find the market size of the electric vehicle industry in China
+Task: Collect information about electric vehicle policies in China
 
-Step 1: WebSearch("China electric vehicle market size 2024")
+Step 1: WebSearch("China electric vehicle policy 2024")
 → Results include several URLs with summary snippets
 
 Step 2: Identify promising sources
-→ Found URL from China Association of Automobile Manufacturers
+→ Found URL from Ministry of Industry and Information Technology
 
-Step 3: WebFetch("https://www.caam.org.cn/...")
+Step 3: WebFetch("https://www.miit.gov.cn/...")
 → Retrieved full page content
 
-Step 4: Extract from fetched content
-→ Page states: "In 2024, new energy vehicle sales reached 9.49 million units"
+Step 4: Save complete content
+## [SRC-001] MIIT New Energy Vehicle Policy Announcement
 
-Step 5: Record with source
-## [SRC-001] China NEV Sales 2024
-
-**Source URL**: https://www.caam.org.cn/chn/4/cate_32/con_5236621.html
+**Source URL**: https://www.miit.gov.cn/jgsj/zbys/qcgy/art/2024/art_xxx.html
 **Fetch Time**: 2025-03-15 10:30 UTC
-**Source Type**: Industry Association Official Data
+**Source Type**: Government Policy Document
+**Credibility**: High (official government website)
 
-**Extracted Content**:
-According to CAAM official statistics, China's new energy vehicle sales
-in 2024 reached 9.49 million units.
+**Original Content**:
 
-**Key Quote from Original**:
-> "2024年，新能源汽车销量达到949万辆"
+工业和信息化部关于进一步促进新能源汽车产业发展的通知
+
+各省、自治区、直辖市及计划单列市工业和信息化主管部门：
+
+为深入贯彻落实党中央、国务院关于碳达峰碳中和的重大战略决策，
+加快推动新能源汽车产业高质量发展，现就有关事项通知如下：
+
+一、总体要求
+[... complete document content preserved verbatim ...]
 ```
 
 ### Incorrect Example
 
 ```markdown
-❌ WRONG: Using search summary directly
+❌ WRONG: Summarizing during collection
 
-Task: Find the market size of the electric vehicle industry in China
+Task: Collect information about electric vehicle policies in China
+
+WebFetch("https://www.miit.gov.cn/...")
+→ Retrieved full page content
+
+Recording with summary:
+## [SRC-001] MIIT NEV Policy
+
+**Source URL**: https://www.miit.gov.cn/...
+**Fetch Time**: 2025-03-15 10:30 UTC
+
+**Key Points**:
+- The policy aims to promote NEV development
+- Subsidies will continue until 2025
+- Focus on charging infrastructure
+
+**Relevant Quote**:
+> "加快推动新能源汽车产业高质量发展"
+
+Problems:
+1. "Key Points" are the collector's interpretation, may miss important details
+2. Downstream agents cannot verify if the summary is accurate
+3. Information not in "Key Points" is effectively lost
+4. The collector made analytical judgments that should be left to analysts
+```
+
+### Incorrect Example: Using Search Summary
+
+```markdown
+❌ WRONG: Using search summary directly
 
 WebSearch("China electric vehicle market size 2024")
 → Summary says: "The market reached $150 billion in 2024"
@@ -244,47 +293,36 @@ Problems:
 4. Source is vague ("web search" is not a real source)
 ```
 
-### Handling Search Result Hallucinations
-
-A common scenario where this pattern prevents errors:
-
-```markdown
-WebSearch returns a summary claiming:
-"According to Ministry of Industry report, EV subsidies will increase 50% in 2025"
-
-Without this pattern: Agent records this as fact
-With this pattern: Agent fetches the Ministry page, discovers:
-- The page doesn't mention 50% increase
-- The actual announcement discusses subsidy phase-out
-- The search summary was a hallucination or outdated
-
-Result: Correct information recorded instead of fabricated claim
-```
-
 ## Quality Level Integration
 
 | Quality Level | Grounded Web Research Requirement |
 |--------------|-----------------------------------|
 | **Simple** | Optional - may use search summaries for speed |
-| **Standard** | Required - must fetch before using |
-| **Strict** | Required - must fetch and cross-verify |
+| **Standard** | Required - must fetch and preserve full content |
+| **Strict** | Required - must fetch, preserve full content, and cross-verify with multiple sources |
 
-In Standard and Strict modes, the Orchestrator should verify that data collection agents are following the fetch-before-use principle by checking that recorded sources include fetch timestamps and quoted original content.
+In Standard and Strict modes, the Orchestrator should verify that data collection agents are preserving complete original content by checking that:
+- Recorded sources include fetch timestamps
+- Original content field contains substantial text (not summaries)
+- No "extracted" or "key points" fields that suggest summarization occurred
 
 ## Related Patterns
 
 - **[Intelligent Runtime](./COR-02-intelligent-runtime.md)**: Provides WebSearch and WebFetch tools
 - **[Methodological Guidance](./STR-06-methodological-guidance.md)**: Defines what types of sources are credible (orthogonal to how they are obtained)
-- **[Verifiable Data Lineage](./QUA-03-verifiable-data-lineage.md)**: Requires traceable sources; this pattern ensures sources are real
-- **[Embedded Quality Standards](./QUA-01-embedded-quality-standards.md)**: Data collection standards should include fetch requirements
+- **[Verifiable Data Lineage](./QUA-03-verifiable-data-lineage.md)**: Requires traceable sources; this pattern ensures sources are real and complete
+- **[Embedded Quality Standards](./QUA-01-embedded-quality-standards.md)**: Data collection standards should include preservation requirements
+- **[Progressive Data Refinement](./BHV-04-progressive-data-refinement.md)**: Analysis and refinement happen after collection, not during
 
 ## Checklist
 
 When designing data collection agents, confirm:
 
 - [ ] Blueprint explicitly states that search summaries are not reliable data?
-- [ ] Blueprint requires WebFetch before using any web information?
+- [ ] Blueprint requires WebFetch before saving any web information?
+- [ ] Blueprint explicitly prohibits summarizing or extracting during collection?
+- [ ] Data recording format preserves complete original content?
 - [ ] Data recording format includes fetch timestamp?
-- [ ] Data recording format includes quoted original content?
+- [ ] Data recording format does NOT include interpretation fields (key points, relevance, etc.)?
 - [ ] Instructions for handling inaccessible pages are provided?
 - [ ] Agent knows not to fall back to summaries when fetch fails?
