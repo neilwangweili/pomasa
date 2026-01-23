@@ -102,6 +102,7 @@ Patterns are grouped by category, identified by a three-letter prefix:
 | BHV-03 | [Parallel Instance Execution](./BHV-03-parallel-instance-execution.md) | Optional | Launch multiple Agent instances in parallel to handle independent tasks |
 | BHV-04 | [Progressive Data Refinement](./BHV-04-progressive-data-refinement.md) | Optional | Data undergoes gradual refinement through multiple stages |
 | BHV-05 | [Grounded Web Research](./BHV-05-grounded-web-research.md) | Recommended | Fetch original content before using web information |
+| BHV-06 | [Configurable Tool Binding](./BHV-06-configurable-tool-binding.md) | Optional | Allow users to configure custom search and fetch tools with fallback |
 
 ### QUA - Quality Patterns
 
@@ -194,6 +195,7 @@ Patterns are grouped by category, identified by a three-letter prefix:
 
 ## Version History
 
+- **v0.9** (2026-01): Added BHV-06 Configurable Tool Binding for custom search/fetch tools with fallback
 - **v0.8** (2026-01): Added STR-09 Deliverable Export Pipeline for exporting final reports to DOCX/PDF
 - **v0.7** (2025-12): Added STR-08 Pandoc-Ready Markdown Format, extracted from STR-05 as independent format specification pattern
 - **v0.6** (2025-12): Added BHV-05 Grounded Web Research, requiring agents to fetch original web content rather than trusting search summaries

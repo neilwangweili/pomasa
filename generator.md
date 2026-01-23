@@ -29,6 +29,7 @@ The user should first fill in `user_input_template.md`, providing the following 
 - **Existing Materials**: Available reference materials
 - **Analysis Methods**: What methods to use for analysis (can be suggested by AI)
 - **Output Format**: What form the final report should take
+- **Custom Tools**: Custom MCP tools for web search and fetch (optional)
 - **Other Requirements**: Special constraints or expectations
 
 For items marked "to be suggested by AI", provide reasonable default solutions based on the pattern catalog.
@@ -40,6 +41,7 @@ Based on user requirements, determine which patterns to adopt:
 - Required patterns: Adopt all
 - Recommended patterns: Adopt by default, unless the user scenario clearly does not need them
 - Optional patterns: Decide based on specific needs
+  - **BHV-06 Configurable Tool Binding**: Adopt if user has configured custom web search or fetch tools
 
 ### Step 3: Generate the System
 
