@@ -91,6 +91,29 @@ Standard Hierarchy:
 
 ## Implementation Guidelines
 
+### Embedding vs Externalizing Quality Standards
+
+Quality standards can be either embedded directly in Blueprints or externalized to reference files. Choose based on:
+
+| Approach | When to Use | Example |
+|----------|-------------|---------|
+| **Embed in Blueprint** | Standards are specific to this Agent and not shared | A unique completion checklist for one Agent |
+| **Externalize to Reference File** | Standards are shared across multiple Agents, or are complex/lengthy | Format specifications, writing style guides |
+
+**When standards are externalized, the Blueprint should reference them without duplicating content:**
+
+```markdown
+## Quality Requirements
+
+**You must follow the standards in `references/methodology/quality-standards.md`.**
+
+This file defines data collection standards, analysis standards, and format standards.
+
+**Important**: The reference file is authoritative; this Blueprint does not repeat specific rules.
+```
+
+See [STR-01 Reference Data Configuration](./STR-01-reference-data-configuration.md) for the principle of not duplicating reference content in Blueprints.
+
 ### Four Dimensions of Quality Standards
 
 **1. Data Quality Standards**

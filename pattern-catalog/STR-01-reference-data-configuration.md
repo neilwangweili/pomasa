@@ -132,6 +132,48 @@ Before starting the task, you must:
 [Note: Explicitly list the reference files to be read; the Agent will read these files first during execution]
 ```
 
+### Do Not Duplicate Reference Content in Blueprints
+
+**Critical Principle: When a Blueprint references an external file, it should NOT repeat the content of that file.**
+
+This is a common mistake that leads to:
+
+- **Inconsistency Risk**: Two places define the same rules, they may diverge over time
+- **Maintenance Burden**: Changes require updating both the reference file and all Blueprints
+- **Confusion**: Agent may not know which source is authoritative when conflicts exist
+
+**Correct Approach**:
+
+```markdown
+## Writing Style Requirements
+
+**You must read and follow `references/domain/style-guide.md`.**
+
+This file defines voice, sentence patterns, vocabulary, and argument structure.
+
+**Important**: The reference file is authoritative; this Blueprint does not repeat specific rules to avoid inconsistency.
+```
+
+**Incorrect Approach**:
+
+```markdown
+## Writing Style Requirements
+
+**You must read and follow `references/domain/style-guide.md`.**
+
+### Voice and Stance
+- Write as an authoritative interpreter...
+- Use high certainty language...
+
+### Sentence Patterns
+- Target long sentences...
+- Use active voice...
+
+[Problem: This duplicates content from the reference file]
+```
+
+The Blueprint may include a brief summary of what the reference file covers (as a table of contents), but should NOT repeat the actual rules or specifications.
+
 ### Data File Design Principles
 
 1. **Single Responsibility**: Each file contains only one type of knowledge
