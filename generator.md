@@ -43,6 +43,27 @@ Based on user requirements, determine which patterns to adopt:
 - Optional patterns: Decide based on specific needs
   - **BHV-06 Configurable Tool Binding**: Adopt if user has configured custom web search or fetch tools
 
+### Step 2.5: Read All Required Patterns (Mandatory)
+
+**Before generating any files, you MUST read the complete content of all Required patterns:**
+
+| Pattern ID | Pattern Name | Key Content |
+|------------|--------------|-------------|
+| COR-01 | Prompt-Defined Agent | Blueprint structure and writing guidelines |
+| COR-02 | Intelligent Runtime | Runtime environment assumptions |
+| STR-01 | Reference Data Configuration | How to organize reference materials |
+| STR-06 | Methodological Guidance | **What files go in methodology/ (read together with STR-01)** |
+| BHV-02 | Faithful Agent Instantiation | **How Orchestrator invokes other Agents (critical!)** |
+| QUA-03 | Verifiable Data Lineage | Data traceability requirements |
+
+**Special Emphasis on BHV-02**: This pattern defines the standard format for how the Orchestrator invokes subagents:
+- Caller only passes parameters, never paraphrases Blueprint content
+- One task instance = One subagent invocation
+- Must use standard invocation wording: "Please read `agents/XX.xxx.md` and execute strictly according to that Blueprint, parameters:..."
+- Orchestrator must verify results against Blueprint completion criteria
+
+**Do NOT skip this step.** Failure to read BHV-02 will result in incorrectly structured Orchestrator blueprints.
+
 ### Step 3: Generate the System
 
 Referring to the selected pattern documents, generate:

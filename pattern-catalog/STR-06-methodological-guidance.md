@@ -1,7 +1,7 @@
 # Methodological Guidance
 
 **Category**: Structure
-**Necessity**: Recommended
+**Necessity**: Required
 
 ## Problem
 

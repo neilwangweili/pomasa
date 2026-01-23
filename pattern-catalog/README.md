@@ -88,7 +88,7 @@ Patterns are grouped by category, identified by a three-letter prefix:
 | STR-03 | [Workspace Isolation](./STR-03-workspace-isolation.md) | Recommended | Restrict Agents to work only within designated directories |
 | STR-04 | [Business-Driven Agent Design](./STR-04-business-driven-agent-design.md) | Recommended | Agent division follows business process, numbered by execution order |
 | STR-05 | [Composable Document Assembly](./STR-05-composable-document-assembly.md) | Recommended | Generate long documents by sections, standardize format, mechanically assemble |
-| STR-06 | [Methodological Guidance](./STR-06-methodological-guidance.md) | Recommended | Methodological guidance: data sources, analysis methods, output templates |
+| STR-06 | [Methodological Guidance](./STR-06-methodological-guidance.md) | Required | Methodological guidance: data sources, analysis methods, output templates |
 | STR-07 | [Concept-to-Questions Decomposition](./STR-07-concept-to-questions.md) | Optional | Transform abstract concepts into concrete question items via conceptualization and operationalization |
 | STR-08 | [Pandoc-Ready Markdown Format](./STR-08-pandoc-ready-markdown.md) | Recommended | Markdown format specification ensuring correct conversion to DOCX/PDF |
 | STR-09 | [Deliverable Export Pipeline](./STR-09-deliverable-export-pipeline.md) | Recommended | Export final reports to DOCX/PDF with templates and timestamped filenames |
@@ -180,7 +180,7 @@ Patterns are grouped by category, identified by a three-letter prefix:
 
 1. **Required Patterns**: First ensure adoption of all patterns marked as "Required"
    - COR-01, COR-02 (Core)
-   - STR-01 (Structure)
+   - STR-01, STR-06 (Structure)
    - BHV-02 (Behavior)
    - QUA-03 (Quality)
 2. **Evaluate Recommended Patterns**: Assess whether each "Recommended" pattern applies based on system requirements
@@ -195,6 +195,7 @@ Patterns are grouped by category, identified by a three-letter prefix:
 
 ## Version History
 
+- **v0.10** (2026-01): Upgraded STR-06 Methodological Guidance to Required (was Recommended); STR-01 and STR-06 are now a mandatory pair
 - **v0.9** (2026-01): Added BHV-06 Configurable Tool Binding for custom search/fetch tools with fallback
 - **v0.8** (2026-01): Added STR-09 Deliverable Export Pipeline for exporting final reports to DOCX/PDF
 - **v0.7** (2025-12): Added STR-08 Pandoc-Ready Markdown Format, extracted from STR-05 as independent format specification pattern
