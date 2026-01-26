@@ -2,6 +2,10 @@
 
 **Pattern-Oriented Multi-Agent System Architecture**
 
+```bash
+npx add-skill eXtremeProgramming-cn/pomasa
+```
+
 ## Purpose
 
 POMASA is a pattern language and generation toolkit for building Declarative Multi-Agent Systems.
