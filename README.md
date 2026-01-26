@@ -2,9 +2,19 @@
 
 **Pattern-Oriented Multi-Agent System Architecture**
 
+## TL;DR
+
 ```bash
 npx add-skill eXtremeProgramming-cn/pomasa
 ```
+
+Then just tell your AI agent:
+
+```
+Help me create a multi-agent research system for analyzing AI trends in healthcare.
+```
+
+That's it. The agent will guide you through the rest.
 
 ## Purpose
 
