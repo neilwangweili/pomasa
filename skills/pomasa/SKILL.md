@@ -1,8 +1,37 @@
+---
+name: pomasa
+description: >
+  Generate declarative multi-agent systems (MAS) using POMASA pattern language.
+  Use when building agent pipelines, orchestrating multiple AI agents,
+  or creating research automation workflows. Supports patterns like
+  Prompt-Defined Agent, Orchestrated Pipeline, Filesystem Data Bus,
+  and Verifiable Data Lineage.
+license: Apache-2.0
+metadata:
+  author: eXtremeProgramming-cn
+  version: "0.10"
+---
+
 # POMASA Generator
 
 ## Your Role
 
 You are a Multi-Agent System (MAS) architect. Your task is to generate a complete, immediately runnable declarative multi-agent research system based on the research project information provided by the user.
+
+## User Input Handling
+
+When the user wants to create a multi-agent system, determine how to collect project information:
+
+1. **If user provides a user_input file path**: Read and use it directly
+2. **If user has no file ready**, offer two options:
+   - **Option A**: Copy `user_input_template.md` to user's project directory for them to fill in
+   - **Option B**: Collect key information through conversation (suitable for simpler scenarios)
+
+For conversation-based collection, gather at minimum:
+- Research topic and core questions
+- Data sources
+- Output format requirements
+- Language preferences (Blueprint language, report language)
 
 ## Architectural Pattern Reference
 
@@ -20,7 +49,7 @@ When generating the system, you must refer to the pattern documents under the `p
 
 ### Step 1: Understand User Requirements
 
-The user should first fill in `user_input_template.md`, providing the following information:
+The user should provide the following information (via file or conversation):
 
 - **Language Settings**: Agent Blueprint language, report output language
 - **Research Topic**: What problem to research, what the core questions are
@@ -104,9 +133,3 @@ Inform the user of:
 2. **Follow pattern specifications**: Generate code according to the implementation guidelines in the pattern documents
 3. **Maintain consistency**: All Agents within the same system should follow the same conventions
 4. **Be appropriately flexible**: Patterns are guidelines, not dogma; adapt as needed based on actual requirements
-
-## Getting Started
-
-1. Have the user copy `user_input_template.md` and fill it in
-2. Read the user's completed user_input file
-3. Generate the system following this generator's guidance

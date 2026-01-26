@@ -21,8 +21,8 @@ When building multi-agent systems, every team uses their own approach to constru
 
 POMASA adopts a "pattern language + generator" approach:
 
-1. **Pattern Catalog** (`pattern-catalog/`): Reusable architectural patterns extracted from real systems, each describing a specific problem and its solution
-2. **Generator** (`generator.md`): A prompt that guides AI to build new systems based on patterns
+1. **Pattern Catalog** (`skills/pomasa/pattern-catalog/`): Reusable architectural patterns extracted from real systems, each describing a specific problem and its solution
+2. **Generator** (`skills/pomasa/SKILL.md`): A prompt that guides AI to build new systems based on patterns
 
 ### Architecture Overview
 
@@ -45,53 +45,67 @@ POMASA patterns are organized into four categories (shown on the left), governin
 
 ```
 pomasa/
-├── README.md                # This file
-├── generator.md             # MAS generator prompt
-├── user_input_template.md   # User input template
-├── pattern-catalog/         # Pattern catalog
-│   ├── README.md            # Pattern overview and usage guide
-│   ├── COR-01-prompt-defined-agent.md
-│   ├── COR-02-intelligent-runtime.md
-│   ├── STR-01-...
-│   ├── BHV-01-...
-│   ├── QUA-01-...
-│   └── ...
-└── references/              # Reference materials
+├── README.md                     # This file
+├── skills/
+│   └── pomasa/                   # POMASA skill (installable)
+│       ├── SKILL.md              # Generator instructions
+│       ├── user_input_template.md
+│       └── pattern-catalog/      # Pattern catalog
+│           ├── README.md
+│           ├── COR-01-...
+│           ├── STR-01-...
+│           ├── BHV-01-...
+│           └── QUA-01-...
+└── references/                   # Background reading materials
     ├── declarative-multi-agent-architecture-part1-en.md
     └── declarative-multi-agent-architecture-part2-en.md
 ```
 
-## How to Use the Generator
+## How to Use
 
-### Scenario 1: Building a New Research-Oriented MAS
+### Method 1: Install as Skill (Recommended)
 
-**Step 1**: Copy `user_input_template.md` to your working directory and fill in your research project information
+Install POMASA as an agent skill for Claude Code, Cursor, Cline, and other compatible agents:
 
-**Step 2**: Issue a command to Claude Code:
-
-```
-Please read pomasa/generator.md, then generate a multi-agent research system based on [your user_input file path].
+```bash
+npx add-skill eXtremeProgramming-cn/pomasa
 ```
 
-The Generator will guide the AI to:
-1. Read your completed user_input
+After installation, simply tell the agent what you want:
+
+```
+Help me create a multi-agent research system for analyzing AI trends in healthcare.
+```
+
+The agent will automatically activate the POMASA skill and guide you through the process.
+
+### Method 2: Direct Use (Without Skill Installation)
+
+Tell your AI agent:
+
+```
+Please read skills/pomasa/SKILL.md, then help me create a multi-agent system.
+```
+
+The agent will:
+1. Ask for your project information (or you can prepare `user_input_template.md` in advance)
 2. Read the relevant patterns in pattern-catalog
 3. Select the appropriate pattern combination based on your needs
 4. Generate the complete system files
 
-### Scenario 2: Understanding or Improving an Existing System
+### Scenario: Understanding or Improving an Existing System
 
 ```
-Please read pomasa/pattern-catalog/README.md, then analyze which patterns [a system directory] uses and what improvements could be made.
+Please read skills/pomasa/pattern-catalog/README.md, then analyze which patterns [a system directory] uses and what improvements could be made.
 ```
 
-### Scenario 3: Learning MAS Architecture
+### Scenario: Learning MAS Architecture
 
-Read the pattern documents under `pattern-catalog/` directly to learn about declarative MAS design principles and best practices.
+Read the pattern documents under `skills/pomasa/pattern-catalog/` directly to learn about declarative MAS design principles and best practices.
 
 ## Pattern Overview
 
-See [pattern-catalog/README.md](./pattern-catalog/README.md)
+See [skills/pomasa/pattern-catalog/README.md](./skills/pomasa/pattern-catalog/README.md)
 
 ## Evolution Plan
 

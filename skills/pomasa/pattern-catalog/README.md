@@ -208,5 +208,5 @@ Patterns are grouped by category, identified by a three-letter prefix:
 
 ## References
 
-- [Anatomy of Declarative Multi-Agent System Architecture (Part 1)](../references/declarative-multi-agent-architecture-part1-en.md)
-- [Anatomy of Declarative Multi-Agent System Architecture (Part 2)](../references/declarative-multi-agent-architecture-part2-en.md)
+- [Anatomy of Declarative Multi-Agent System Architecture (Part 1)](../../../references/declarative-multi-agent-architecture-part1-en.md)
+- [Anatomy of Declarative Multi-Agent System Architecture (Part 2)](../../../references/declarative-multi-agent-architecture-part2-en.md)
