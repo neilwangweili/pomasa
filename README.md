@@ -8,7 +8,7 @@
 npx add-skill eXtremeProgramming-cn/pomasa
 ```
 
-Then just tell your AI agent:
+Then just tell your AI client (e.g. Claude Code or Codex):
 
 ```
 Help me create a multi-agent research system for analyzing AI trends in healthcare.
