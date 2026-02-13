@@ -33,7 +33,7 @@ Several limitations constrain POMASA's current scope:
 
 ### 7.3 Pattern Language Evolution
 
-POMASA continues to evolve. The pattern catalog grew from 5 patterns in early versions to 15 patterns currently. Growth follows a pattern:
+POMASA continues to evolve. The pattern catalog grew from 5 patterns in early versions to 20 patterns currently. Growth follows a pattern:
 
 1. **Build systems**: Construct working MAS for real tasks
 2. **Encounter problems**: Identify recurring challenges
@@ -49,7 +49,7 @@ Patterns emerge from practice, not theory. POMASA captures what we've learned bu
 
 This paper makes three contributions to the emerging field of declarative multi-agent systems:
 
-**A pattern language**: POMASA provides 15 patterns organized by category (Core, Structure, Behavior, Quality) and necessity (Must, Recommended, Optional). The patterns address foundational challenges in declarative MAS: agent definition, runtime execution, inter-agent communication, coordination, and quality assurance.
+**A pattern language**: POMASA provides 20 patterns organized by category (Core, Structure, Behavior, Quality) and necessity (Must, Recommended, Optional). The patterns address foundational challenges in declarative MAS: agent definition, runtime execution, inter-agent communication, coordination, and quality assurance.
 
 **A case study**: The industry analysis system demonstrates patterns in practice. The system's outputs—including a 50,000-word analysis of the eVTOL industry grounded in hundreds of verifiable sources—validate that pattern-based construction produces substantive results.
 

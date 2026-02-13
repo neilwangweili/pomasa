@@ -5,62 +5,66 @@ Patterns gain meaning through combination. This section demonstrates how the eig
 
 ### 5.1 Minimal Viable Configuration
 
-The absolute minimum for a declarative MAS requires all four Must patterns:
+The absolute minimum for a declarative MAS requires all six Must patterns:
 
 | Pattern | Necessity | Role |
 |---------|-----------|------|
 | COR-02: Intelligent Runtime | Foundation | Provides execution capability |
 | COR-01: Prompt-Defined Agent | Definition | Enables agent specification |
+| STR-01: Reference Data Configuration | Knowledge | Externalizes domain knowledge from agent logic |
+| STR-06: Methodological Guidance | Methodology | Provides data sources, analysis methods, output templates |
 | BHV-02: Faithful Agent Instantiation | Execution | Ensures correct invocation |
 | QUA-03: Verifiable Data Lineage | Trust | Prevents hallucination contamination |
 
-With only these four patterns, you can build a single-agent system that:
+With only these six patterns, you can build a single-agent system that:
 
 - Defines its behavior through a natural language blueprint
 - Executes on an intelligent runtime
+- Separates domain knowledge and methodology from agent logic
 - Produces outputs with verifiable sources
 
-However, such a minimal system lacks structure for multi-agent coordination, clear data organization, or systematic quality assurance beyond source verification.
+However, such a minimal system lacks structure for multi-agent coordination, clear data flow organization, or systematic quality assurance beyond source verification.
 
 ### 5.2 Recommended Configuration
 
-Adding the four recommended patterns covered in Section 4 creates a robust multi-agent system:
+Adding the three recommended patterns covered in Section 4 creates a robust multi-agent system:
 
 | Pattern | Addition | Benefit |
 |---------|----------|---------|
-| STR-01: Reference Data Configuration | Knowledge | Separates domain knowledge from agent logic |
 | BHV-01: Orchestrated Agent Pipeline | Coordination | Enables multi-stage agent collaboration |
 | STR-02: Filesystem Data Bus | Communication | Provides transparent inter-agent data passing |
 | STR-03: Workspace Isolation | Safety | Prevents cross-project contamination |
 
-This eight-pattern configuration—the set presented in Section 4—supports systems of moderate complexity with multiple agents, clear data flow, and verifiable outputs.
+This nine-pattern configuration—the set presented in Section 4—supports systems of moderate complexity with multiple agents, clear data flow, and verifiable outputs.
 
 ### 5.3 The Industry Analysis System Configuration
 
-The complete industry analysis system employs 12 of the 15 patterns:
+The complete industry analysis system employs 14 of the 20 patterns:
 
-**Must (all 4)**:
+**Must (all 6)**:
 
 - COR-01: Prompt-Defined Agent
 - COR-02: Intelligent Runtime
+- STR-01: Reference Data Configuration
+- STR-06: Methodological Guidance
 - BHV-02: Faithful Agent Instantiation
 - QUA-03: Verifiable Data Lineage
 
-**Recommended (7 of 8)**:
+**Recommended (7 of 10)**:
 
-- STR-01: Reference Data Configuration
 - STR-02: Filesystem Data Bus
 - STR-03: Workspace Isolation
 - STR-04: Business-Driven Agent Design
-- STR-06: Methodological Guidance
+- STR-07: Reverse-Engineered Research Questions
 - BHV-01: Orchestrated Agent Pipeline
+- BHV-05: Grounded Web Research
 - QUA-01: Embedded Quality Standards
 
-**Optional (1 of 3)**:
+**Optional (1 of 4)**:
 
 - BHV-03: Parallel Instance Execution
 
-The system omits STR-05 (Composable Document Assembly) because the final report is generated as a unified document rather than assembled from independent chapters. It omits BHV-04 (Progressive Data Refinement) because the refinement pattern is implicit in the stage-based pipeline. It omits QUA-02 (Layered Quality Assurance) because verification occurs at specific pipeline stages rather than across multiple quality layers.
+The system omits STR-05 (Composable Document Assembly) because the final report is generated as a unified document rather than assembled from independent chapters. It omits STR-08 (Pandoc-Ready Markdown Format) and STR-09 (Deliverable Export Pipeline) because the system predates these patterns; export was handled ad hoc. It omits BHV-04 (Progressive Data Refinement) because the refinement pattern is implicit in the stage-based pipeline. It omits BHV-06 (Configurable Tool Binding) because the system was built for a single runtime environment with fixed tool configuration. It omits QUA-02 (Layered Quality Assurance) because verification occurs at specific pipeline stages rather than across multiple quality layers.
 
 ### 5.4 Pattern Interaction in Practice
 
