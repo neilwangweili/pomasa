@@ -54,7 +54,7 @@ For executable pattern languages, **publishing the pattern language itself is eq
 - The structure section explains how patterns relate
 - The application section demonstrates pattern combination
 
-A reader with access to an intelligent runtime (Claude Code or equivalent) can present this paper's content to the AI and request: "Build me a research system following these patterns for domain X." The AI can generate a working system. No traditional source code repository is required.
+A reader with access to an intelligent runtime (Claude Code or equivalent) can present this paper's content to the AI and request: "Build me a research system following these patterns for domain X." The AI can generate a working system. Equally, a practitioner with an existing multi-agent system can ask: "Refactor my system to follow POMASA patterns"—using the pattern language as a reference architecture for improving existing work. No traditional source code repository is required in either case.
 
 This shifts what "open source" means in the AI era:
 
@@ -73,7 +73,9 @@ The implications are significant:
 
 To sharpen the distinction, consider an alternative approach: imperative generation tools that produce MAS through step-by-step instructions.
 
-One of the authors previously developed AgentForge, an imperative generator for multi-agent systems. AgentForge's `generator.md` contains instructions like:
+One of the authors previously developed AgentForge[^agentforge], an imperative generator for multi-agent systems. AgentForge's `generator.md` contains instructions like:
+
+[^agentforge]: https://github.com/eXtremeProgramming-cn/agent-forge
 
 ```markdown
 1. Create a directory named `agents/`
@@ -126,7 +128,7 @@ These characteristics emerged from patterns being designed for human learning. T
 
 The approach has limitations:
 
-**Runtime dependency**: Executable patterns require capable AI runtimes. As of this writing, only a few systems (notably Claude Code) provide sufficient capability. Pattern languages that depend on advanced reasoning may not execute reliably on all systems.
+**Runtime dependency**: Executable patterns require capable AI runtimes. Several systems—Claude Code, Cursor, Cline, Windsurf, among others—can execute POMASA patterns to varying degrees, with Claude Code currently providing the most complete support. However, pattern languages that depend on advanced reasoning (e.g., multi-level subagent orchestration) may not execute reliably on all runtimes.
 
 **Non-determinism**: AI interpretation introduces variability. The same patterns may generate somewhat different systems across runs. For applications requiring exact replication, this variability is problematic.
 

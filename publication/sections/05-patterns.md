@@ -45,21 +45,21 @@ The fundamental distinction from traditional runtimes:
 | Error handling | Throw exception, halt | Understand error context, attempt recovery |
 | Determinism | High (same input → same output) | Medium (same blueprint may take different paths) |
 
-**Example**: In the industry analysis system, Claude Code serves as the intelligent runtime. When the Initial Scanner blueprint states "collect basic industry information including scale, market structure, ownership composition, and policy environment," the runtime:
+**Example**: In the industry analysis system, Claude Code serves as the intelligent runtime. The Initial Scanner blueprint specifies detailed collection topics (industry definition, market size, ownership structure, policy environment), the methodology guide specifies source credibility tiers, and the output format is prescribed down to file names and markdown structure. The blueprint leaves little room for high-level decision-making—what to collect, where to look, and how to format outputs are all specified. The runtime's intelligence manifests at the *execution* level:
 
-1. Decides to use web search for each topic
-2. Selects appropriate search queries based on the industry
-3. Evaluates whether retrieved information is sufficient
-4. Adapts strategy if certain information proves difficult to find
-5. Formats output according to the blueprint's specifications
+1. Navigating diverse web pages with varying structures—extracting relevant information from government statistics portals, news sites, and research databases that each present data differently
+2. Handling unexpected situations during execution—a URL returns a PDF instead of HTML, a search yields no results for a specific sub-topic, a page requires different parsing strategies
+3. Judging whether a specific piece of retrieved information actually matches the blueprint's specified topic (e.g., distinguishing "eVTOL market size" from "drone market size" when search results conflate the two)
+4. Organizing heterogeneous raw information into the structured markdown format the blueprint prescribes
+5. Self-checking output against the blueprint's completion criteria before reporting done
 
-None of these decisions are explicitly programmed—the runtime interprets intent and acts accordingly.
+The blueprint specifies *what* to collect, *where* to look, and *what standards* to meet; the runtime handles the *execution-level complexity* of interacting with an unpredictable information environment. When difficulties arise, the blueprint requires the runtime to report rather than adapt independently—a deliberate constraint that preserves predictability.
 
 **Discussion**: The intelligent runtime pattern has a profound architectural consequence: *every agent in a POMASA system possesses full cognitive capabilities*. Unlike traditional MAS frameworks where some agents may be simple executors while a dedicated "planner" or "reasoner" agent coordinates them, every POMASA agent runs on the same intelligent runtime and can plan, reason, evaluate, and adapt. Agent differentiation comes not from varying cognitive capabilities but from varying blueprints—different business responsibilities, domain knowledge, and quality criteria. A Deep Researcher agent does research not because it "can only search" but because its blueprint assigns it that responsibility.
 
 This architectural choice means that POMASA does not prescribe which agents a system should have or what cognitive roles they should play. Questions like "which agent handles planning?" or "which agent manages state?" do not apply at the pattern language level. Planning is embedded in the orchestrator's blueprint (BHV-01). State is managed through the filesystem (STR-02). Memory is the collection of files agents have written. These are consequences of applying patterns, not roles assigned to specialized agents. POMASA provides design principles for building multi-agent systems, not a fixed system design.
 
-The intelligent runtime pattern also introduces platform dependency. Currently, Claude Code provides the most mature implementation, but this creates lock-in. Blueprint designers should avoid relying on runtime-specific features when possible, maintaining portability for future runtime alternatives.
+The intelligent runtime pattern introduces platform considerations. POMASA is portable across multiple AI coding assistants (see Section 8.2), though runtimes vary in capability levels and subagent mechanisms. Claude Code currently provides the most mature implementation. Blueprint designers should avoid relying on runtime-specific features when portability is desired.
 
 The non-determinism of intelligent runtimes challenges traditional software engineering assumptions. The same blueprint may execute differently across runs. This trade-off—flexibility for determinism—defines the declarative MAS paradigm.
 
@@ -78,7 +78,7 @@ Traditional approaches use code to specify every logical step. But when task com
 - *Development efficiency vs. Runtime cost*: Development is highly efficient, but each execution consumes AI resources
 - *Human readability vs. Machine executability*: Must find expression that serves both
 
-**Solution**: Use natural language documents (Agent Blueprints) to describe what the agent "should do," "what standards to follow," and "what outcomes to achieve"—rather than specifying "exactly how to do it."
+**Solution**: Use natural language documents (Agent Blueprints) to describe what the agent "should do," "what standards to follow," and "what outcomes to achieve"—rather than specifying "exactly how to do it." Markdown's structured headings and templates tame ambiguity while preserving natural-language expressiveness; the declarative style trades runtime cost for dramatic development efficiency gains; and the same document remains readable by both human reviewers and AI runtimes.
 
 A blueprint's essential structure:
 
@@ -190,7 +190,7 @@ Embedding this knowledge directly in agent blueprints creates bloated blueprints
 - *Completeness vs. Conciseness*: Complete knowledge bases are large; concise ones may omit important details
 - *Generality vs. Specificity*: General knowledge applies broadly; specific knowledge is more precise
 
-**Solution**: Externalize knowledge as independent data files, separate from agent blueprints. Blueprints reference these files; agents read and apply the knowledge at execution time.
+**Solution**: Externalize knowledge as independent data files, separate from agent blueprints. Blueprints reference these files; agents read and apply the knowledge at execution time. This balances centralization and distribution—knowledge is managed in dedicated files yet distributed to agents on demand. The domain/methodology split addresses generality vs. specificity: domain knowledge captures what is specific to the subject, while methodological guidance remains reusable across projects. Markdown format provides enough structure for machine processing while remaining freely editable by domain experts.
 
 Organize reference data into two subdirectories:
 
@@ -251,7 +251,7 @@ Complex tasks like "analyze an industry" cannot be accomplished by a single agen
 - *Simplicity vs. Capability*: Simple coordination is easier to implement but limits what the system can achieve
 - *Centralization vs. Distribution*: Central orchestration enables control but creates bottlenecks
 
-**Solution**: Decompose tasks into sequential stages, each handled by specialized agent types, coordinated by an Orchestrator agent.
+**Solution**: Decompose tasks into sequential stages, each handled by specialized agent types, coordinated by an Orchestrator agent. The stage-based pipeline resolves the forces through separation of concerns: agents retain autonomy *within* each stage while the orchestrator enforces coordination *between* stages; independent tasks within a stage can execute in parallel while cross-stage dependencies remain sequential; and the orchestrator provides centralized control over stage sequencing without becoming a bottleneck for intra-stage work.
 
 The pipeline structure:
 
@@ -428,7 +428,7 @@ Multi-agent systems require data exchange between agents. Traditional solutions 
 - *Loose coupling vs. Real-time*: File-based loose coupling cannot support real-time communication
 - *Human readability vs. Machine efficiency*: Text formats are human-friendly but less efficient to process
 
-**Solution**: Use the filesystem as the data passing medium. Agents read and write JSON and Markdown files through agreed-upon file paths. They do not communicate directly.
+**Solution**: Use the filesystem as the data passing medium. Agents read and write JSON and Markdown files through agreed-upon file paths. They do not communicate directly. This solution deliberately favors simplicity, transparency, and human readability over functionality, performance, and real-time communication—a trade-off well suited to batch-oriented research systems where debuggability matters more than throughput.
 
 The directory structure reflects data flow:
 
@@ -503,7 +503,7 @@ The main limitation is performance. File I/O is slower than in-memory communicat
 
 ### 5.7 STR-06: Methodological Guidance
 
-**Context**: You have agents defined through blueprints (COR-01) with externalized domain knowledge (STR-01). Agents know "what things are" but not "how to do things."
+**Context**: You have agents defined through blueprints (COR-01) with externalized domain knowledge (STR-01). STR-01 has given agents the "what"—domain concepts, theoretical frameworks, classification systems—but not the "how."
 
 **Problem**: How do you ensure AI agents execute tasks according to correct methodology?
 
@@ -516,7 +516,7 @@ Domain knowledge tells agents what concepts mean and how a theoretical framework
 - *Generality vs. Specialization*: General methods apply broadly but lack precision; specialized methods are precise but narrow
 - *Standardization vs. Innovation*: Strict methodological standards ensure consistency but may inhibit the agent's ability to adapt to unexpected findings
 
-**Solution**: Externalize methodological guidance as independent configuration files, managed separately from domain knowledge. While STR-01 addresses both domain knowledge and methodology at a structural level, this pattern provides detailed guidance on the methodology component specifically.
+**Solution**: Externalize methodological guidance as independent configuration files, managed separately from domain knowledge. While STR-01 addresses both domain knowledge and methodology at a structural level, this pattern provides detailed guidance on the methodology component specifically. The key to resolving the forces is making guidance *specific enough to be executable* yet *structured as reference rather than script*—concrete credibility tiers and analysis checklists ensure standardization and completeness, while the intelligent runtime retains flexibility to adapt methods to specific situations.
 
 Organize methodology into four components:
 

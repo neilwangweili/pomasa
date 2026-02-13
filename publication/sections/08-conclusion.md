@@ -73,6 +73,10 @@ This paper presents the foundational patterns and key insights of POMASA. Severa
 
 **Pattern language evolution**: As the pattern catalog continues to grow, documenting the evolution process itself—how patterns emerge, mature, and occasionally become obsolete—would contribute to the pattern community's understanding of living pattern languages.
 
+**Community applications and knowledge sharing**: Early adoption suggests that POMASA enables a wide variety of systems beyond its original research orientation. For example, a multi-agent news curation system[^noc] uses agent groups for news collection, investigative writing, and translation to produce a weekly multilingual newsletter. Such diverse applications demonstrate that the pattern language can inspire creative system designs across domains. Documenting and sharing what practitioners build with POMASA—the problems they solve, the patterns they combine, and the new patterns they discover—would be valuable for empowering a broader community of declarative MAS builders.
+
+[^noc]: https://thetricontinental.org/asia/publications/news-on-china/
+
 We envision this paper as the first in a series, establishing the core architecture and the executability insight. Subsequent work will explore specific pattern categories in greater depth and document the pattern language's application across diverse domains.
 
 ### 8.6 Conclusion
