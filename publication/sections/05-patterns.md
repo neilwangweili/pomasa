@@ -1,17 +1,17 @@
 
-## 4. Essential Patterns
+## 5. Essential Patterns
 
-This section presents eight patterns essential to building declarative multi-agent systems. The patterns form an interconnected network, organized here by the logical sequence of system construction.
+This section presents eight patterns that form a self-contained network for building a working multi-agent system. The selection follows two principles. First, all six Must patterns are included, as they define the non-negotiable foundation of any declarative MAS: COR-02 (Intelligent Runtime), COR-01 (Prompt-Defined Agent), STR-01 (Reference Data Configuration), STR-06 (Methodological Guidance), BHV-02 (Faithful Agent Instantiation), and QUA-03 (Verifiable Data Lineage). Second, two Recommended patterns—BHV-01 (Orchestrated Agent Pipeline) and STR-02 (Filesystem Data Bus)—are included because they enable the "multi" in multi-agent systems, providing coordination and communication mechanisms respectively. The remaining twelve patterns extend and enhance this foundation; complete documentation is available in the POMASA repository.
 
-The foundation is COR-02 (Intelligent Runtime), which provides the execution environment capable of understanding natural language. This runtime enables COR-01 (Prompt-Defined Agent), which allows agents to be defined through natural language blueprints rather than code. Together, these two Core patterns establish the declarative paradigm.
+The eight patterns form an interconnected network, organized here by the logical sequence of system construction. The foundation is COR-02 (Intelligent Runtime), which provides the execution environment capable of understanding natural language. This runtime enables COR-01 (Prompt-Defined Agent), which allows agents to be defined through natural language blueprints rather than code. Together, these two Core patterns establish the declarative paradigm.
 
-From agent definition, three architectural concerns branch out. First, agents need external knowledge to perform their tasks—STR-01 (Reference Data Configuration) addresses this by separating domain knowledge and methodological guidance from agent blueprints. Second, complex tasks require multiple agents working together—BHV-01 (Orchestrated Agent Pipeline) provides the coordination mechanism, while BHV-02 (Faithful Agent Instantiation) ensures agents are correctly invoked without information loss. Third, AI outputs require quality assurance—QUA-03 (Verifiable Data Lineage) ensures all data can be traced to verifiable sources.
+From agent definition, three architectural concerns branch out. First, agents need external knowledge to perform their tasks—STR-01 (Reference Data Configuration) separates domain knowledge from agent blueprints, while STR-06 (Methodological Guidance) externalizes the "how to do things" knowledge: data sources, analysis methods, and output formats. Second, complex tasks require multiple agents working together—BHV-01 (Orchestrated Agent Pipeline) provides the coordination mechanism, while BHV-02 (Faithful Agent Instantiation) ensures agents are correctly invoked without information loss. Third, AI outputs require quality assurance—QUA-03 (Verifiable Data Lineage) ensures all data can be traced to verifiable sources.
 
-The coordination branch continues: when agents exchange data, they need a communication medium—STR-02 (Filesystem Data Bus) uses the filesystem for transparent, traceable data passing. And when multiple agents access the filesystem, they need boundaries—STR-03 (Workspace Isolation) prevents cross-contamination between projects.
+The coordination branch continues: when agents exchange data, they need a communication medium—STR-02 (Filesystem Data Bus) uses the filesystem for transparent, traceable data passing.
 
-Each pattern below follows a consistent format derived from the pattern language tradition: **Context** (the situation in which the pattern applies), **Problem** (the design challenge being addressed), **Forces** (the competing concerns that make the problem difficult), **Solution** (the recommended approach), **Example** (concrete illustration from the industry analysis system), and **Discussion** (consequences, limitations, and related considerations).
+Each pattern below follows a consistent format derived from the pattern language tradition [4]: **Context** (the situation in which the pattern applies), **Problem** (the design challenge being addressed), **Forces** (the competing concerns that make the problem difficult), **Solution** (the recommended approach), **Example** (concrete illustration from the industry analysis system), and **Discussion** (consequences, limitations, and related considerations).
 
-### 4.1 COR-02: Intelligent Runtime
+### 5.1 COR-02: Intelligent Runtime
 
 **Context**: You are building a system where agents are defined declaratively through natural language descriptions rather than imperative code.
 
@@ -26,7 +26,7 @@ Traditional runtime environments (JVM, Python interpreter, shell) mechanically e
 - *Autonomy vs. Auditability*: Autonomous decision-making makes auditing difficult
 - *Capability vs. Cost*: Intelligent runtimes require AI model access, incurring costs
 
-**Solution**: Use an AI system with comprehension and decision-making capabilities as the runtime environment. The intelligent runtime understands natural language blueprints, selects execution methods, evaluates output quality, and handles exceptional situations.
+**Solution**: Use an AI system with comprehension and decision-making capabilities as the runtime environment. The intelligent runtime understands natural language blueprints, selects execution methods, evaluates output quality, and handles exceptional situations. This solution accepts the trade-offs embedded in the forces: it prioritizes intelligence and adaptability while managing controllability through structured blueprints (COR-01), managing auditability through filesystem-based data passing (STR-02), and managing cost as an operational parameter rather than an architectural constraint.
 
 The intelligent runtime operates at four capability layers:
 
@@ -55,11 +55,15 @@ The fundamental distinction from traditional runtimes:
 
 None of these decisions are explicitly programmed—the runtime interprets intent and acts accordingly.
 
-**Discussion**: The intelligent runtime pattern introduces platform dependency. Currently, Claude Code provides the most mature implementation, but this creates lock-in. Blueprint designers should avoid relying on runtime-specific features when possible, maintaining portability for future runtime alternatives.
+**Discussion**: The intelligent runtime pattern has a profound architectural consequence: *every agent in a POMASA system possesses full cognitive capabilities*. Unlike traditional MAS frameworks where some agents may be simple executors while a dedicated "planner" or "reasoner" agent coordinates them, every POMASA agent runs on the same intelligent runtime and can plan, reason, evaluate, and adapt. Agent differentiation comes not from varying cognitive capabilities but from varying blueprints—different business responsibilities, domain knowledge, and quality criteria. A Deep Researcher agent does research not because it "can only search" but because its blueprint assigns it that responsibility.
+
+This architectural choice means that POMASA does not prescribe which agents a system should have or what cognitive roles they should play. Questions like "which agent handles planning?" or "which agent manages state?" do not apply at the pattern language level. Planning is embedded in the orchestrator's blueprint (BHV-01). State is managed through the filesystem (STR-02). Memory is the collection of files agents have written. These are consequences of applying patterns, not roles assigned to specialized agents. POMASA provides design principles for building multi-agent systems, not a fixed system design.
+
+The intelligent runtime pattern also introduces platform dependency. Currently, Claude Code provides the most mature implementation, but this creates lock-in. Blueprint designers should avoid relying on runtime-specific features when possible, maintaining portability for future runtime alternatives.
 
 The non-determinism of intelligent runtimes challenges traditional software engineering assumptions. The same blueprint may execute differently across runs. This trade-off—flexibility for determinism—defines the declarative MAS paradigm.
 
-### 4.2 COR-01: Prompt-Defined Agent
+### 5.2 COR-01: Prompt-Defined Agent
 
 **Context**: You have an intelligent runtime (COR-02) capable of understanding and executing natural language instructions.
 
@@ -162,11 +166,11 @@ For each functional item, collect four types of information:
 
 This blueprint tells the agent *what* to collect and *what standards* to meet, not *how* to search or *which websites* to visit.
 
-**Discussion**: Prompt-defined agents trade determinism for adaptability. The same blueprint may produce different execution paths—a feature, not a bug. The agent adapts to what it finds rather than failing when reality doesn't match expectations. This declarative approach to agent definition has been validated by prior work such as Generative Agents[^5], which demonstrated that natural language specifications can produce believable autonomous behavior.
+**Discussion**: Prompt-defined agents trade determinism for adaptability. The same blueprint may produce different execution paths—a feature, not a bug. The agent adapts to what it finds rather than failing when reality doesn't match expectations. This declarative approach to agent definition has been validated by prior work such as Generative Agents [15], which demonstrated that natural language specifications can produce believable autonomous behavior.
 
 The pattern also dramatically lowers the barrier to system maintenance. Domain experts who cannot program can read, understand, and modify agent blueprints. This democratizes system evolution.
 
-### 4.3 STR-01: Reference Data Configuration
+### 5.3 STR-01: Reference Data Configuration
 
 **Context**: You have agents defined through blueprints (COR-01) that need external knowledge to perform their tasks.
 
@@ -230,9 +234,9 @@ The `theoretical_framework_explained.md` file contains the complete ESSCC framew
 
 **Discussion**: Reference data configuration enables separation of concerns. Domain experts maintain domain knowledge; methodology experts maintain methodological guidance; system developers maintain agent blueprints. Each can evolve independently.
 
-The pattern also supports system reuse. The same agent blueprints can be applied to different domains by swapping reference data—a different theoretical framework yields a different analysis system. This approach shares conceptual similarities with Retrieval-Augmented Generation (RAG)[^6], though RAG typically retrieves knowledge dynamically at inference time, while reference data configuration pre-positions knowledge that agents consult during execution.
+The pattern also supports system reuse. The same agent blueprints can be applied to different domains by swapping reference data—a different theoretical framework yields a different analysis system. This approach shares conceptual similarities with Retrieval-Augmented Generation (RAG) [16], though RAG typically retrieves knowledge dynamically at inference time, while reference data configuration pre-positions knowledge that agents consult during execution.
 
-### 4.4 BHV-01: Orchestrated Agent Pipeline
+### 5.4 BHV-01: Orchestrated Agent Pipeline
 
 **Context**: You have multiple agents defined through blueprints (COR-01) that need to collaborate to accomplish a complex task.
 
@@ -323,11 +327,17 @@ The Orchestrator agent:
 - Wait for completion
 ```
 
-**Discussion**: The orchestrated pipeline pattern trades flexibility for predictability. The fixed stage sequence constrains what the system can do but makes behavior comprehensible and debuggable. When something goes wrong, you know which stage failed. This pattern relates to multi-agent coordination approaches in systems like AutoGen[^7] and MetaGPT[^8], though POMASA emphasizes declarative blueprints over programmatic agent definitions.
+**Discussion**: A critical question arises: where does the orchestrator's execution plan come from, and how is the complex work decomposed into tasks?
 
-The pattern also enables incremental execution. If Stage 3 fails, Stages 1 and 2 outputs remain intact. The system can resume from the failed stage rather than starting over.
+In POMASA, the orchestrator is itself a Prompt-Defined Agent (COR-01). Its blueprint explicitly defines the execution stages, which agent to invoke at each stage, what parameters to pass, and what completion criteria to check. The task decomposition is performed at *design time*—when a human architect writes the orchestrator blueprint—not at *runtime* through dynamic planning. The orchestrator executes a *predefined plan*, not a self-generated one. This is a deliberate architectural choice that distinguishes POMASA from autonomous planning systems: it sacrifices dynamic adaptability in exchange for predictability and debuggability.
 
-### 4.5 BHV-02: Faithful Agent Instantiation
+The decomposition itself derives from the domain's natural structure. In the industry analysis system, the theoretical framework defines 55 functional items, which naturally map to 55 independent research tasks. The 7-stage pipeline (scan → research → verify → analyze → synthesize → report → review) follows the inherent logic of systematic research. Reference data (STR-01) and methodological guidance (STR-06) provide the decomposition rationale; the orchestrator blueprint encodes it.
+
+The orchestrated pipeline pattern trades flexibility for predictability. The fixed stage sequence constrains what the system can do but makes behavior comprehensible and debuggable. When something goes wrong, you know which stage failed. This pattern relates to multi-agent coordination approaches in systems like AutoGen [7] and MetaGPT [8], though POMASA emphasizes declarative blueprints over programmatic agent definitions.
+
+The pattern also enables incremental execution. If Stage 3 fails, Stages 1 and 2 outputs remain intact on the filesystem (STR-02). The system can resume from the failed stage rather than starting over—a property particularly valuable for long-running research tasks that may take hours to complete.
+
+### 5.5 BHV-02: Faithful Agent Instantiation
 
 **Context**: You have an Orchestrator (BHV-01) that needs to invoke other agents to execute portions of the task.
 
@@ -347,7 +357,7 @@ These shortcuts may seem harmless in short call chains, but in long chains or la
 - *Brevity vs. Completeness*: Brief invocations may omit critical information
 - *Flexibility vs. Rigor*: Flexible invocation patterns are harder to keep consistent
 
-**Solution**: Every agent instance must directly read and execute the complete blueprint. The caller passes only parameters, never blueprint content. Each independent task corresponds to an independent subagent invocation. The orchestrator must verify results against blueprint completion criteria.
+**Solution**: Every agent instance must directly read and execute the complete blueprint. The caller passes only parameters, never blueprint content. Each independent task corresponds to an independent subagent invocation. The orchestrator must verify results against blueprint completion criteria. This solution resolves the forces decisively in favor of quality, completeness, and rigor—accepting the overhead of separate invocations and full blueprint reads as the price of reliable execution.
 
 Core principles:
 
@@ -403,7 +413,7 @@ Please launch a subagent to perform the following task:
 
 The principle that completion criteria are non-negotiable was added after observing agents "helpfully" reducing scope when facing difficulties. An agent tasked with researching 55 items might decide to sample 10 "representative" items—a reasonable-seeming adaptation that destroys the analysis's comprehensiveness.
 
-### 4.6 STR-02: Filesystem Data Bus
+### 5.6 STR-02: Filesystem Data Bus
 
 **Context**: You have multiple agents (COR-01) coordinated through a pipeline (BHV-01) that need to exchange data.
 
@@ -491,75 +501,73 @@ The pattern also enables human intervention. A domain expert can review and corr
 
 The main limitation is performance. File I/O is slower than in-memory communication. For systems requiring high throughput or real-time responses, this pattern is inappropriate. The industry analysis system, where a complete run takes hours and throughput is measured in reports per day, finds this trade-off acceptable.
 
-### 4.7 STR-03: Workspace Isolation
+### 5.7 STR-06: Methodological Guidance
 
-**Context**: You have agents (COR-01) that read and write files through the filesystem data bus (STR-02).
+**Context**: You have agents defined through blueprints (COR-01) with externalized domain knowledge (STR-01). Agents know "what things are" but not "how to do things."
 
-**Problem**: How do you prevent agents from accessing or modifying files they shouldn't?
+**Problem**: How do you ensure AI agents execute tasks according to correct methodology?
 
-AI agents have file system read/write capabilities. Without restrictions, they may:
-
-- Accidentally read files from other projects, contaminating context
-- Accidentally modify system files or other projects' data
-- Cause interference between different projects
-- Make system behavior depend on state outside the project
+Domain knowledge tells agents what concepts mean and how a theoretical framework is structured. But agents also need to know: where to find data, how to assess source credibility, what analytical methods to apply, and what format to use for outputs. Without this methodological guidance, systems suffer from inconsistent data quality (agents not knowing which sources are credible), insufficient analysis depth (agents not knowing which questions to answer), inconsistent output formats (each agent deciding format independently), and difficulty adjusting methodology (requiring modifications to multiple blueprints).
 
 **Forces**:
 
-- *Security vs. Convenience*: Access restrictions increase security but may add inconvenience
-- *Isolation vs. Sharing*: Complete isolation may prevent legitimate resource sharing
-- *Explicit constraints vs. Implicit assumptions*: Explicit constraints are more reliable but add configuration burden
+- *Specificity vs. Flexibility*: Too specific methodology limits agent adaptability; too flexible leads to inconsistent execution
+- *Completeness vs. Conciseness*: Complete methodological guides are lengthy; concise ones may miss critical procedures
+- *Generality vs. Specialization*: General methods apply broadly but lack precision; specialized methods are precise but narrow
+- *Standardization vs. Innovation*: Strict methodological standards ensure consistency but may inhibit the agent's ability to adapt to unexpected findings
 
-**Solution**: At the beginning of every agent blueprint, explicitly declare workspace boundaries. Forbid reading or writing any files outside the specified directory.
+**Solution**: Externalize methodological guidance as independent configuration files, managed separately from domain knowledge. While STR-01 addresses both domain knowledge and methodology at a structural level, this pattern provides detailed guidance on the methodology component specifically.
 
-Standard constraint declaration:
+Organize methodology into four components:
 
-```markdown
-## Workspace Isolation Requirements
+1. **Research Overview** (`research-overview.md`): Research objectives, scope, analytical stance, and core questions to answer
+2. **Data Sources Guide** (`data-sources.md`): Source types with credibility ratings, sources to use cautiously, and standard recording formats
+3. **Analysis Methods Guide** (`analysis-methods.md`): Analytical framework, core questions for each analysis point, step-by-step process, and results format
+4. **Output Template** (`output-template.md`): Document structure, format specifications, writing style requirements, and quality checklist
 
-**IMPORTANT**: You must work ONLY within the project directory `{PROJECT_PATH}/`.
-- You are **forbidden** from reading any files outside this directory
-- You are **forbidden** from writing any files outside this directory
-- All file paths you use must be relative to this project root or absolute paths within this directory
-- This constraint ensures system isolation and prevents context contamination
-```
+Critical design principle: methodological guidance must be **specific enough to be executable**—not vague generalizations like "pay attention to data quality" but concrete instructions like "data sources are divided into five credibility tiers: government statistics (High), academic publications (High), industry reports (Medium-High), mainstream media (Medium), other sources (Low)."
 
-Placement: The constraint declaration should appear at the very beginning of the blueprint (immediately after the title), ensuring it is:
-
-1. Read first by the agent
-2. Emphasized in importance
-3. Established before any concrete task
-
-**Example**: Every agent in the industry analysis system begins with:
+**Example**: The industry analysis system's data sources guide includes:
 
 ```markdown
-# Initial Scanner
+## Data Source Types
 
-## Workspace Isolation Requirements
+### 1. Government Statistics and Policy Documents
+- Priority: High
+- Credibility: High
+- Examples: National Bureau of Statistics, ministry announcements
 
-**IMPORTANT**: You must work ONLY within the project directory `industry_assessment/`.
-- You are **forbidden** from reading any files outside this directory
-- You are **forbidden** from writing any files outside this directory
-- All file paths you use must be relative to this project root
-- This constraint ensures system isolation and prevents context contamination
+### 2. Academic Publications
+- Priority: High
+- Credibility: High
+- Examples: CNKI, SSRN, peer-reviewed journals
 
----
+### 3. Industry Research Reports
+- Priority: High
+- Credibility: Medium-High
+- Examples: Consulting firm reports, brokerage research
 
-## Your Role
-...
+## Sources to Use Cautiously
+- Personal blogs without professional credentials
+- Self-media content lacking data support
+- Content with obvious commercial promotional intent
 ```
 
-**Discussion**: Workspace isolation relies on convention rather than technical enforcement. The intelligent runtime (Claude Code) respects these constraints but could technically violate them. The pattern works because the AI system genuinely attempts to follow instructions, not because violations are technically impossible.
+The analysis methods guide specifies five core questions that every functional item analysis must answer—function manifestation, positive effects, deficiencies, interactions with other ownership forms, and improvement directions—each with concrete analytical guidance.
 
-This convention-based approach has an important benefit: the constraint is visible and auditable. Reviewers can see that the blueprint includes isolation requirements. Technical enforcement mechanisms, by contrast, operate invisibly—you must trust that they work correctly.
+**Discussion**: Methodological guidance enables separation of concerns along a different axis than domain knowledge. Domain experts maintain what concepts mean; methodology experts maintain how research should be conducted; system developers maintain agent blueprints. Each can evolve independently. The forces in this pattern are resolved through the specificity of the guidance: concrete, checklist-driven methodology provides consistency without requiring agents to follow rigid scripts, because the intelligent runtime can adapt the methodology to specific situations while respecting its constraints.
 
-### 4.8 QUA-03: Verifiable Data Lineage
+The pattern also supports system reuse across domains. The same methodological guidance—data source tiers, analysis question templates, output formats—can apply to different industries or research topics. Combined with different domain knowledge (STR-01), the methodology produces different but consistently structured analyses.
+
+STR-03 (Workspace Isolation) complements STR-06 by ensuring that agents following these methodological procedures operate within designated directories, preventing cross-project contamination of both data and methodology.
+
+### 5.8 QUA-03: Verifiable Data Lineage
 
 **Context**: You have a multi-agent system that collects, processes, and synthesizes data to produce analytical outputs.
 
 **Problem**: How do you ensure that data and conclusions produced by the AI system are trustworthy?
 
-AI systems, especially LLMs, suffer from severe "hallucination" problems[^9]: they may fabricate non-existent data, invent URLs, and create fictitious citations. Even when blueprints explicitly require data verification, within the same execution context, AI often cannot effectively identify hallucinations it produced earlier.
+AI systems, especially LLMs, suffer from severe "hallucination" problems [17]: they may fabricate non-existent data, invent URLs, and create fictitious citations. Even when blueprints explicitly require data verification, within the same execution context, AI often cannot effectively identify hallucinations it produced earlier.
 
 This problem is especially severe in research-oriented MAS because:
 
@@ -574,7 +582,7 @@ This problem is especially severe in research-oriented MAS because:
 - *Completeness vs. Credibility*: Better to have less data that is credible than more data that is questionable
 - *Automation vs. Human intervention*: Some verification may require human involvement
 
-**Solution**: Establish full-chain verifiable data lineage. All data must have verifiable sources, maintain numbered traceability throughout, undergo layered verification in independent contexts, and unqualified data must be firmly eliminated.
+**Solution**: Establish full-chain verifiable data lineage. All data must have verifiable sources, maintain numbered traceability throughout, undergo layered verification in independent contexts, and unqualified data must be firmly eliminated. The solution resolves the forces by prioritizing rigor over efficiency (verification doubles runtime but eliminates hallucination contamination), verification over trust (independent context prevents self-confirmation bias), and credibility over completeness (less data with verified sources is more valuable than more data of uncertain provenance).
 
 Core principles:
 
@@ -643,13 +651,4 @@ This cost is justified for outputs requiring high credibility. The eVTOL analysi
 
 For systems with lower credibility requirements, this pattern may be relaxed. But for research-oriented MAS producing analytical outputs that humans will rely upon, verifiable data lineage is essential.
 
-[^5]: Park, J.S., O'Brien, J.C., Cai, C.J., Morris, M.R., Liang, P. and Bernstein, M.S., 2023. Generative Agents: Interactive Simulacra of Human Behavior. *Proceedings of the 36th Annual ACM Symposium on User Interface Software and Technology (UIST '23)*. ACM.
-
-[^6]: Lewis, P., Perez, E., Piktus, A., Petroni, F., Karpukhin, V., Goyal, N., Küttler, H., Lewis, M., Yih, W., Rocktäschel, T., Riedel, S. and Kiela, D., 2020. Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks. *Advances in Neural Information Processing Systems*, 33, pp.9459-9474.
-
-[^7]: Wu, Q., Bansal, G., Zhang, J., Wu, Y., Zhang, S., Zhu, E., Li, B., Jiang, L., Zhang, X. and Wang, C., 2023. AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation. *arXiv preprint arXiv:2308.08155*.
-
-[^8]: Hong, S., Zhuge, M., Chen, J., Zheng, X., Cheng, Y., Zhang, C., Wang, J., Wang, Z., Yau, S.K.S., Lin, Z., Zhou, L., Ran, C., Xiao, L., Wu, C. and Schmidhuber, J., 2024. MetaGPT: Meta Programming for A Multi-Agent Collaborative Framework. *Proceedings of the Twelfth International Conference on Learning Representations (ICLR 2024)*.
-
-[^9]: Huang, L., Yu, W., Ma, W., Zhong, W., Feng, Z., Wang, H., Chen, Q., Peng, W., Feng, X., Qin, B. and Liu, T., 2023. A Survey on Hallucination in Large Language Models: Principles, Taxonomy, Challenges, and Open Questions. *arXiv preprint arXiv:2311.05232*.
 

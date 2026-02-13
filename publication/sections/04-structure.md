@@ -1,9 +1,9 @@
 
-## 3. The Pattern Language Structure
+## 4. The Pattern Language Structure
 
-POMASA organizes its patterns through two orthogonal classification schemes: a categorical taxonomy that groups patterns by their architectural concern, and a necessity hierarchy that indicates how critical each pattern is to system viability. This organizational approach draws inspiration from the Pattern-Oriented Software Architecture (POSA) series[^4], which demonstrated the value of systematic pattern classification.
+POMASA organizes its patterns through two orthogonal classification schemes: a categorical taxonomy that groups patterns by their architectural concern, and a necessity hierarchy that indicates how critical each pattern is to system viability. This organizational approach draws inspiration from the Pattern-Oriented Software Architecture (POSA) series [5], which demonstrated the value of systematic pattern classification.
 
-### 3.1 Categorical Taxonomy
+### 4.1 Categorical Taxonomy
 
 Patterns are classified into four categories, each identified by a three-letter prefix:
 
@@ -15,7 +15,7 @@ Patterns are classified into four categories, each identified by a three-letter 
 
 **QUA (Quality)**: Patterns that ensure system reliability and output quality—how to embed standards, how to verify data, how to prevent hallucinations. Quality patterns determine whether the system produces trustworthy results. Currently: 3 patterns.
 
-### 3.2 Necessity Hierarchy
+### 4.2 Necessity Hierarchy
 
 Orthogonal to categorical classification, each pattern carries a necessity level:
 
@@ -25,7 +25,7 @@ Orthogonal to categorical classification, each pattern carries a necessity level
 
 **Optional**: Patterns that address specific scenarios or provide additional capabilities. Systems should adopt these based on their particular requirements. Currently: 4 patterns.
 
-### 3.3 The Pattern Catalog
+### 4.3 The Pattern Catalog
 
 Combining these two dimensions yields the following catalog:
 
@@ -61,7 +61,9 @@ Combining these two dimensions yields the following catalog:
 - QUA-02: Layered Quality Assurance (Optional)
 - QUA-03: Verifiable Data Lineage (Must)
 
-The following section presents eight essential patterns in detail. Complete documentation for all 20 patterns is available in the POMASA repository at https://github.com/eXtremeProgramming-cn/pomasa.
+Figure 1 illustrates the relationships among the eight essential patterns presented in the following section. The vertical spine shows the primary execution flow: the Intelligent Runtime (COR-02) interprets Prompt-Defined Agents (COR-01), which define agents for the Orchestrated Pipeline (BHV-01), where data flows via the Filesystem Data Bus (STR-02). On the left, Reference Data Configuration (STR-01) and Methodological Guidance (STR-06) jointly configure agent blueprints. On the right, Faithful Instantiation (BHV-02) constrains how agents are invoked within the pipeline. At the data layer, Verifiable Data Lineage (QUA-03) ensures traceability across the filesystem bus.
 
-[^4]: Buschmann, F., Meunier, R., Rohnert, H., Sommerlad, P. and Stal, M., 1996. *Pattern-Oriented Software Architecture: A System of Patterns*. Wiley.
+![Relationships among the eight essential patterns](images/pattern-relationships.png){width=85%}
+
+Complete documentation for all 20 patterns is available in the POMASA repository at https://github.com/eXtremeProgramming-cn/pomasa.
 

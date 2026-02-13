@@ -12,9 +12,9 @@
 
 ## 编号规范
 
-- [ ] 章节编号统一：1, 2, 3, 4, 5, 6, 7
+- [ ] 章节编号统一：1, 2, 3, 4, 5, 6, 7, 8
 - [ ] 小节编号统一：1.1, 1.2, 2.1, 2.2, ...
-- [ ] 模式编号：4.1, 4.2, 4.3, ... (在第4章内)
+- [ ] 模式编号：5.1, 5.2, 5.3, ... (在第5章内)
 
 ## 空行规范
 
@@ -48,6 +48,12 @@
 - [ ] 引用块前：一个空行
 - [ ] 引用块后：一个空行
 
+## 引用规范
+
+- [ ] 文献引用使用编号式：[1], [2], [3]...
+- [ ] 所有引用集中在末尾 References 节
+- [ ] 脚注（补充说明）与引用（文献）不混用
+
 ## 本论文章节结构
 
 ```
@@ -61,42 +67,48 @@
 ### 2.3 Why This Case Study
 ### 2.4 A Glimpse of the Output
 
-## 3. The Pattern Language Structure (二级标题)
-### 3.1 Categorical Taxonomy
-### 3.2 Necessity Hierarchy
-### 3.3 The Pattern Matrix
-### 3.4 Pattern Relationships
-### 3.5 Reading the Patterns
+## 3. Related Work (二级标题，新增)
+### 3.1 Multi-Agent System Frameworks
+### 3.2 Pattern Languages in Software Engineering
+### 3.3 Patterns for AI and LLM-based Systems
 
-## 4. Essential Patterns (二级标题)
-### 4.1 COR-02: Intelligent Runtime
-### 4.2 COR-01: Prompt-Defined Agent
-### 4.3 STR-01: Reference Data Configuration
-### 4.4 BHV-01: Orchestrated Agent Pipeline
-### 4.5 BHV-02: Faithful Agent Instantiation
-### 4.6 STR-02: Filesystem Data Bus
-### 4.7 STR-03: Workspace Isolation
-### 4.8 QUA-03: Verifiable Data Lineage
+## 4. The Pattern Language Structure (二级标题)
+### 4.1 Categorical Taxonomy
+### 4.2 Necessity Hierarchy
+### 4.3 The Pattern Catalog
 
-## 5. Applying the Pattern Language (二级标题)
-### 5.1 Minimal Viable Configuration
-### 5.2 Recommended Configuration
-### 5.3 The Industry Analysis System Configuration
-### 5.4 Pattern Interaction in Practice
-### 5.5 The Complete Flow
+## 5. Essential Patterns (二级标题)
+### 5.1 COR-02: Intelligent Runtime
+### 5.2 COR-01: Prompt-Defined Agent
+### 5.3 STR-01: Reference Data Configuration
+### 5.4 BHV-01: Orchestrated Agent Pipeline
+### 5.5 BHV-02: Faithful Agent Instantiation
+### 5.6 STR-02: Filesystem Data Bus
+### 5.7 STR-06: Methodological Guidance
+### 5.8 QUA-03: Verifiable Data Lineage
 
-## 6. The Key Insight: Executable Pattern Languages (二级标题)
-### 6.1 Traditional Pattern Languages vs. Executable Pattern Languages
-### 6.2 The Generator: One Way to Execute the Pattern Language
-### 6.3 Implications for Open Source
-### 6.4 Comparison with Imperative Generation
-### 6.5 Why Pattern Languages Suit AI Execution
-### 6.6 Limitations of Executable Pattern Languages
+## 6. Applying the Pattern Language (二级标题)
+### 6.1 The Complete Flow
+### 6.2 Minimal Viable Configuration
+### 6.3 Recommended Configuration
+### 6.4 The Industry Analysis System Configuration
+### 6.5 Pattern Interaction in Practice
 
-## 7. Discussion and Conclusion (二级标题)
-### 7.1 Applicability and Scope
-### 7.2 Limitations
-### 7.3 Pattern Language Evolution
-### 7.4 Contributions
-### 7.5 Conclusion
+## 7. The Key Insight: Executable Pattern Languages (二级标题)
+### 7.1 Traditional Pattern Languages vs. Executable Pattern Languages
+### 7.2 The Generator: One Way to Execute the Pattern Language
+### 7.3 Implications for Open Source
+### 7.4 Comparison with Imperative Generation
+### 7.5 Why Pattern Languages Suit AI Execution
+### 7.6 Limitations of Executable Pattern Languages
+
+## 8. Discussion and Conclusion (二级标题)
+### 8.1 Applicability and Scope
+### 8.2 Limitations
+### 8.3 Pattern Language Evolution
+### 8.4 Contributions
+### 8.5 Future Work
+### 8.6 Conclusion
+
+## References (独立节)
 ```

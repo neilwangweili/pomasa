@@ -1,9 +1,65 @@
 
-## 5. Applying the Pattern Language
+## 6. Applying the Pattern Language
 
-Patterns gain meaning through combination. This section demonstrates how the eight essential patterns combine to form working systems, using the industry analysis system as concrete illustration.
+Patterns gain meaning through combination. This section demonstrates how the essential patterns combine to form working systems, using the industry analysis system as concrete illustration. We begin with the complete process flow to provide a global view, then examine how pattern configurations scale from minimal to production systems, and finally trace pattern interactions through a concrete execution stage.
 
-### 5.1 Minimal Viable Configuration
+### 6.1 The Complete Flow
+
+A complete industry analysis run proceeds through eight stages, orchestrated by a central agent that coordinates specialized agents at each stage:
+
+```
+Orchestrator reads:
+    - agents/00.orchestrator.md (its own blueprint)
+    - references/methodology/research-overview.md (what to do)
+
+Stage 0: Initialize
+    - Verify references/ exists and is complete
+    - Create data/evtol/ directory structure
+
+Stage 1: Initial Scanning
+    - Launch Initial Scanner (reads own blueprint + references)
+    - Produces: industry overview, question lists
+    - Orchestrator validates against completion criteria
+
+Stage 2: Deep Research (parallel)
+    - Launch 55 Deep Researcher instances
+    - Each reads own blueprint + references
+    - Each produces: policies, statistics, cases, expert views, source list
+    - Orchestrator validates each against completion criteria
+
+Stage 3: Data Verification (independent context)
+    - Launch Data Verifier in fresh context
+    - Visits every URL, confirms content
+    - Eliminates unverifiable data
+    - Orchestrator reviews verification report
+
+Stage 4: Analysis (parallel)
+    - Launch 55 Analyzer instances
+    - Each reads verified research + theoretical framework
+    - Each produces: functional item analysis
+    - Orchestrator validates against completion criteria
+
+Stage 5: Synthesis
+    - Launch Synthesizer
+    - Reads all functional analyses
+    - Produces: feature syntheses, dimension syntheses, overall synthesis
+
+Stage 6: Report Generation
+    - Launch Reporter
+    - Reads syntheses, follows output template
+    - Produces: final_report.md, executive_summary.md
+
+Stage 7: Quality Review
+    - Launch Quality Checker
+    - Reviews entire output against standards
+    - Produces: quality_review.md
+
+Complete
+```
+
+This flow embodies several patterns working in concert. The Orchestrator is itself a Prompt-Defined Agent (COR-01) running on an Intelligent Runtime (COR-02). It coordinates specialized agents through the Orchestrated Agent Pipeline (BHV-01), invoking each via Faithful Agent Instantiation (BHV-02). Agents consult Reference Data (STR-01) and Methodological Guidance (STR-06). Data flows between stages through the Filesystem Data Bus (STR-02). Verifiable Data Lineage (QUA-03) governs Stage 3's independent verification. The following subsections examine how these patterns compose at different scales.
+
+### 6.2 Minimal Viable Configuration
 
 The absolute minimum for a declarative MAS requires all six Must patterns:
 
@@ -25,19 +81,18 @@ With only these six patterns, you can build a single-agent system that:
 
 However, such a minimal system lacks structure for multi-agent coordination, clear data flow organization, or systematic quality assurance beyond source verification.
 
-### 5.2 Recommended Configuration
+### 6.3 Recommended Configuration
 
-Adding the three recommended patterns covered in Section 4 creates a robust multi-agent system:
+Adding the two recommended patterns detailed in Section 5 creates a multi-agent system:
 
 | Pattern | Addition | Benefit |
 |---------|----------|---------|
 | BHV-01: Orchestrated Agent Pipeline | Coordination | Enables multi-stage agent collaboration |
 | STR-02: Filesystem Data Bus | Communication | Provides transparent inter-agent data passing |
-| STR-03: Workspace Isolation | Safety | Prevents cross-project contamination |
 
-This nine-pattern configuration—the set presented in Section 4—supports systems of moderate complexity with multiple agents, clear data flow, and verifiable outputs.
+This eight-pattern configuration—the set presented in Section 5—supports systems of moderate complexity with multiple agents, clear data flow, and verifiable outputs. Additional recommended patterns such as STR-03 (Workspace Isolation), which prevents cross-project contamination, further strengthen the system depending on operational requirements.
 
-### 5.3 The Industry Analysis System Configuration
+### 6.4 The Industry Analysis System Configuration
 
 The complete industry analysis system employs 14 of the 20 patterns:
 
@@ -66,7 +121,7 @@ The complete industry analysis system employs 14 of the 20 patterns:
 
 The system omits STR-05 (Composable Document Assembly) because the final report is generated as a unified document rather than assembled from independent chapters. It omits STR-08 (Pandoc-Ready Markdown Format) and STR-09 (Deliverable Export Pipeline) because the system predates these patterns; export was handled ad hoc. It omits BHV-04 (Progressive Data Refinement) because the refinement pattern is implicit in the stage-based pipeline. It omits BHV-06 (Configurable Tool Binding) because the system was built for a single runtime environment with fixed tool configuration. It omits QUA-02 (Layered Quality Assurance) because verification occurs at specific pipeline stages rather than across multiple quality layers.
 
-### 5.4 Pattern Interaction in Practice
+### 6.5 Pattern Interaction in Practice
 
 To illustrate how patterns interact concretely, consider the execution of Stage 2 (Deep Research) in the industry analysis system:
 
@@ -163,60 +218,4 @@ Quality standards are embedded in each blueprint. The Deep Researcher blueprint 
 ```
 
 The agent self-checks against these criteria before reporting completion. The orchestrator validates against the same criteria when receiving results.
-
-### 5.5 The Complete Flow
-
-Combining all patterns, a complete industry analysis run proceeds:
-
-```
-Orchestrator reads:
-    - agents/00.orchestrator.md (its own blueprint)
-    - references/methodology/research-overview.md (what to do)
-
-Stage 0: Initialize
-    - Verify references/ exists and is complete
-    - Create data/evtol/ directory structure
-
-Stage 1: Initial Scanning
-    - Launch Initial Scanner (reads own blueprint + references)
-    - Produces: industry overview, question lists
-    - Orchestrator validates against completion criteria
-
-Stage 2: Deep Research (parallel)
-    - Launch 55 Deep Researcher instances
-    - Each reads own blueprint + references
-    - Each produces: policies, statistics, cases, expert views, source list
-    - Orchestrator validates each against completion criteria
-
-Stage 3: Data Verification (independent context)
-    - Launch Data Verifier in fresh context
-    - Visits every URL, confirms content
-    - Eliminates unverifiable data
-    - Orchestrator reviews verification report
-
-Stage 4: Analysis (parallel)
-    - Launch 55 Analyzer instances
-    - Each reads verified research + theoretical framework
-    - Each produces: functional item analysis
-    - Orchestrator validates against completion criteria
-
-Stage 5: Synthesis
-    - Launch Synthesizer
-    - Reads all functional analyses
-    - Produces: feature syntheses, dimension syntheses, overall synthesis
-
-Stage 6: Report Generation
-    - Launch Reporter
-    - Reads syntheses, follows output template
-    - Produces: final_report.md, executive_summary.md
-
-Stage 7: Quality Review
-    - Launch Quality Checker
-    - Reviews entire output against standards
-    - Produces: quality_review.md
-
-Complete
-```
-
-The pattern language provides the vocabulary to describe this flow. Each stage employs specific patterns; the interaction between patterns creates the complete system behavior.
 

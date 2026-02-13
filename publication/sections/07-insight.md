@@ -1,9 +1,9 @@
 
-## 6. The Key Insight: Executable Pattern Languages
+## 7. The Key Insight: Executable Pattern Languages
 
 Beyond documenting patterns for declarative MAS, this work advances a broader insight about the nature of pattern languages in the AI era: pattern languages themselves become executable. This section elaborates this insight and its implications.
 
-### 6.1 Traditional Pattern Languages vs. Executable Pattern Languages
+### 7.1 Traditional Pattern Languages vs. Executable Pattern Languages
 
 Christopher Alexander's original pattern language for architecture and the Gang of Four's design patterns for software share a common characteristic: patterns serve as design guidance that humans must translate into concrete implementations. A developer reads the Singleton pattern, understands its intent and structure, then writes code that embodies the pattern. The pattern is not directly executable—it requires human interpretation and implementation.
 
@@ -18,7 +18,7 @@ POMASA operates differently. Because the intelligent runtime (COR-02) can interp
 | Gap to working system | Requires human translation | Minimal or none |
 | Precision required | Sufficient for human understanding | Sufficient for AI interpretation |
 
-### 6.2 The Generator: One Way to Execute the Pattern Language
+### 7.2 The Generator: One Way to Execute the Pattern Language
 
 POMASA includes a generator—a prompt that guides an AI system in creating new MAS based on the pattern language. The generator is not a code generator in the traditional sense; it is a prompt that tells the AI:
 
@@ -43,7 +43,7 @@ Crucially, **the generator is not the only way to execute the pattern language**
 
 The generator is merely a convenience—one worked example of pattern language execution.
 
-### 6.3 Implications for Open Source
+### 7.3 Implications for Open Source
 
 Traditional open source means publishing source code. Developers download code, study it, modify it, and run it. The source code is the artifact that enables replication and extension.
 
@@ -69,7 +69,7 @@ The implications are significant:
 
 3. **Versioning**: Pattern language evolution differs from code versioning. Patterns can evolve in description while remaining implementable; generated systems reflect current pattern understanding.
 
-### 6.4 Comparison with Imperative Generation
+### 7.4 Comparison with Imperative Generation
 
 To sharpen the distinction, consider an alternative approach: imperative generation tools that produce MAS through step-by-step instructions.
 
@@ -106,7 +106,7 @@ POMASA's pattern language approach addresses these limitations:
 
 The fundamental difference: imperative generators tell AI "how to generate"; pattern languages tell AI "what properties the result should have." The AI figures out how to achieve properties—the same declarative-over-imperative shift that defines POMASA's approach to agents themselves.
 
-### 6.5 Why Pattern Languages Suit AI Execution
+### 7.5 Why Pattern Languages Suit AI Execution
 
 Pattern languages have properties that make them particularly suitable for AI interpretation:
 
@@ -122,7 +122,7 @@ Pattern languages have properties that make them particularly suitable for AI in
 
 These characteristics emerged from patterns being designed for human learning. They turn out to be equally valuable for AI interpretation—a fortunate alignment that makes pattern languages a natural fit for the AI era.
 
-### 6.6 Limitations of Executable Pattern Languages
+### 7.6 Limitations of Executable Pattern Languages
 
 The approach has limitations:
 
